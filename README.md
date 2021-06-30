@@ -1,2 +1,2 @@
 # we4us-API
-3rd year group project - UCSC
+3rd Year Group Project - UCSC
