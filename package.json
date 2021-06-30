@@ -1,0 +1,14 @@
+{
+  "name": "we4us",
+  "version": "1.0.0",
+  "description": "community for community",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Priyatharshan",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
