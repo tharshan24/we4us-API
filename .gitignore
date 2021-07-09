@@ -1,3 +1,9 @@
+# Package-lock.json
+./package-lock.json
+
+# IntelliJ
+.idea
+
 # Logs
 logs
 *.log
