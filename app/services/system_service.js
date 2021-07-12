@@ -31,7 +31,7 @@ function getCitiesByDistricts(data,callback){
             } else {
                 if(rows.length>0){
                     callback(null, {
-                        rows
+                        p:"oo",rows
                         });
                 } else {
                     callback({status:1, message: "DB error"});

@@ -7,6 +7,6 @@ const router = express.Router();
 router.get("/districts", systemController.getDistricts);
 
 //get cities by district id
-router.get("/citiesByDistrict", systemController.getDistricts);
+router.get("/citiesByDistrict/:district", systemController.getCitiesByDistricts);
 
 module.exports = router;

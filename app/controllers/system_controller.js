@@ -18,8 +18,8 @@ function getDistricts(req,res){
 
 // registration of public
 function getCitiesByDistricts(req,res){
-    console.log(req.body);
-    systemService.getCitiesByDistricts(req.body,function(err,results){
+    console.log(req.params);
+    systemService.getCitiesByDistricts(req.params,function(err,results){
         if(err){
             res.json({status_code:1,message:'Error in getting cities',error:err.message});
         }
