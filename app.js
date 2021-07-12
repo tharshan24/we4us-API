@@ -12,6 +12,7 @@ app.use(express.urlencoded({
 }));
 
 app.get('/',(req,res)=>{
+  console.log(req.body);
   res.send("Welcome");
 });
 
@@ -19,13 +20,13 @@ app.get('/',(req,res)=>{
 app.use('/user', userRouter);
 
 // public specified requests
-app.use('/user/public', publicRouter);
+app.use('/public', publicRouter);
 
 // organizations specified requests
-app.use('/user/org', organizationRouter);
+app.use('/org', organizationRouter);
 
 // admin specified requests
-app.use('/user/admin', adminRouter);
+app.use('/admin', adminRouter);
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);

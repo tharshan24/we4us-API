@@ -53,9 +53,7 @@ function publicRegister(data,callback){
                                             } else {
                                                 // registration successful
                                                 connection.release();
-                                                callback(null, {
-                                                    row1:rows1.insertId
-                                                });
+                                                callback(null, {row1:rows1.insertId});
                                             }
                                         });
                                     }
@@ -166,7 +164,7 @@ function login(data,callback){
                         isVerified: rows[0].is_verified
                     });
                 } else {
-                    callback({message: "Login Failed !"});
+                    callback({status:1, message: "Login Failed !"});
                 }
             }
         });

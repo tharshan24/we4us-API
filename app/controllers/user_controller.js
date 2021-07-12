@@ -4,8 +4,8 @@ const jwt = require('jsonwebtoken');
 
 // registration of public
 function publicRegister(req,res){
-    console.log(req.headers);
-    userService.publicRegister(req.headers,function(err,results){
+    console.log(req.body);
+    userService.publicRegister(req.body,function(err,results){
         if(err){
             res.json({status_code:1,message:'Error in register user',error:err.message});
         }
@@ -18,8 +18,8 @@ function publicRegister(req,res){
 
 // registration of organization
 function orgRegister(req,res){
-    console.log(req.headers);
-    userService.orgRegister(req.headers,function(err,results){
+    console.log(req.body);
+    userService.orgRegister(req.body,function(err,results){
         if(err){
             res.json({status_code:1,message:'Error in register user',error:err.message});
         }
@@ -32,13 +32,14 @@ function orgRegister(req,res){
 
 // user login
 function login(req,res){
-    console.log(req.headers);
-    userService.login(req.headers,function(err,results){
+    console.log(req.body);
+    userService.login(req.body,function(err,results){
         if(err){
             res.json({status_code:1,message:'Error in user login',error:err.message});
         }
         else{
             console.log(results);
+
             const user = {
                 id: results.id,
                 userName: results.userName,
