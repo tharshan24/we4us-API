@@ -94,7 +94,7 @@ function orgRegister(data,callback){
                     } else {
                         // insert query for users table
                         connection.query('insert into users (user_name,email,password,mobile_number,user_type,city,status,created_at,updated_at)' +
-                            ' values(?,?,?,?,?,?,?,now(),now())', [data.user_name, data.email, password, data.mobile_number, 1, data.city, 1], (ex, rows1) => {
+                            ' values(?,?,?,?,?,?,?,now(),now())', [data.user_name, data.email, password, data.mobile_number, 2, data.city, 1], (ex, rows1) => {
                             if (ex) {
                                 connection.rollback(function () {
                                     connection.release();
