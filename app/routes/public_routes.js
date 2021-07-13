@@ -1,8 +1,8 @@
 const express = require('express');
 const publicController = require('../controllers/public_controller');
-// const app = express();
+const authMiddleware = require('../middlewares/auth');
 const router = express.Router();
 
-// router.post("/register",publicController.register);
+router.get("/viewProfile/:userId", authMiddleware.verifyToken, publicController.viewProfile);
 
 module.exports  = router;
