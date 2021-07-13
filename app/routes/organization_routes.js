@@ -1,8 +1,8 @@
 const express = require('express');
-const publicController = require('../controllers/organization_controller');
-// const app = express();
+const orgController = require('../controllers/organization_controller');
+const authMiddleware = require('../middlewares/auth');
 const router = express.Router();
 
-// router.post("/register",publicController.register);
+router.get("/viewProfile/:userId", authMiddleware.verifyToken, orgController.viewProfile);
 
 module.exports  = router;
