@@ -10,7 +10,7 @@ function getDistricts(req,res){
             res.json({status_code:1,message:'Error in getting districts',error:err.message});
         }
         else{
-            console.log(results);
+            // console.log(results);
             res.json({status_code:0,message:'success',result:results});
         }
     });
@@ -24,7 +24,7 @@ function getCitiesByDistricts(req,res){
             res.json({status_code:1,message:'Error in getting cities',error:err.message});
         }
         else{
-            console.log(results);
+            // console.log(results);
             res.json({status_code:0,message:'success',result:results});
         }
     });

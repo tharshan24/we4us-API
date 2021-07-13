@@ -10,7 +10,7 @@ function publicRegister(req,res){
             res.json({status_code:1,message:'Error in register user',error:err.message});
         }
         else{
-            console.log(results);
+            // console.log(results);
             res.json({status_code:0,message:'Registered successfully. Please verify your email by checking email',result:results});
         }
     });
@@ -24,7 +24,7 @@ function orgRegister(req,res){
             res.json({status_code:1,message:'Error in register user',error:err.message});
         }
         else{
-            console.log(results);
+            // console.log(results);
             res.json({status_code:0,message:'Registered successfully. Please verify your email by checking email',result:results});
         }
     });
@@ -38,7 +38,7 @@ function login(req,res){
             res.json({status_code:1,message:'Error in user login',error:err.message});
         }
         else{
-            console.log(results);
+            // console.log(results);
 
             const user = {
                 id: results.id,
@@ -61,18 +61,10 @@ function login(req,res){
 
 // authentication testing
 function test(req, res){
-    jwt.verify(req.token, main.key, (err, authData) => {
-        if(err) {
-            res.json({
-                status: 403,
-                message: "verification error"
-            });
-        } else {
-            res.json({
-                message: 'authentication successful',
-                authData
-            });
-        }
+    res.json({
+        message: 'authentication successful',
+        authData: req.authData,
+        token: req.token
     });
 }
 

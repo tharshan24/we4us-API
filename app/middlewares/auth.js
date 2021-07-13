@@ -1,3 +1,5 @@
+var main = require('../config/main');
+const jwt = require('jsonwebtoken');
 
 function verifyToken(req, res, next) {
 
@@ -11,7 +13,17 @@ function verifyToken(req, res, next) {
         // Set the token
         req.token = bearerToken;
         // Next middleware
-        next();
+        jwt.verify(req.token, main.key, (err, authData) => {
+            if(err) {
+                res.json({
+                    status: 403,
+                    message: "verification error"
+                });
+            } else {
+                req.authData = authData;
+                next();
+            }
+        });
     } else {
         // Forbidden
         res.json({
