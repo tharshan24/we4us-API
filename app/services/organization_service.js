@@ -24,6 +24,78 @@ function viewProfile(data,callback){
     }
 }
 
-module.exports = {
+/*module.exports = {
     viewProfile:viewProfile
+}*/
+
+//new change...
+
+function updateProfile(data,callback){
+    try {
+
+        //getting mysql connection
+        db.pool.getConnection(function(error, connection) {
+            if (error) {
+                callback(error);
+            } else {
+                //use transaction as 2 tables are involved
+                connection.beginTransaction(function(err) {
+                    if (err) {
+                        connection.rollback(function () {
+                            connection.release();
+                            callback(err);
+                        });
+                    } else {
+                        // update query for users table
+                        connection.query('update users set mobile_number=?, land_number=?, address1=?, address2=?,user_type=?,city=?,bank=?,accound_number=?,updated_at=now()' +
+                        'where users.id=?',
+                             [data.mobile_number,data.land_number, data.address1, data.address2, data.user_type, data.city,data.bank,data.accound_number], (ex, rows1) => {
+                            if (ex) {
+                                connection.rollback(function () {
+                                    connection.release();
+                                    callback(ex);
+                                });
+                            } else {
+                                // update query for organizations table
+                                connection.query('update organizations set name=?,description=?,contact_person_name=?,contact_person_number=?,contact_person_email=?,license_no=?,license_path=?,extension=?,social_media=?,website=?,latitude=?,longitude=?,updated_at=now()' +
+                                'where organizations.id=?',
+                                     [rows1.insertId, data.name, data.description, data.contact_person_name, data.contact_person_number, data.contact_person_email, data.license_no, data.license_path, data.extension, data.social_media,data.website,data.latitude,data.longitude], (ex, rows2) => {
+                                    if (ex) {
+                                        connection.rollback(function () {
+                                            connection.release();
+                                            callback(ex);
+                                        });
+                                    } else {
+                                        //committing the transaction
+                                        connection.commit(function (err) {
+                                            if (err) {
+                                                connection.rollback(function () {
+                                                    connection.release();
+                                                    callback(err);
+                                                });
+                                            } else {
+                                                // registration successful
+                                                connection.release();
+                                                callback(null, {
+                                                    row1:rows1.insertId
+                                                });
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+            }
+        });
+
+    } catch(err) {
+        callback(err);
+    }
+}
+
+module.exports = {
+    viewProfile:viewProfile,
+    updateProfile:updateProfile
 }
