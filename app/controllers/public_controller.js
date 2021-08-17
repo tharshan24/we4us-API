@@ -2,7 +2,7 @@ const publicService = require('../services/public_service');
 
 // registration of public
 function viewProfile(req,res){
-    //console.log(req.params);
+    console.log(req);
     publicService.viewProfile(req.params,function(err,results){
         if(err){
             res.json({status_code:1,message:'Cannot get profile',error:err.message});
@@ -22,7 +22,7 @@ function viewProfile(req,res){
 
 // updateProfile of public
 function updateProfile (req,res){
-   // console.log(req);
+   console.log(req.body);
     publicService.updateProfile(req.body,function(err,results){
         if(err){
             res.json({status_code:1,message:'Cannot Update profile',error:err.message});
@@ -31,7 +31,7 @@ function updateProfile (req,res){
             // console.log(results);
             res.json({
                 status_code:0,
-                message:'success',
+                message:'Update success',
                 result:results,
                 authData: req.authData,
                 token: req.token

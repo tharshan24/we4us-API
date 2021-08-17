@@ -40,8 +40,8 @@ function updateProfile(data,callback){
                         });
                     } else {
                         // update query for users table
-                        connection.query('update users set address_1=?, address_2=?, bank=?, account_number=?, city=?, updated_at=now()'+
-                        'where users.id=?',
+                        connection.query("update users set address_1=?, address_2=?, bank=?, account_number=?, city=?, updated_at=now()"+
+                        " where id=?",
                         [data.address_1, data.address_2, data.bank, data.account_number, data.city, data.userId], (ex, rows1) => {
                             if (ex) {
                                 connection.rollback(function () {
@@ -49,10 +49,10 @@ function updateProfile(data,callback){
                                     callback(ex);
                                 });
                             } else {
-                                // update query for organizations table
-                                connection.query('update public set first_name=?, last_name=?,' +
-                                    ' where public.user_id=?', 
-                                    [data.first_name, data.last_name, data.user_id], (ex, rows2) => {
+                                // update query for public table
+                                connection.query("update public set first_name=?, last_name=?" +
+                                     " where user_id=?", 
+                                    [data.first_name, data.last_name, data.userId], (ex, rows2) => {
                                     if (ex) {
                                         connection.rollback(function () {
                                             connection.release();
