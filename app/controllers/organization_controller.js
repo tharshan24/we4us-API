@@ -25,19 +25,19 @@ function viewProfile(req,res){
 }*/
 
 //new changes 
-//org update profile
 
+//organization update profile
 function updateProfile(req,res){
-    //console.log(req.body);
+    console.log(req.body);
     orgService.updateProfile(req.body,function(err,results){
         if(err){
-            res.json({status_code:1,message:'Cannot put profile',error:err.message});
+            res.json({status_code:1,message:'Cannot Update profile',error:err.message});
         }
         else{
             // console.log(results);
             res.json({
                 status_code:0,
-                message:'success',
+                message:'Update success',
                 result:results,
                 authData: req.authData,
                 token: req.token

@@ -5,6 +5,6 @@ const router = express.Router();
 
 router.get("/viewProfile/:userId", authMiddleware.verifyToken, orgController.viewProfile);
 //new change...
-router.post("/updateProfile/:userId", authMiddleware.verifyToken, orgController.updateProfile);
+router.post("/updateProfile", authMiddleware.verifyToken, orgController.updateProfile);
 //.....
 module.exports  = router;

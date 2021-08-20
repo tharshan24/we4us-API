@@ -47,9 +47,9 @@ function updateProfile(data,callback){
                         });
                     } else {
                         // update query for users table
-                        connection.query('update users set mobile_number=?, land_number=?, address1=?, address2=?,user_type=?,city=?,bank=?,accound_number=?,updated_at=now()' +
-                        'where users.id=?',
-                             [data.mobile_number,data.land_number, data.address1, data.address2, data.user_type, data.city,data.bank,data.accound_number], (ex, rows1) => {
+                        connection.query('update users set mobile_number=?, land_number=?, address1=?, address2=?,city=?,bank=?,account_number=?,updated_at=now()' +
+                        ' where id=?',
+                             [data.mobile_number,data.land_number, data.address1, data.address2, data.city,data.bank,data.account_number,data.userId], (ex, rows1) => {
                             if (ex) {
                                 connection.rollback(function () {
                                     connection.release();
@@ -57,9 +57,9 @@ function updateProfile(data,callback){
                                 });
                             } else {
                                 // update query for organizations table
-                                connection.query('update organizations set name=?,description=?,contact_person_name=?,contact_person_number=?,contact_person_email=?,license_no=?,license_path=?,extension=?,social_media=?,website=?,latitude=?,longitude=?,updated_at=now()' +
-                                'where organizations.id=?',
-                                     [rows1.insertId, data.name, data.description, data.contact_person_name, data.contact_person_number, data.contact_person_email, data.license_no, data.license_path, data.extension, data.social_media,data.website,data.latitude,data.longitude], (ex, rows2) => {
+                                connection.query('update organizations set name=?,description=?,contact_person_name=?,contact_person_number=?,contact_person_email=?,license_no=?,license_proof_path=?,extension=?,social_media=?,website=?,latitude=?,longitude=?,updated_at=now()' +
+                                ' where user_id=?',
+                                     [rows1.insertId, data.name, data.description, data.contact_person_name, data.contact_person_number, data.contact_person_email, data.license_no, data.license_proof_path, data.extension, data.social_media,data.website,data.latitude,data.longitude,data.userId], (ex, rows2) => {
                                     if (ex) {
                                         connection.rollback(function () {
                                             connection.release();
