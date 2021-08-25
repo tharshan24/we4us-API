@@ -1,17 +1,11 @@
+const mysql = require('mysql');
+const DB = require('./main');
 
-var mysql = require('mysql');
-const DB = {
-    URL:'localhost',
-    USERNAME:'root',
-    PASSWORD:'',
-    NAME:'we4us'
-}
-
-var pool = mysql.createPool({
-    host     : DB.URL,
-    user     : DB.USERNAME,
-    password : DB.PASSWORD,
-    database : DB.NAME
+const pool = mysql.createPool({
+    host: DB.host,
+    user: DB.user,
+    password: DB.password,
+    database: DB.database
 });
 
 var getConnection = function(callback) {

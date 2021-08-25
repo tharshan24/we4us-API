@@ -1,5 +1,5 @@
-var db = require('../config/database');
-var main = require('../config/main');
+const db = require('../config/database');
+const main = require('../config/main');
 
 function getDistricts(data,callback){
     try {

@@ -1,7 +1,7 @@
-var db = require('../config/database');
-var main = require('../config/main');
-var crypto = require('crypto');
-var moment = require('moment');
+const db = require('../config/database');
+const main = require('../config/main');
+const crypto = require('crypto');
+const moment = require('moment');
 
 function publicRegister(data,callback){
     try {
@@ -94,7 +94,7 @@ function orgRegister(data,callback){
                     } else {
                         // insert query for users table
                         connection.query('insert into users (user_name,email,password,mobile_number,user_type,city,status,created_at,updated_at)' +
-                            ' values(?,?,?,?,?,?,?,now(),now())', [data.user_name, data.email, password, data.mobile_number, 2, data.city, 1], (ex, rows1) => {
+                            ' values(?,?,?,?,?,?,?,now(),now())', [data.user_name, data.email, password, data.mobile_number, data.organization_type, data.city, 1], (ex, rows1) => {
                             if (ex) {
                                 connection.rollback(function () {
                                     connection.release();
@@ -102,8 +102,8 @@ function orgRegister(data,callback){
                                 });
                             } else {
                                 // insert query for organizations table
-                                connection.query('insert into organizations (user_id,organization_type,name,created_at,updated_at)' +
-                                    ' values(?,?,?,now(),now())', [rows1.insertId, data.organization_type, data.name], (ex, rows2) => {
+                                connection.query('insert into organizations (user_id,name,created_at,updated_at)' +
+                                    ' values(?,?,now(),now())', [rows1.insertId, data.name], (ex, rows2) => {
                                     if (ex) {
                                         connection.rollback(function () {
                                             connection.release();

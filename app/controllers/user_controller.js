@@ -63,7 +63,7 @@ function login(req,res){
 function test(req, res){
     res.json({
         message: 'authentication successful',
-        authData: req.authData,
+        authData: req.body.authData,
         token: req.token
     });
 }

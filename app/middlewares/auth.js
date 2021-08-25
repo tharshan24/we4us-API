@@ -1,4 +1,4 @@
-var main = require('../config/main');
+const main = require('../config/main');
 const jwt = require('jsonwebtoken');
 
 function verifyToken(req, res, next) {
@@ -20,7 +20,7 @@ function verifyToken(req, res, next) {
                     message: "verification error"
                 });
             } else {
-                req.authData = authData;
+                req.headers.authData = authData;
                 next();
             }
         });
