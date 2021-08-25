@@ -3,7 +3,8 @@ const orgService = require('../services/organization_service');
 // registration of public
 function viewProfile(req,res){
     console.log(req.params);
-    orgService.viewProfile(req.params,function(err,results){
+
+    orgService.viewProfile(req.headers.authData,req.params,function(err,results){
         if(err){
             res.json({status_code:1,message:'Cannot get profile',error:err.message});
         }
@@ -13,7 +14,7 @@ function viewProfile(req,res){
                 status_code:0,
                 message:'success',
                 result:results,
-                authData: req.authData,
+                authData: req.body.authData,
                 token: req.token
             });
         }
@@ -29,7 +30,7 @@ function viewProfile(req,res){
 //organization update profile
 function updateProfile(req,res){
     console.log(req.body);
-    orgService.updateProfile(req.body,function(err,results){
+    orgService.updateProfile(req.headers.authData,req.body,function(err,results){
         if(err){
             res.json({status_code:1,message:'Cannot Update profile',error:err.message});
         }
@@ -39,7 +40,7 @@ function updateProfile(req,res){
                 status_code:0,
                 message:'Update success',
                 result:results,
-                authData: req.authData,
+                authData: req.body.authData,
                 token: req.token
             });
         }

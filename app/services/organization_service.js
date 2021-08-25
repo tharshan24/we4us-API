@@ -1,14 +1,15 @@
-var db = require('../config/database');
-var main = require('../config/main');
+const db = require('../config/database');
+const main = require('../config/main');
 
-function viewProfile(data,callback){
+function viewProfile(authData,data,callback){
     try {
+        console.log(authData)
         //using the connection to query
-        db.pool.query('select u.id, u.user_name, u.email, u.user_type, u.profile_picture_path, u.mobile_number, u.land_number, address_1, address_2, u.zipcode, u.bank, u.account_number, u.status, u.is_verified, o.name, o.description, o.contact_person_name, o.contact_person_number, o.contact_person_email, o.license_no, o.license_proof_path, o.social_media, o.website, o.latitude, o.longitude, ot.name, c.name_en from users u ' +
+        db.pool.query('select u.id, u.user_name, u.email, u.user_type, u.profile_picture_path, u.mobile_number, u.land_number, address_1, address_2, u.zipcode, u.bank, u.account_number, u.status, u.is_verified, o.name, o.description, o.contact_person_name, o.contact_person_number, o.contact_person_email, o.license_no, o.license_proof_path, o.social_media, o.website, o.latitude, o.longitude, ut.name, c.name_en from users u ' +
             'join organizations o on u.id = o.user_id ' +
             'join cities c on c.id = u.city ' +
-            'join organization_types ot on ot.id = o.organization_type ' +
-            'where u.status=1 and u.id=?', [data.userId], (ex, rows) => {
+            'join user_types ut on ot.id = u.user_type ' +
+            'where u.status=1 and u.id=?', [authData.user.id], (ex, rows) => {
             if (ex) {
                 callback(ex);
             } else {
@@ -30,7 +31,7 @@ function viewProfile(data,callback){
 
 //new change...
 
-function updateProfile(data,callback){
+function updateProfile(authData,data,callback){
     try {
 
         //getting mysql connection
@@ -49,7 +50,7 @@ function updateProfile(data,callback){
                         // update query for users table
                         connection.query('update users set mobile_number=?, land_number=?, address1=?, address2=?,city=?,bank=?,account_number=?,updated_at=now()' +
                         ' where id=?',
-                             [data.mobile_number,data.land_number, data.address1, data.address2, data.city,data.bank,data.account_number,data.userId], (ex, rows1) => {
+                             [data.mobile_number,data.land_number, data.address1, data.address2, data.city,data.bank,data.account_number,authData.user.id], (ex, rows1) => {
                             if (ex) {
                                 connection.rollback(function () {
                                     connection.release();
@@ -59,7 +60,7 @@ function updateProfile(data,callback){
                                 // update query for organizations table
                                 connection.query('update organizations set name=?,description=?,contact_person_name=?,contact_person_number=?,contact_person_email=?,license_no=?,license_proof_path=?,extension=?,social_media=?,website=?,latitude=?,longitude=?,updated_at=now()' +
                                 ' where user_id=?',
-                                     [rows1.insertId, data.name, data.description, data.contact_person_name, data.contact_person_number, data.contact_person_email, data.license_no, data.license_proof_path, data.extension, data.social_media,data.website,data.latitude,data.longitude,data.userId], (ex, rows2) => {
+                                     [rows1.insertId, data.name, data.description, data.contact_person_name, data.contact_person_number, data.contact_person_email, data.license_no, data.license_proof_path, data.extension, data.social_media,data.website,data.latitude,data.longitude,authData.user.id], (ex, rows2) => {
                                     if (ex) {
                                         connection.rollback(function () {
                                             connection.release();
