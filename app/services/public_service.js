@@ -1,6 +1,7 @@
 const db = require('../config/database');
 const main = require('../config/main');
 const upload = require('../utilities/multer');
+const cloudinary = require('../utilities/cloudinary');
 
 function viewProfile(authData,data,callback){
     try {
@@ -103,27 +104,34 @@ function registerDriver(data,callback){
                     } else {
                         // call cloudinary upload
                         upload.multerCloud(data.files,  (ex, result) => {
-                            if (ex) {
+                            // console.log("aaaaaaaa " + ex, result)
+                            if (!result || result==undefined) {
                                 connection.rollback(function () {
                                     connection.release();
                                     callback(ex);
                                 });
                             } else {
-                                // update query for users table
+                                // update query for drivers table
                                 connection.query("INSERT INTO drivers (user_id, license_no, license_proof_path,created_at, updated_at) " +
                                     "VALUES (?,?,?,now(),now())",
-                                    [data.headers.authData.user.id, data.body.license_no, result.urls[0].url], (ex, rows1) => {
+                                    [data.headers.authData.user.id, data.body.license_no, result.urls[0] + " " + result.ids[0] ], (ex, rows1) => {
                                         if (ex) {
+                                            cloudinary.destroyer(result.ids,  (err, result) => {
+                                                console.log(err, result);
+                                            });
                                             connection.rollback(function () {
                                                 connection.release();
                                                 callback(ex);
                                             });
                                         } else {
                                             // update query for public table
-                                            connection.query("update public set driver_status=0" +
+                                            connection.query("update public set driver_status=2, updated_at=now()" +
                                                 " where user_id=?",
                                                 [data.headers.authData.user.id], (ex, rows2) => {
                                                     if (ex) {
+                                                        cloudinary.destroyer(result.ids,  (err, result) => {
+                                                            console.log(err, result);
+                                                        });
                                                         connection.rollback(function () {
                                                             connection.release();
                                                             callback(ex);
@@ -132,6 +140,9 @@ function registerDriver(data,callback){
                                                         //committing the transaction
                                                         connection.commit(function (err) {
                                                             if (err) {
+                                                                cloudinary.destroyer(result.ids,  (err, result) => {
+                                                                    console.log(err, result);
+                                                                });
                                                                 connection.rollback(function () {
                                                                     connection.release();
                                                                     callback(err);

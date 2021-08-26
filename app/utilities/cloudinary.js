@@ -16,7 +16,7 @@ const upload = (file, folder) => {
                 width: 400,
                 crop: `pad`
             }, (err, result) => {
-            console.log(result);
+            // console.log(result);
             resolve({
                 url: result.url,
                 id: result.public_id
@@ -25,6 +25,30 @@ const upload = (file, folder) => {
     })
 }
 
+const destroyer = (file) => {
+    return new Promise(resolve => {
+        console.log(file);
+        cloudinary.api.delete_resources(file,  (err, result) => {
+            // console.log(err, result);
+            if(err){
+                resolve({
+                    err:err
+                })
+            }
+            else{
+                resolve({
+                    result:result
+                })
+            }
+
+        })
+    })
+}
+
+destroyer("Images/nq3nvtfcjykvj1l03qdv");
+
+
 module.exports = {
-    upload:upload
+    upload:upload,
+    destroyer:destroyer
 }

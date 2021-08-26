@@ -42,7 +42,7 @@ function updateProfile (req,res){
 }
 
 function registerDriver (req, res){
-    console.log(req.body)
+    // console.log(req.body)
     publicService.registerDriver(req, function(err,results){
         if(err){
             res.json({status_code:1,message:'Cannot Register Driver',error:err.message});
