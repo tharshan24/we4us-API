@@ -35,6 +35,9 @@ app.use('/admin', adminRouter);
 // system specified requests
 app.use('/system', systemRouter);
 
+// availability specified requests
+app.use('/availability', availabilityRouter);
+
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
 });

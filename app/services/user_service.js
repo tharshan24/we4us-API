@@ -34,7 +34,7 @@ function publicRegister(data,callback){
                                     callback(ex);
                                 });
                             } else {
-                                // insert query for organizations table
+                                // insert query for public table
                                 connection.query('insert into public (user_id,gender,created_at,updated_at)' +
                                     ' values(?,?,now(),now())', [rows1.insertId, data.gender], (ex, rows2) => {
                                     if (ex) {
