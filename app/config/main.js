@@ -3,7 +3,7 @@ const env = process.env;
 
 module.exports ={
     host: env.URL,
-    user: env.USERNAME,
+    user: env.USER_NAME,
     password: env.PASSWORD,
     database: env.NAME,
 
