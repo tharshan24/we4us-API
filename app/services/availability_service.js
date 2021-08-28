@@ -41,9 +41,8 @@ function createAvailability(data,callback){
                                 data.body.status,data.body.image_status] , (ex,rows1) => {
                                     if(ex){
                                         
-                                        connection.rollback(function(){
-                                            connection.release();
-                                            callback(ex)
+                                        cloudinary.destroyer(result.ids,  (err, result) => {
+                                            console.log(err, result);
                                             connection.rollback(function () {
                                             connection.release();
                                             callback(ex);
@@ -106,7 +105,7 @@ function createAvailability(data,callback){
     }
 }
 
-function createAvailability(data,callback){
+function requestSession(data,callback){
     try {
         db.pool.getConnection(function(error, connection){
             if(error){
@@ -159,5 +158,5 @@ function createAvailability(data,callback){
 
 module.exports = {
     createAvailability:createAvailability,
-    createAvailabilitySessions:createAvailabilitySessions
+    requestSession:requestSession
 }

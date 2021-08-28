@@ -13,16 +13,16 @@ function createAvailability (req, res){
                 status_code: 0,
                 message: 'Availability creation Success',
                 result: results,
-                authData: req.body.authData,
+                authData: req.headers.authData,
                 token: req.token
             });
         }
     });
 }
 
-function createAvailabilitySessions (req, res){
+function requestSession (req, res){
     //console.log(req.body)
-    availabilityService.createAvailabilitySessions(req, function(err, results){
+    availabilityService.requestSession(req, function(err, results){
         if(err){
             res,json({status_code:1, message: 'Cannot create Availability Sessions', error: err.message});
         }
@@ -41,5 +41,5 @@ function createAvailabilitySessions (req, res){
 
 module.exports = {
     createAvailability:createAvailability,
-    createAvailabilitySessions:createAvailabilitySessions
+    requestSession:requestSession
 }
