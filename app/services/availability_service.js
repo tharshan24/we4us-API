@@ -106,6 +106,58 @@ function createAvailability(data,callback){
     }
 }
 
+function createAvailability(data,callback){
+    try {
+        db.pool.getConnection(function(error, connection){
+            if(error){
+                callback(error);
+            }
+            else{
+                //use transaction since 2 tables are involved
+                connection.beginTransaction(function(err){
+                    if(err){
+                        connection.rollback(function(){
+                        connection.release();
+                        callback(err);
+                        });
+                    }
+                    else{
+                        //call cloudinary upload
+                        upload.multerCloud(data.files, (ex, result) => {
+                            if(!result || result == undefined){
+                                connection.rollback(function(){
+                                connection.release();
+                                callback(ex);
+                                });
+                            }
+                            else{
+                                db.pool.query('INSERT INTO availability_sessions (availability_id, user_id, quantity, requester_message, location, address_1, address_2, city, latitude, longitude, creator_feedback, requester_feedback, created_at, updated_at)'+
+                                ' values(?,?,?,?,?,?,?,?,?,?,?,?,now(),now())',
+                                [data.body.availability_id, data.headers.authData.user.id, data.body.quantity,data.body.requester_message, data.body.location, data.body.address_1, data.body.address_2, data.body.city, data.body.latitude, data.body.longitude, data.body.creator_feedback, data.body.requester_feedback], (ex, rows) => {
+                                    if(ex){
+                                        connection.rollback(function(){
+                                        connection.release();
+                                        callback(err);
+                                        });
+                                    } {
+                                        
+                                    }
+                                
+
+                                });
+                            }
+                        });
+                    }
+                });
+            }
+        });
+    }
+    catch(err) {
+        callback(err);
+    }
+}
+
 module.exports = {
-    createAvailability:createAvailability
+    createAvailability:createAvailability,
+    createAvailabilitySessions:createAvailabilitySessions
 }
