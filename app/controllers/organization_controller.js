@@ -14,7 +14,7 @@ function viewProfile(req,res){
                 status_code:0,
                 message:'success',
                 result:results,
-                authData: req.body.authData,
+                authData: req.headers.authData,
                 token: req.token
             });
         }
@@ -40,7 +40,7 @@ function updateProfile(req,res){
                 status_code:0,
                 message:'Update success',
                 result:results,
-                authData: req.body.authData,
+                authData: req.headers.authData,
                 token: req.token
             });
         }
