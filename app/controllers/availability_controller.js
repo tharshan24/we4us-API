@@ -5,7 +5,7 @@ function createAvailability (req, res){
     //console.log(req.body)
     availabilityService.createAvailability(req, function(err, results){
         if(err){
-            res,json({status_code:1, message: 'Cannot create Availability', error: err.message});
+            res.json({status_code:1, message: 'Cannot create Availability', error: err.message});
         }
         else{
             console.log(results)
@@ -24,7 +24,7 @@ function requestSession (req, res){
     //console.log(req.body)
     availabilityService.requestSession(req, function(err, results){
         if(err){
-            res,json({status_code:1, message: 'Cannot create Availability Sessions', error: err.message});
+            res.json({status_code:1, message: 'Cannot create Availability Sessions', error: err.message});
         }
         else{
             console.log(results)
