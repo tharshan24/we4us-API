@@ -27,7 +27,7 @@ const upload = (file, folder) => {
 
 const destroyer = (file) => {
     return new Promise(resolve => {
-        console.log(file);
+        // console.log(file);
         cloudinary.api.delete_resources(file,  (err, result) => {
             // console.log(err, result);
             if(err){
@@ -45,7 +45,7 @@ const destroyer = (file) => {
     })
 }
 
-destroyer("Images/nq3nvtfcjykvj1l03qdv");
+// destroyer("Images/nq3nvtfcjykvj1l03qdv");
 
 
 module.exports = {
