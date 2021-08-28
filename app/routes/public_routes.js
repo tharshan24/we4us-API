@@ -9,7 +9,5 @@ router.post("/updateProfile", authMiddleware.verifyToken, publicController.updat
 
 router.post('/driverRegister', upload.upload.array('files', 12), authMiddleware.verifyToken, publicController.registerDriver);
 
-router.post('/createAvailability', upload.upload.array('files', 12), authMiddleware.verifyToken, publicController.createAvailability);
-
 
 module.exports  = router;
