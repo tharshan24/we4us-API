@@ -9,33 +9,41 @@ cloudinary.config({
 
 const upload = (file, folder) => {
     return new Promise(resolve => {
-        // console.log(file);
+        console.log("uploading "+file);
         cloudinary.uploader.upload(file, {
                 resource_type: "auto",
                 folder: folder,
                 width: 400,
                 crop: `pad`
             }, (err, result) => {
-            // console.log(result);
-            resolve({
-                url: result.url,
-                id: result.public_id
-            })
+            console.log("upload feedback ", err, result);
+            if(err)
+            {
+                resolve({
+                    err:err
+                })
+            }
+            else {
+                resolve({
+                    url: result.url,
+                    id: result.public_id
+                })
+            }
         })
     })
 }
 
 const destroyer = (file, callback) => {
     //return new Promise(resolve => {
-         console.log(file);
+        console.log("delete files "+file);
         cloudinary.api.delete_resources(file, (err, result) => {
-            // console.log(err, result);
+            // console.log("destroy feedback ", err, result);
             if(err){
-                console.log("destroy")
+                console.log("destroy error ", err)
                 callback(err);
             }
             else{
-                console.log("else")
+                console.log("destroy success ", result)
                 callback(null,result)
             }
 

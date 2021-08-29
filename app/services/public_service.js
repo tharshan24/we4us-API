@@ -117,7 +117,7 @@ function registerDriver(data,callback){
                                     [data.headers.authData.user.id, data.body.license_no, result.urls[0] + " " + result.ids[0] ], (ex, rows1) => {
                                         if (ex) {
                                             cloudinary.destroyer(result.ids,  (err, result) => {
-                                                console.log(err, result);
+                                                // console.log(err, result);
                                                 connection.rollback(function () {
                                                 connection.release();
                                                 callback(ex);

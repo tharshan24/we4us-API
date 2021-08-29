@@ -20,11 +20,13 @@ async function multerCloud (files, callback) {
 
     const urls = [];
     const ids = [];
-    console.log("bbb0"+files)
+    console.log("multer upload files "+files)
 
     for (const file of files) {
         const { path } = file;
+        console.log("call upload file "+path)
         const newPath = await uploader(path);
+        console.log("new path file "+newPath)
         urls.push(newPath.url);
         ids.push(newPath.id);
         fs.unlinkSync(path);
