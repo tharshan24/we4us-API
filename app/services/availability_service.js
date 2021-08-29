@@ -22,6 +22,7 @@ function createAvailability(data,callback){
                     else{
                         //call cloudinary upload
                         upload.multerCloud(data.files, (ex, result) => {
+                            console.log("aaaaa"+ result)
                             if(!result || result == undefined){
                                 connection.rollback(function(){
                                 connection.release();
@@ -29,18 +30,19 @@ function createAvailability(data,callback){
                                 });
                             }
                             else{
+                                console.log("service")
                                 //insert query for availabilities table
                                 connection.query("INSERT INTO availabilities (user_id, name, availability_type, other_description, description, food_type, total_quantity, " + 
                                 "available_quantity, actual_quantity, cooked_time, best_before, storage_description, location, address_1, address_2, city, latitude, longitude," +
                                 "cater_description, creator_delivery_option, creator_vehicle_option, status, image_status, created_at, updated_at)" +
                                 "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,now(),now())",
-                                [data.headers.authData.user.id,data.body.name,data.body.availability_type, data.body.other_description, data,body.description,
+                                [data.headers.authData.user.id,data.body.name,data.body.availability_type, data.body.other_description, data.body.description,
                                 data.body.food_type,data.body.total_quantity,data.body.available_quantity,data.body.actual_quantity,data.body.cooked_time,
                                 data.body.best_before,data.body.storage_description,data.body.location,data.body.address_1,data.body.address_2,data.body.city,
                                 data.body.latitude,data.body.longitude,data.body.cater_description,data.body.creator_delivery_option,data.body.creator_vehicle_option,
                                 data.body.status,data.body.image_status] , (ex,rows1) => {
                                     if(ex){
-                                        
+                                           console.log("222222")                                         
                                         cloudinary.destroyer(result.ids,  (err, result) => {
                                             console.log(err, result);
                                             connection.rollback(function () {
@@ -50,6 +52,7 @@ function createAvailability(data,callback){
                                         });
                                     }
                                     else{
+                                        console.log("33333")
                                         //insert query for availability_images table
                                     
                                             let q = "INSERT INTO availability_images (availability_id, name, description, image_path,status,"+
@@ -61,6 +64,7 @@ function createAvailability(data,callback){
                                             console.log("queries "+ q,[v]);
                                             connection.query(q,[v], (ex,rows2) => {
                                                 if (ex) {
+                                                    console.log("4444")
                                                     cloudinary.destroyer(result.ids,  (err, result) => {
                                                         console.log(err, result);
                                                         connection.rollback(function () {
@@ -70,6 +74,7 @@ function createAvailability(data,callback){
                                                    
                                                 } 
                                                 else{
+                                                    console.log("55555")
                                                     //commit the transaction
                                                     connection.commit(function (err) {
                                                         if (err) {
@@ -144,50 +149,74 @@ function createAvailSession(data,callback){
 
 
 
-function postRequestSession(data, callback){
-    try{
-        db.pool.getConnection(function(error, connection){
-            if(error){
-                connection.rollback();
-            }
-            else{
-                connection.beginTransaction(function(err){
-                    if(err){
-                        connection.rollback(function(){
-                        connection.release();
-                        callback(err);
-                        });
-                    }
-                    else{
-                        //Gettins status from session table
-                        connection.query('SELECT as.status, as.quantity, as.requester_delivery_option, as.final_delivery_option, as.payment_status,'+
-                        ' as.payment_by, a.available_quantity, a.actual_quantity, a.creator_delivery_option FROM availability_sessions as'+
-                        'JOIN availabilities a on as.availability_id = a.id'+
-                        ' WHERE as.availability_id=?',
-                        [data.avail_id], (ex, rows1) =>{
-                            if(ex){
-                                connection.rollback(function(){
-                                    connection.release();
-                                    callback(ex);
-                                });
-                            }
+// function postRequestSession(data, callback){
+//     try{
+//         db.pool.getConnection(function(error, connection){
+//             if(error){
+//                 connection.rollback();
+//             }
+//             else{
+//                 connection.beginTransaction(function(err){
+//                     if(err){
+//                         connection.rollback(function(){
+//                         connection.release();
+//                         callback(err);
+//                         });
+//                     }
+//                     else{
+//                         //Gettins status from session table
+//                         connection.query('SELECT as.status, as.quantity, as.requester_delivery_option, as.final_delivery_option, as.payment_status,'+
+//                         ' as.payment_by, a.available_quantity, a.actual_quantity, a.creator_delivery_option FROM availability_sessions as'+
+//                         'JOIN availabilities a on as.availability_id = a.id'+
+//                         ' WHERE as.availability_id=?',
+//                         [data.avail_id], (ex, rows1) =>{
+//                             if(ex){
+//                                 connection.rollback(function(){
+//                                     connection.release();
+//                                     callback(ex);
+//                                 });
+//                             }
                             
-                        });
-                    }
-                });
-            }
-        });
-    }
-    catch(err){
-        callback(err);
-    }
-}
+//                         });
+//                     }
+//                 });
+//             }
+//         });
+//     }
+//     catch(err){
+//         callback(err);
+//     }
+// }
 
+
+// function login(data,callback){
+//     try{
+
+//         data.pool.query('SELECT as.status, as.quantity, as.requester_delivery_option, as.final_delivery_option, as.payment_status,'+
+//         ' as.payment_by, a.available_quantity, a.actual_quantity, a.creator_delivery_option FROM availability_sessions as'+
+//         'JOIN availabilities a on as.availability_id = a.id'+
+//         ' WHERE as.availability_id=?',
+//         [data.avail_id], (ex, rows1) =>{
+//             if(ex){
+//                 connection.rollback(function(){
+//                     connection.release();
+//                     callback(ex);
+//                 });
+//             }
+//             else{
+
+//             }
+//         });
+//     }
+//     catch(err) {
+//     callback(err);
+//     }
+// }
 
 module.exports = {
     createAvailability:createAvailability,
     createAvailSession:createAvailSession,
-    postRequestSession: postRequestSession
+    //postRequestSession: postRequestSession
 }
 
 

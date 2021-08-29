@@ -20,7 +20,7 @@ async function multerCloud (files, callback) {
 
     const urls = [];
     const ids = [];
-    // console.log(files)
+    console.log("bbb0"+files)
 
     for (const file of files) {
         const { path } = file;

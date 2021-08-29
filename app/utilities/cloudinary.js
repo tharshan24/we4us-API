@@ -25,24 +25,22 @@ const upload = (file, folder) => {
     })
 }
 
-const destroyer = (file) => {
-    return new Promise(resolve => {
-        // console.log(file);
-        cloudinary.api.delete_resources(file,  (err, result) => {
+const destroyer = (file, callback) => {
+    //return new Promise(resolve => {
+         console.log(file);
+        cloudinary.api.delete_resources(file, (err, result) => {
             // console.log(err, result);
             if(err){
-                resolve({
-                    err:err
-                })
+                console.log("destroy")
+                callback(err);
             }
             else{
-                resolve({
-                    result:result
-                })
+                console.log("else")
+                callback(null,result)
             }
 
         })
-    })
+    //})
 }
 
 // destroyer("Images/nq3nvtfcjykvj1l03qdv");
