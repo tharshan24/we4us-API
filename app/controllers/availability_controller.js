@@ -2,7 +2,7 @@ const availabilityService = require('../services/availability_service');
 
 //createAvailability of public
 function createAvailability (req, res){
-    console.log(req.body)
+    console.log("request body: ",req.body)
     availabilityService.createAvailability(req, function(err, results){
         if(err){
             res.json({status_code:1, message: 'Cannot create Availability', error: err.message});

@@ -22,7 +22,7 @@ function createAvailability(data,callback){
                     else{
                         //call cloudinary upload
                         upload.multerCloud(data.files, (ex, result) => {
-                            console.log("aaaaa"+ result)
+                            // console.log("aaaaa"+ result)
                             if(!result || result == undefined){
                                 connection.rollback(function(){
                                 connection.release();
@@ -30,21 +30,21 @@ function createAvailability(data,callback){
                                 });
                             }
                             else{
-                                console.log("service")
+                                // console.log("service")
                                 //insert query for availabilities table
                                 connection.query("INSERT INTO availabilities (user_id, name, availability_type, other_description, description, food_type, total_quantity, " + 
                                 "available_quantity, actual_quantity, cooked_time, best_before, storage_description, location, address_1, address_2, city, latitude, longitude," +
-                                "cater_description, creator_delivery_option, creator_vehicle_option, status, image_status, created_at, updated_at)" +
+                                "cater_description, creator_delivery_option, delivery_vehicle_option, status, image_status, created_at, updated_at)" +
                                 "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,now(),now())",
                                 [data.headers.authData.user.id,data.body.name,data.body.availability_type, data.body.other_description, data.body.description,
-                                data.body.food_type,data.body.total_quantity,data.body.available_quantity,data.body.actual_quantity,data.body.cooked_time,
+                                data.body.food_type,data.body.total_quantity,data.body.total_quantity,data.body.total_quantity,data.body.cooked_time,
                                 data.body.best_before,data.body.storage_description,data.body.location,data.body.address_1,data.body.address_2,data.body.city,
-                                data.body.latitude,data.body.longitude,data.body.cater_description,data.body.creator_delivery_option,data.body.creator_vehicle_option,
-                                data.body.status,data.body.image_status] , (ex,rows1) => {
+                                data.body.latitude,data.body.longitude,data.body.cater_description,data.body.creator_delivery_option,data.body.delivery_vehicle_option,
+                                1,data.body.image_status] , (ex,rows1) => {
                                     if(ex){
-                                           console.log("222222")                                         
+                                           // console.log("222222")
                                         cloudinary.destroyer(result.ids,  (err, result) => {
-                                            console.log(err, result);
+                                            // console.log(err, result);
                                             connection.rollback(function () {
                                             connection.release();
                                             callback(ex);
@@ -52,19 +52,21 @@ function createAvailability(data,callback){
                                         });
                                     }
                                     else{
-                                        console.log("33333")
+                                        // console.log("rr",result)
                                         //insert query for availability_images table
                                     
-                                            let q = "INSERT INTO availability_images (availability_id, name, description, image_path,status,"+
-                                            "created_at, updated_at) VALUES ?";
+                                            let q = "INSERT INTO availability_images (availability_id, name, description, image_path,status) VALUES ?";
                                             let v = [];
-                                            for (const i in result.urls.length){
-                                                v.push([rows1.insertId,data.body.name, data.body.description,result.urls[i] + " " + result.ids[i],data.body.status,'now()','now()'])
+                                            for (let i = 0; i < result.urls.length; i++){
+                                                // console.log("i:",i)
+                                                let vv = {availabilty_id:rows1.insertId,name:data.body.name,description:data.body.description,image_path:result.urls[i] + " " + result.ids[i]};
+                                                // console.log("qq:",vv)
+                                                v.push(vv)
                                             }
-                                            console.log("queries "+ q,[v]);
-                                            connection.query(q,[v], (ex,rows2) => {
+                                            // console.log("queries "+ q,[v.map(item => [item.availabilty_id,item.name,item.description,item.image_path,1])]);
+                                            connection.query(q,[v.map(item => [item.availabilty_id,item.name,item.description,item.image_path,1])], (ex,rows2) => {
                                                 if (ex) {
-                                                    console.log("4444")
+                                                    // console.log("4444")
                                                     cloudinary.destroyer(result.ids,  (err, result) => {
                                                         console.log(err, result);
                                                         connection.rollback(function () {
