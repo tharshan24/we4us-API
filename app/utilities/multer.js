@@ -29,6 +29,7 @@ async function multerCloud (files, callback) {
         console.log("new path file "+newPath)
         urls.push(newPath.url);
         ids.push(newPath.id);
+        console.log("deleting", path, "from local storage")
         fs.unlinkSync(path);
     }
 
