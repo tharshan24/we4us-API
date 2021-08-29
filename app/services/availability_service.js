@@ -105,14 +105,52 @@ function createAvailability(data,callback){
     }
 }
 
-function requestSession(data,callback){
+
+function createAvailSession(data,callback){
     try {
+
+        db.pool.query('INSERT INTO availability_sessions (availability_id, user_id, quantity, requester_message, location, address_1, address_2, city, latitude, longitude, creator_feedback, requester_feedback, created_at, updated_at)'+
+        ' values(?,?,?,?,?,?,?,?,?,?,?,?,now(),now())',
+        [data.body.availability_id, data.headers.authData.user.id, data.body.quantity,data.body.requester_message, data.body.location, data.body.address_1, data.body.address_2, data.body.city, data.body.latitude, data.body.longitude, data.body.creator_feedback, data.body.requester_feedback], (ex, rows) => {
+            if(ex){
+                connection.rollback(function(){
+                connection.release();
+                callback(err);
+                });
+            } 
+            else{
+           //commit the transaction
+                connection.commit(function(err) {
+                    if(err){
+                        connection.rollback(function(){
+                            connection.release();
+                            callback(err);
+                        });
+                    }
+                    else{
+                        connection.release();
+                        callback(null,rows);
+                    }
+                });
+             }
+        
+
+        });
+    }
+    catch(err) {
+    callback(err);
+    }
+}
+
+
+
+function postRequestSession(data, callback){
+    try{
         db.pool.getConnection(function(error, connection){
             if(error){
-                callback(error);
+                connection.rollback();
             }
             else{
-                //use transaction since 2 tables are involved
                 connection.beginTransaction(function(err){
                     if(err){
                         connection.rollback(function(){
@@ -121,42 +159,35 @@ function requestSession(data,callback){
                         });
                     }
                     else{
-                        //call cloudinary upload
-                        upload.multerCloud(data.files, (ex, result) => {
-                            if(!result || result == undefined){
+                        //Gettins status from session table
+                        connection.query('SELECT as.status, as.quantity, as.requester_delivery_option, as.final_delivery_option, as.payment_status,'+
+                        ' as.payment_by, a.available_quantity, a.actual_quantity, a.creator_delivery_option FROM availability_sessions as'+
+                        'JOIN availabilities a on as.availability_id = a.id'+
+                        ' WHERE as.availability_id=?',
+                        [data.avail_id], (ex, rows1) =>{
+                            if(ex){
                                 connection.rollback(function(){
-                                connection.release();
-                                callback(ex);
+                                    connection.release();
+                                    callback(ex);
                                 });
                             }
-                            else{
-                                db.pool.query('INSERT INTO availability_sessions (availability_id, user_id, quantity, requester_message, location, address_1, address_2, city, latitude, longitude, creator_feedback, requester_feedback, created_at, updated_at)'+
-                                ' values(?,?,?,?,?,?,?,?,?,?,?,?,now(),now())',
-                                [data.body.availability_id, data.headers.authData.user.id, data.body.quantity,data.body.requester_message, data.body.location, data.body.address_1, data.body.address_2, data.body.city, data.body.latitude, data.body.longitude, data.body.creator_feedback, data.body.requester_feedback], (ex, rows) => {
-                                    if(ex){
-                                        connection.rollback(function(){
-                                        connection.release();
-                                        callback(err);
-                                        });
-                                    } {
-                                        
-                                    }
-                                
-
-                                });
-                            }
+                            
                         });
                     }
                 });
             }
         });
     }
-    catch(err) {
+    catch(err){
         callback(err);
     }
 }
 
+
 module.exports = {
     createAvailability:createAvailability,
-    requestSession:requestSession
+    createAvailSession:createAvailSession,
+    postRequestSession: postRequestSession
 }
+
+

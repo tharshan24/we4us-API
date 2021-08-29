@@ -1,6 +1,6 @@
 const publicService = require('../services/public_service');
 
-// registration of public
+// viewProfile of public
 function viewProfile(req,res){
     console.log(req);
 
