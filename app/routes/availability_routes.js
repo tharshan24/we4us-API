@@ -6,6 +6,6 @@ const upload = require('../utilities/multer');
 
 router.post('/createAvailability', upload.upload.array('files', 12), authMiddleware.verifyToken, availabilityController.createAvailability);
 router.post('/createAvailSession', authMiddleware.verifyToken, availabilityController.createAvailSession);
-//router.get('/acceptAvailSession/:avail_id',availabilityController.acceptAvailSession);
+router.get('/rejectAvailSession/:avail_id',authMiddleware.verifyToken,availabilityController.rejectAvailSession);
 
 module.exports  = router;

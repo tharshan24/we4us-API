@@ -21,7 +21,7 @@ function createAvailability (req, res){
 }
 
 function createAvailSession (req, res){
-    //console.log(req.body)
+    console.log(req.body)
     availabilityService.createAvailSession(req, function(err, results){
         if(err){
             res.json({status_code:1, message: 'Cannot create Availability Sessions', error: err.message});
@@ -39,9 +39,9 @@ function createAvailSession (req, res){
     });
 }
 
-// function acceptAvailSession (req, res){
+// function statusAvailSession (req, res){
 //     //console.log(req.body)
-//     availabilityService.getAvailSession(req, function(err, results1){
+//     availabilityService.acceptAvailSession(req, function(err, results1){
 //         if(err){
 //             res.json({status_code:1, message: 'Cannot create Availability Sessions', error: err.message});
 //         }
@@ -73,7 +73,7 @@ function createAvailSession (req, res){
 //             else{
                 
 //             }
-//             availabilityService.acceptAvailSession(req.params.id, final, function(err, results2){
+//             availabilityService.reAvailSession(req.params.id, final, function(err, results2){
 //                 if(err){
 //                     res.json({status_code:1, message: 'Cannot create Availability Sessions', error: err.message});
 //                 }
@@ -92,8 +92,29 @@ function createAvailSession (req, res){
 //     });
 // }
 
+function rejectAvailSession (req, res){
+    console.log("request body: ",req.params)
+    availabilityService.rejectAvailSession(req.params, function(err, results){
+        if(err){
+            res.json({status_code:1, message: 'Cannot reject Session', error: err.message});
+        }
+        else{
+            console.log(results)
+            res.json({
+                status_code: 0,
+                message: 'Availability Session rejection Success',
+                result: results,
+                authData: req.headers.authData,
+                token: req.token
+            });
+        }
+    });
+}
+
+
 module.exports = {
     createAvailability:createAvailability,
     createAvailSession:createAvailSession,
-   // acceptAvailSession:acceptAvailSession
+    rejectAvailSession:rejectAvailSession
+    //statusAvailSession: statusAvailSession
 }

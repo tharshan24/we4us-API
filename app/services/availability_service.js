@@ -115,33 +115,15 @@ function createAvailability(data,callback){
 
 function createAvailSession(data,callback){
     try {
-
-        db.pool.query('INSERT INTO availability_sessions (availability_id, user_id, quantity, requester_message, location, address_1, address_2, city, latitude, longitude, creator_feedback, requester_feedback, created_at, updated_at)'+
-        ' values(?,?,?,?,?,?,?,?,?,?,?,?,now(),now())',
-        [data.body.availability_id, data.headers.authData.user.id, data.body.quantity,data.body.requester_message, data.body.location, data.body.address_1, data.body.address_2, data.body.city, data.body.latitude, data.body.longitude, data.body.creator_feedback, data.body.requester_feedback], (ex, rows) => {
+        db.pool.query('INSERT INTO availability_sessions (availability_id, user_id, quantity, status, requester_message, location, address_1, address_2, city, latitude, longitude, creator_feedback, requester_feedback, created_at, updated_at)'+
+        ' values(?,?,?,?,?,?,?,?,?,?,?,?,?,now(),now())',
+        [data.body.availability_id, data.headers.authData.user.id, data.body.quantity,0,data.body.requester_message, data.body.location, data.body.address_1, data.body.address_2, data.body.city, data.body.latitude, data.body.longitude, data.body.creator_feedback, data.body.requester_feedback], (ex, rows) => {
             if(ex){
-                connection.rollback(function(){
-                connection.release();
-                callback(err);
-                });
+                callback(ex);
             } 
             else{
-           //commit the transaction
-                connection.commit(function(err) {
-                    if(err){
-                        connection.rollback(function(){
-                            connection.release();
-                            callback(err);
-                        });
-                    }
-                    else{
-                        connection.release();
-                        callback(null,rows);
-                    }
-                });
+              callback(null,{row: rows});
              }
-        
-
         });
     }
     catch(err) {
@@ -191,34 +173,47 @@ function createAvailSession(data,callback){
 // }
 
 
-// function login(data,callback){
-//     try{
+function cancelAvailSession(data,callback){
+    try{
+        data.pool.query('SELECT status FROM availability_sessions WHERE available_id=?',
+        [data.avail_id], (ex, rows) =>{
+            if(ex){
+                    callback(ex);
+            }
+            else{
 
-//         data.pool.query('SELECT as.status, as.quantity, as.requester_delivery_option, as.final_delivery_option, as.payment_status,'+
-//         ' as.payment_by, a.available_quantity, a.actual_quantity, a.creator_delivery_option FROM availability_sessions as'+
-//         'JOIN availabilities a on as.availability_id = a.id'+
-//         ' WHERE as.availability_id=?',
-//         [data.avail_id], (ex, rows1) =>{
-//             if(ex){
-//                 connection.rollback(function(){
-//                     connection.release();
-//                     callback(ex);
-//                 });
-//             }
-//             else{
+            }
+        });
+    }
+    catch(err) {
+    callback(err);
+    }
+}
 
-//             }
-//         });
-//     }
-//     catch(err) {
-//     callback(err);
-//     }
-// }
+function rejectAvailSession(data,callback){
+    try{
+        db.pool.query('UPDATE availability_sessions SET status=?, updated_at=now() WHERE availability_id=?',
+        [5,data.avail_id], (ex, rows) => {
+            if(ex){
+                callback(ex);
+            }
+            else{
+                callback(null,{row: rows});
+            }
+        });
+    }
+    catch(err) {
+    callback(err);
+    }
+}
+
+
 
 module.exports = {
     createAvailability:createAvailability,
     createAvailSession:createAvailSession,
-    //postRequestSession: postRequestSession
+    rejectAvailSession: rejectAvailSession,
+    cancelAvailSession: cancelAvailSession
 }
 
 
