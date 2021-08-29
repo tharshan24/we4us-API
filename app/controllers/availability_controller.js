@@ -119,7 +119,7 @@ function cancelAvailSession (req, res){
         }
         else{
             if(results1.row[0].status==0) {
-                availabilityService.updateAvailSession(req.params, 5, function(err2, results2){
+                availabilityService.updateAvailSession(req.params, 6, function(err2, results2){
                     if(err2){
                         res.json({status_code:1, message: 'Cannot reject Session', error: err2.message});
                     }
@@ -136,18 +136,18 @@ function cancelAvailSession (req, res){
                 });
             }
             else if(results1.row[0].status==1) {
-
+                console.log("qqqqqqq")
                 const data={
                     status:6,
                     avail_ses_id:req.params.avail_ses_id,
-                    avail_id:results1.id,
+                    avail_id:results1.row[0].id,
                     final_delivery_option:results1.row[0].final_delivery_option,
                     payment_status:results1.row[0].payment_status,
                     payment_by:results1.row[0].payment_by,
                     available_quantity:results1.row[0].available_quantity + results1.row[0].quantity
                 }
 
-                console.log(data)
+                console.log("sdfgsgf",data)
 
                 availabilityService.updateAvailSessionTrans(data, function(err3, results3){
                     if(err3){
@@ -173,7 +173,7 @@ function cancelAvailSession (req, res){
                     token: req.token
                 });
             }
-            console.log(results1)
+            console.log("äsdsasdsasdsas",results1.row[0].id)
         }
     });
 }

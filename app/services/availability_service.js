@@ -174,11 +174,11 @@ function createAvailSession(data,callback){
 
 function getAvailSession(data,callback){
     try{
-        db.pool.query('SELECT a.id, as.status, as.quantity, as.requester_delivery_option, as.final_delivery_option, as.payment_status,'+
-                        ' as.payment_by, a.available_quantity, a.actual_quantity, a.creator_delivery_option FROM availability_sessions as'+
-                        'JOIN availabilities a on as.availability_id = a.id'+
-                        ' WHERE as.availability_id=?',
-                        [data.avail_id], (ex, rows1) => {
+        db.pool.query('SELECT a.id, aa.status, aa.quantity, aa.requester_delivery_option, aa.final_delivery_option, aa.payment_status,'+
+                        ' aa.payment_by, a.available_quantity, a.actual_quantity, a.creator_delivery_option FROM availability_sessions aa'+
+                        ' JOIN availabilities a on aa.availability_id = a.id'+
+                        ' WHERE aa.id=?',
+                        [data.avail_ses_id], (ex, rows1) => {
             if(ex){
                 callback(ex);
             }
@@ -194,7 +194,7 @@ function getAvailSession(data,callback){
 
 function updateAvailSession(data,status,callback){
     try{
-        db.pool.query('UPDATE availability_sessions SET status=?, updated_at=now() WHERE availability_id=?',
+        db.pool.query('UPDATE availability_sessions SET status=?, updated_at=now() WHERE id=?',
         [status,data.avail_ses_id], (ex, rows) => {
             if(ex){
                 callback(ex);
