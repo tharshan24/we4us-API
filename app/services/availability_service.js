@@ -172,16 +172,18 @@ function createAvailSession(data,callback){
 //     }
 // }
 
-
-function cancelAvailSession(data,callback){
+function getAvailSession(data,callback){
     try{
-        data.pool.query('SELECT status FROM availability_sessions WHERE available_id=?',
-        [data.avail_id], (ex, rows) =>{
+        db.pool.query('SELECT a.id, as.status, as.quantity, as.requester_delivery_option, as.final_delivery_option, as.payment_status,'+
+                        ' as.payment_by, a.available_quantity, a.actual_quantity, a.creator_delivery_option FROM availability_sessions as'+
+                        'JOIN availabilities a on as.availability_id = a.id'+
+                        ' WHERE as.availability_id=?',
+                        [data.avail_id], (ex, rows1) => {
             if(ex){
-                    callback(ex);
+                callback(ex);
             }
             else{
-
+                callback(null,{row: rows1});
             }
         });
     }
@@ -190,7 +192,84 @@ function cancelAvailSession(data,callback){
     }
 }
 
-function rejectAvailSession(data,callback){
+function updateAvailSession(data,status,callback){
+    try{
+        db.pool.query('UPDATE availability_sessions SET status=?, updated_at=now() WHERE availability_id=?',
+        [status,data.avail_ses_id], (ex, rows) => {
+            if(ex){
+                callback(ex);
+            }
+            else{
+                callback(null,{row: rows});
+            }
+        });
+    }
+    catch(err) {
+    callback(err);
+    }
+}
+
+function updateAvailSessionTrans(data,callback){
+    try {
+        db.pool.getConnection(function(error, connection) {
+            if (error) {
+                callback(error);
+            } else {
+                //use transaction as 2 tables are involved
+                connection.beginTransaction(function(err) {
+                    if (err) {
+                        connection.rollback(function () {
+                            connection.release();
+                            callback(err);
+                        });
+                    } else {
+                        // update query for users table
+                        connection.query("update availability_sessions set status=?, final_delivery_option=?, payment_status=?, payment_by=?, updated_at=now()"+
+                            " where id=?",
+                            [data.status, data.final_delivery_option, data.payment_status, data.payment_by, data.avail_ses_id], (ex, rows1) => {
+                                if (ex) {
+                                    connection.rollback(function () {
+                                        connection.release();
+                                        callback(ex);
+                                    });
+                                } else {
+                                    // update query for public table
+                                    connection.query("update availabilities set available_quantity=?, updated_at=now()" +
+                                        " where id=?",
+                                        [data.available_quantity, data.avail_id], (ex, rows2) => {
+                                            if (ex) {
+                                                connection.rollback(function () {
+                                                    connection.release();
+                                                    callback(ex);
+                                                });
+                                            } else {
+                                                //committing the transaction
+                                                connection.commit(function (err) {
+                                                    if (err) {
+                                                        connection.rollback(function () {
+                                                            connection.release();
+                                                            callback(err);
+                                                        });
+                                                    } else {
+                                                        // Updating successful
+                                                        connection.release();
+                                                        callback(null, {row1:rows1.insertId});
+                                                    }
+                                                });
+                                            }
+                                        });
+                                }
+                            });
+                    }
+                });
+            }
+        });
+    } catch(err) {
+        callback(err);
+    }
+}
+
+function cancelAvailSession(data,callback){
     try{
         db.pool.query('UPDATE availability_sessions SET status=?, updated_at=now() WHERE availability_id=?',
         [5,data.avail_id], (ex, rows) => {
@@ -212,8 +291,9 @@ function rejectAvailSession(data,callback){
 module.exports = {
     createAvailability:createAvailability,
     createAvailSession:createAvailSession,
-    rejectAvailSession: rejectAvailSession,
-    cancelAvailSession: cancelAvailSession
+    updateAvailSession: updateAvailSession,
+    updateAvailSessionTrans: updateAvailSessionTrans,
+    getAvailSession:getAvailSession
 }
 
 
