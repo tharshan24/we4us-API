@@ -46,220 +46,81 @@ function acceptAvailSession (req, res){
             res.json({status_code:1, message: 'Cannot get Sessions', error: err.message});
         }
         else{
-            // let final = {
-            //     quantity: results1.quantity,
-            //     final_delivery_option: 0, 
-            //     payment_status: 0, 
-            //     payment_by: 0
-            // }
-            // console.log(results)
             if(results1.row[0].status==0) {
-                availabilityService.updateAvailSession(req.params, 1, function(err2, results2){
-                    if(err2){
-                        res.json({status_code:1, message: 'Cannot accept Session', error: err2.message});
-                    }
-                    else{
-                        // console.log(results2)
-                        res.json({
-                            status_code: 0,
-                            message: 'Availability Session accepted Successfully!',
-                            result: results2,
-                            authData: req.headers.authData,
-                            token: req.token
-                        });
-                    }
-                });
-            }
-           else if(results1.row[0].status==1) {
+                //logic
                 console.log("check1");
-                const data={
+                let data={
+                    status:1,
                     avail_ses_id:req.params.avail_ses_id,
                     avail_id:results1.row[0].id,
-                    available_quantity:results1.row[0].available_quantity - results1.row[0].quantity
+                    available_quantity:results1.row[0].available_quantity - results1.row[0].quantity,
+                    quantity:results1.row[0].quantity
                 }
-
+    
                 console.log("check2",data)
+    
+                if(results1.row[0].requester_delivery_option==0 || results1.row[0].creator_delivery_option==0){
+                    if(results1.row[0].requester_delivery_option==0){
+                        console.log("check1_1");
+                            data.final_delivery_option=0,
+                            data.payment_status=0,
+                            data.payment_by=2
+                        
+                        console.log("data1_1",data)
+                    }
+                    else{
+                            data.final_delivery_option=0,
+                            data.payment_status=0,
+                            data.payment_by=1
+                    }
+                }
+                else if(results1.row[0].requester_delivery_option==1 || results1.row[0].creator_delivery_option==1){
+                    if(results1.row[0].requester_delivery_option==1){
+                        console.log("check2_1");
+                            data.final_delivery_option=1,
+                            data.payment_status=0,
+                            data.payment_by=1
+                        
+                        console.log("data2_1",data)
+                        }
+                        else{
+                            data.final_delivery_option=0,
+                            data.payment_status=0,
+                            data.payment_by=2
+                    }
+                }
+                else if(results1.row[0].requester_delivery_option==2 || results1.row[0].creator_delivery_option==2){
+                    if(results1.row[0].requester_delivery_option==2){
+                        console.log("check3_1");
+                            data.final_delivery_option=2,
+                            data.payment_status=1,
+                            data.payment_by=2
+    
+                        console.log("data3_1",data)
+                    }
+                    else{
+                            data.final_delivery_option=2,
+                            data.payment_status=1,
+                            data.payment_by=1
+                    }
+                }
+                console.log("final data"+ data)
 
                 availabilityService.updateAvailSessionTrans(data, function(err3, results3){
                     if(err3){
-                        res.json({status_code:1, message: 'Cannot update qunatity', error: err3.message});
+                        res.json({status_code:1, message: 'Cannot update accepted availability Session', error: err3.message});
                     }
                     else{
                         console.log(results3)
                         res.json({
                             status_code: 0,
-                            message: 'Available quantity of food is updated',
+                            message: 'Availability Session accepted and updated payments and others Successfully',
                             result: results3,
                             authData: req.headers.authData,
                             token: req.token
                         });
                     }
                 });
-
-                if(results1.row[0].requester_delivery_option==0 || results1.row[0].creator_delivery_option==0){
-                    if(results1.row[0].requester_delivery_option==0){
-                        console.log("check1_1");
-                        const data1_1={
-                            final_delivery_option:0,
-                            payment_status:0,
-                            payment_by:0,
-                        }
-        
-                        console.log("data1_1",data1_1)
-        
-                        availabilityService.updateAvailSessionTrans(data1_1, function(err3, results3){
-                            if(err3){
-                                res.json({status_code:1, message: 'Cannot update delivery, payment details', error: err3.message});
-                            }
-                            else{
-                                console.log(results3)
-                                res.json({
-                                    status_code: 0,
-                                    message: 'Delivery and payment options updated',
-                                    result: results3,
-                                    authData: req.headers.authData,
-                                    token: req.token
-                                });
-                            }
-                        });
-                    }
-                    else if(results1.row[0].creator_delivery_option==0){
-                        console.log("check1_2");
-                        const data1_2={
-                            final_delivery_option:0,
-                            payment_status:0,
-                            payment_by:0,
-                        }
-
-                        console.log("data1_2",data1_2)
-        
-                        availabilityService.updateAvailSessionTrans(data1_2, function(err3, results3){
-                            if(err3){
-                                res.json({status_code:1, message: 'Cannot update delivery, payment details', error: err3.message});
-                            }
-                            else{
-                                console.log(results3)
-                                res.json({
-                                    status_code: 0,
-                                    message: 'Delivery and payment options updated',
-                                    result: results3,
-                                    authData: req.headers.authData,
-                                    token: req.token
-                                });
-                            }
-                        });
-        
-                    }
-                }
-
-                else if(results1.row[0].requester_delivery_option==1 || results1.row[0].creator_delivery_option==1){
-                    if(results1.row[0].requester_delivery_option==1){
-                        console.log("check2_1");
-                        const data2_1={
-                            final_delivery_option:1,
-                            payment_status:0,
-                            payment_by:0,
-                        }
-
-                        console.log("data2_1",data2_1)
-        
-                        availabilityService.updateAvailSessionTrans(data2_1, function(err3, results3){
-                            if(err3){
-                                res.json({status_code:1, message: 'Cannot update delivery, payment details', error: err3.message});
-                            }
-                            else{
-                                console.log(results3)
-                                res.json({
-                                    status_code: 0,
-                                    message: 'Delivery and payment options updated',
-                                    result: results3,
-                                    authData: req.headers.authData,
-                                    token: req.token
-                                });
-                            }
-                        });
-                    }
-                    else if(results1.row[0].creator_delivery_option==1){
-                        console.log("check2_2");
-                        const data2_2={
-                            final_delivery_option:1,
-                            payment_status:0,
-                            payment_by:0,
-                        }
-
-                        console.log("data2_2",data2_2)
-        
-                        availabilityService.updateAvailSessionTrans(data2_2, function(err3, results3){
-                            if(err3){
-                                res.json({status_code:1, message: 'Cannot update delivery, payment details', error: err3.message});
-                            }
-                            else{
-                                console.log(results3)
-                                res.json({
-                                    status_code: 0,
-                                    message: 'Delivery and payment options updated',
-                                    result: results3,
-                                    authData: req.headers.authData,
-                                    token: req.token
-                                });
-                            }
-                        });
-                    }
-                }
-                else if(results1.row[0].requester_delivery_option==2 || results1.row[0].creator_delivery_option==2){
-                    if(results1.row[0].requester_delivery_option==2){
-                        console.log("check3_1");
-                        const data3_1={
-                            final_delivery_option:2,
-                            payment_status:1,
-                            payment_by:2,
-                        }
-
-                        console.log("data3_1",data3_1)
-        
-                        availabilityService.updateAvailSessionTrans(data3_1, function(err3, results3){
-                            if(err3){
-                                res.json({status_code:1, message: 'Cannot update delivery, payment details', error: err3.message});
-                            }
-                            else{
-                                console.log(results3)
-                                res.json({
-                                    status_code: 0,
-                                    message: 'Delivery and payment options updated',
-                                    result: results3,
-                                    authData: req.headers.authData,
-                                    token: req.token
-                                });
-                            }
-                        });
-                    }
-                    else if(results1.row[0].creator_delivery_option==2){
-                        console.log("check3_2");
-                        const data3_2={
-                            final_delivery_option:2,
-                            payment_status:1,
-                            payment_by:2,
-                        }
-
-                        console.log("data3_2",data3_2)
-        
-                        availabilityService.updateAvailSessionTrans(data3_2, function(err3, results3){
-                            if(err3){
-                                res.json({status_code:1, message: 'Cannot update delivery, payment details', error: err3.message});
-                            }
-                            else{
-                                console.log(results3)
-                                res.json({
-                                    status_code: 0,
-                                    message: 'Delivery and payment options updated',
-                                    result: results3,
-                                    authData: req.headers.authData,
-                                    token: req.token
-                                });
-                            }
-                        });     
-                    }
-                }
             }
             else{
                 res.json({
