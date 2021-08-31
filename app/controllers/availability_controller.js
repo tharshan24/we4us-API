@@ -54,6 +54,7 @@ function acceptAvailSession (req, res){
                     avail_ses_id:req.params.avail_ses_id,
                     avail_id:results1.row[0].id,
                     available_quantity:results1.row[0].available_quantity - results1.row[0].quantity,
+                    actual_quantity:results1.row[0].actual_quantity,
                     quantity:results1.row[0].quantity
                 }
     
@@ -177,6 +178,7 @@ function cancelAvailSession (req, res){
                     final_delivery_option:results1.row[0].final_delivery_option,
                     payment_status:results1.row[0].payment_status,
                     payment_by:results1.row[0].payment_by,
+                    actual_quantity:results1.row[0].actual_quantity,
                     available_quantity:results1.row[0].available_quantity + results1.row[0].quantity
                 }
 
@@ -211,11 +213,98 @@ function cancelAvailSession (req, res){
     });
 }
 
+function waitingAvailSession (req, res){
+    console.log("request body: ",req.params)
+    availabilityService.getAvailSession(req.params,function(err1, results1){
+        if(err1){
+            res.json({status_code:1, message: 'Cannot get the current session', error: err.message});
+        }
+        else{
+          if(results1.row[0].status==1){
+            availabilityService.updateAvailSession(req.params, 2, function(err2, results2){
+                if(err2){
+                    res.json({status_code:1, message: 'Cannot update Session to waiting', error: err2.message});
+                }
+                else{
+                    // console.log(results2)
+                    res.json({
+                        status_code: 0,
+                        message: 'Availability Session updating to waiting is Success',
+                        result: results2,
+                        authData: req.headers.authData,
+                        token: req.token
+                    });
+                }
+            });
+          }
+          else{
+            res.json({
+                status_code: 0,
+                message: 'The current status is not in accepted stage',
+                authData: req.headers.authData,
+                token: req.token
+            })
+          }
+        }
+    });
+}
+
+function dispatchedAvailSession (req, res){
+    console.log("request body: ",req.params)
+    availabilityService.getAvailSession(req.params, function(err1, results1){
+        if(err1){
+            res.json({status_code:1, message: 'Cannot get the current session', error: err.message});
+        }
+        else{
+           if(results1.row[0].status==2){
+            console.log("check1");
+            let data={
+                status:3,
+                avail_ses_id:req.params.avail_ses_id,
+                avail_id:results1.row[0].id,
+                final_delivery_option:results1.row[0].final_delivery_option,
+                payment_status:results1.row[0].payment_status,
+                payment_by:results1.row[0].payment_by,
+                available_quantity:results1.row[0].available_quantity - results1.row[0].quantity,
+                actual_quantity:results1.row[0].actual_quantity - results1.row[0].quantity,
+                quantity:results1.row[0].quantity
+            }
+            console.log("checkdata",data)
+
+            availabilityService.updateAvailSessionTrans(data, function(err2, results2){
+                if(err2){
+                    res.json({status_code:1, message: 'Cannot update the waiting session', error: err2.message});
+                }
+                else{
+                    console.log(results2)
+                    res.json({
+                        status_code: 0,
+                        message: 'Availability Session updated to dispatched status Successfully',
+                        result: results2,
+                        authData: req.headers.authData,
+                        token: req.token
+                    });
+                }
+            });
+           }
+           else{
+            res.json({
+                status_code: 0,
+                message: 'The current status is not in waiting stage',
+                authData: req.headers.authData,
+                token: req.token
+            })
+           }
+        }
+    });
+}
 
 module.exports = {
     createAvailability:createAvailability,
     createAvailSession:createAvailSession,
     rejectAvailSession:rejectAvailSession,
     cancelAvailSession:cancelAvailSession,
-    acceptAvailSession:acceptAvailSession
+    acceptAvailSession:acceptAvailSession,
+    waitingAvailSession:waitingAvailSession,
+    dispatchedAvailSession:dispatchedAvailSession
 }

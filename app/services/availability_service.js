@@ -234,9 +234,9 @@ function updateAvailSessionTrans(data,callback){
                                     });
                                 } else {
                                     // update query for public table
-                                    connection.query("update availabilities set available_quantity=?, updated_at=now()" +
+                                    connection.query("update availabilities set available_quantity=?, actual_quantity=?, updated_at=now()" +
                                         " where id=?",
-                                        [data.available_quantity, data.avail_id], (ex, rows2) => {
+                                        [data.available_quantity,data.actual_quantity, data.avail_id], (ex, rows2) => {
                                             if (ex) {
                                                 connection.rollback(function () {
                                                     connection.release();

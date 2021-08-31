@@ -9,5 +9,7 @@ router.post('/createAvailSession', authMiddleware.verifyToken, availabilityContr
 router.get('/rejectAvailSession/:avail_ses_id',authMiddleware.verifyToken,availabilityController.rejectAvailSession);
 router.get('/cancelAvailSession/:avail_ses_id',authMiddleware.verifyToken,availabilityController.cancelAvailSession);
 router.get('/acceptAvailSession/:avail_ses_id',authMiddleware.verifyToken,availabilityController.acceptAvailSession);
+router.get('/waitingAvailSession/:avail_ses_id',authMiddleware.verifyToken,availabilityController.waitingAvailSession);
+router.get('/dispatchedAvailSession/:avail_ses_id',authMiddleware.verifyToken,availabilityController.dispatchedAvailSession);
 
 module.exports  = router;
