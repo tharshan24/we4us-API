@@ -74,21 +74,6 @@ function acceptAvailSession (req, res){
                             data.payment_by=1
                     }
                 }
-                else if(results1.row[0].requester_delivery_option==1 || results1.row[0].creator_delivery_option==1){
-                    if(results1.row[0].requester_delivery_option==1){
-                        console.log("check2_1");
-                            data.final_delivery_option=1,
-                            data.payment_status=0,
-                            data.payment_by=1
-                        
-                        console.log("data2_1",data)
-                        }
-                        else{
-                            data.final_delivery_option=0,
-                            data.payment_status=0,
-                            data.payment_by=2
-                    }
-                }
                 else if(results1.row[0].requester_delivery_option==2 || results1.row[0].creator_delivery_option==2){
                     if(results1.row[0].requester_delivery_option==2){
                         console.log("check3_1");
@@ -104,6 +89,12 @@ function acceptAvailSession (req, res){
                             data.payment_by=1
                     }
                 }
+                else{
+                            data.final_delivery_option=1,
+                            data.payment_status=0,
+                            data.payment_by=0
+                }
+              
                 console.log("final data"+ data)
 
                 availabilityService.updateAvailSessionTrans(data, function(err3, results3){
@@ -226,5 +217,5 @@ module.exports = {
     createAvailSession:createAvailSession,
     rejectAvailSession:rejectAvailSession,
     cancelAvailSession:cancelAvailSession,
-    acceptAvailSession: acceptAvailSession
+    acceptAvailSession:acceptAvailSession
 }
