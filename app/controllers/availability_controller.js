@@ -20,6 +20,7 @@ function createAvailability (req, res){
     });
 }
 
+//creating availability sessions
 function createAvailSession (req, res){
     console.log(req.body)
     availabilityService.createAvailSession(req, function(err, results){
@@ -39,6 +40,7 @@ function createAvailSession (req, res){
     });
 }
 
+//accepting status of an availability session
 function acceptAvailSession (req, res){
     console.log("request body: ",req.params)
     availabilityService.getAvailSession(req.params, function(err1, results1){
@@ -46,10 +48,9 @@ function acceptAvailSession (req, res){
             res.json({status_code:1, message: 'Cannot get Sessions', error: err.message});
         }
         else{
-            if(results1.row[0].status==0) {
-                //logic
+            if(results1.row[0].status==0) { //If the initial status is pending.
                 console.log("check1");
-                let data={
+                let data={ //initializing an object to update the data.
                     status:1,
                     avail_ses_id:req.params.avail_ses_id,
                     avail_id:results1.row[0].id,
@@ -59,7 +60,7 @@ function acceptAvailSession (req, res){
                 }
     
                 console.log("check2",data)
-    
+                //logic for changing assigning final data related to delivery and payment.
                 if(results1.row[0].requester_delivery_option==0 || results1.row[0].creator_delivery_option==0){
                     if(results1.row[0].requester_delivery_option==0){
                         console.log("check1_1");
@@ -97,7 +98,7 @@ function acceptAvailSession (req, res){
                 }
               
                 console.log("final data"+ data)
-
+                //Updating the final results from the logic and data.
                 availabilityService.updateAvailSessionTrans(data, function(err3, results3){
                     if(err3){
                         res.json({status_code:1, message: 'Cannot update accepted availability Session', error: err3.message});
@@ -126,6 +127,7 @@ function acceptAvailSession (req, res){
     });
 }
 
+//Rejecting status of an availabiity session
 function rejectAvailSession (req, res){
     console.log("request body: ",req.params)
     availabilityService.updateAvailSession(req.params, 5, function(err, results){
@@ -145,6 +147,7 @@ function rejectAvailSession (req, res){
     });
 }
 
+//Cancelling status of an availability session.
 function cancelAvailSession (req, res){
     console.log("request body: ",req.params)
     availabilityService.getAvailSession(req.params, function(err1, results1){
@@ -152,7 +155,7 @@ function cancelAvailSession (req, res){
             res.json({status_code:1, message: 'Cannot get Session', error: err1.message});
         }
         else{
-            if(results1.row[0].status==0) {
+            if(results1.row[0].status==0) { //cancelled only when the current status is pending.
                 availabilityService.updateAvailSession(req.params, 6, function(err2, results2){
                     if(err2){
                         res.json({status_code:1, message: 'Cannot reject Session', error: err2.message});
@@ -171,7 +174,7 @@ function cancelAvailSession (req, res){
             }
             else if(results1.row[0].status==1) {
                 console.log("qqqqqqq")
-                const data={
+                const data={ //setting the values for the columns when the status is cancelled.
                     status:6,
                     avail_ses_id:req.params.avail_ses_id,
                     avail_id:results1.row[0].id,
@@ -184,7 +187,7 @@ function cancelAvailSession (req, res){
 
                 console.log("sdfgsgf",data)
 
-                availabilityService.updateAvailSessionTrans(data, function(err3, results3){
+                availabilityService.updateAvailSessionTrans(data, function(err3, results3){//Updating after final results.
                     if(err3){
                         res.json({status_code:1, message: 'Cannot reject Session', error: err3.message});
                     }
@@ -213,6 +216,7 @@ function cancelAvailSession (req, res){
     });
 }
 
+//Updating the status to waiting after accepting an availability session.
 function waitingAvailSession (req, res){
     console.log("request body: ",req.params)
     availabilityService.getAvailSession(req.params,function(err1, results1){
@@ -220,7 +224,7 @@ function waitingAvailSession (req, res){
             res.json({status_code:1, message: 'Cannot get the current session', error: err.message});
         }
         else{
-          if(results1.row[0].status==1){
+          if(results1.row[0].status==1){ //Updating status to waiting when the current stage is accept
             availabilityService.updateAvailSession(req.params, 2, function(err2, results2){
                 if(err2){
                     res.json({status_code:1, message: 'Cannot update Session to waiting', error: err2.message});
@@ -249,6 +253,7 @@ function waitingAvailSession (req, res){
     });
 }
 
+//Updating the status to dispatched after waiting and getting a driver for an availability session.
 function dispatchedAvailSession (req, res){
     console.log("request body: ",req.params)
     availabilityService.getAvailSession(req.params, function(err1, results1){
@@ -256,7 +261,7 @@ function dispatchedAvailSession (req, res){
             res.json({status_code:1, message: 'Cannot get the current session', error: err.message});
         }
         else{
-           if(results1.row[0].status==2){
+           if(results1.row[0].status==2){ //setting final data when status is changed from waiting to dispatched.
             console.log("check1");
             let data={
                 status:3,
@@ -271,7 +276,7 @@ function dispatchedAvailSession (req, res){
             }
             console.log("checkdata",data)
 
-            availabilityService.updateAvailSessionTrans(data, function(err2, results2){
+            availabilityService.updateAvailSessionTrans(data, function(err2, results2){ //Updating the final data.
                 if(err2){
                     res.json({status_code:1, message: 'Cannot update the waiting session', error: err2.message});
                 }

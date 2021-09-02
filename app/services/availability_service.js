@@ -3,7 +3,7 @@ const main = require('../config/main');
 const upload = require('../utilities/multer');
 const cloudinary = require('../utilities/cloudinary');
 
-
+//Queries for create availability
 function createAvailability(data,callback){
     try {
         db.pool.getConnection(function(error, connection){
@@ -112,7 +112,7 @@ function createAvailability(data,callback){
     }
 }
 
-
+//Quereis for creating availability sessions.
 function createAvailSession(data,callback){
     try {
         db.pool.query('INSERT INTO availability_sessions (availability_id, user_id, quantity, status, requester_message, location, address_1, address_2, city, latitude, longitude, creator_feedback, requester_feedback, created_at, updated_at)'+
@@ -172,8 +172,10 @@ function createAvailSession(data,callback){
 //     }
 // }
 
+//Queries for getting the data for availability session.
 function getAvailSession(data,callback){
     try{
+        //Since the data has to be fetched from 2 tables, the availabilies table and availability_sessions table joined.
         db.pool.query('SELECT a.id, aa.status, aa.quantity, aa.requester_delivery_option, aa.final_delivery_option, aa.payment_status,'+
                         ' aa.payment_by, a.available_quantity, a.actual_quantity, a.creator_delivery_option FROM availability_sessions aa'+
                         ' JOIN availabilities a on aa.availability_id = a.id'+
@@ -192,6 +194,7 @@ function getAvailSession(data,callback){
     }
 }
 
+// Queries for Updating the availability session status.
 function updateAvailSession(data,status,callback){
     try{
         db.pool.query('UPDATE availability_sessions SET status=?, updated_at=now() WHERE id=?',
@@ -209,6 +212,7 @@ function updateAvailSession(data,status,callback){
     }
 }
 
+//Queries for updating the status of the sessions and other details related to payment, delivery and quantity of the particular availabiity 
 function updateAvailSessionTrans(data,callback){
     try {
         db.pool.getConnection(function(error, connection) {
