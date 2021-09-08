@@ -12,6 +12,11 @@ router.get('/viewShops/:user_id',authMiddleware.verifyToken,adminController.view
 router.get('/viewRestaurants/:user_id',authMiddleware.verifyToken,adminController.viewRestaurants);
 router.get('/updateOrganizationStatus/:user_id',authMiddleware.verifyToken,adminController.updateOrganizationStatus);
 router.get('/updatePublicStatus/:user_id',authMiddleware.verifyToken,adminController.updatePublicStatus);
+router.get('/viewDriverRequests/:user_id',authMiddleware.verifyToken,adminController.viewDriverRequests);
+router.get('/updateDriverStatus/:user_id',authMiddleware.verifyToken,adminController.updateDriverStatus);
+
+
+
 
 
 

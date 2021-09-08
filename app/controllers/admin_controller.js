@@ -230,6 +230,80 @@ function updatePublicStatus (req, res){
 }
 
 
+//viewing Driver Requests
+function viewDriverRequests (req, res){
+    console.log("request body: ",req.params)
+    adminService.getDriverRequests(req.params,function(err, results){
+        if(err){
+            res.json({status_code:1, message: 'Cannot get data of Driver Requests!!', error: err.message});
+        }
+        else{
+            console.log(results)
+            res.json({
+                status_code: 0,
+                message: 'Data of all drivers with request Status successfully displayed',
+                result: results,
+                authData: req.headers.authData,
+                token: req.token
+            });
+        }
+    });
+}
+
+
+//Updating the status of an Driver(accept/rejected/pending)
+function updateDriverStatus (req, res){
+    console.log("request body: ",req.params)
+    adminService.getDriverRequests(req.params,function(err1, results1){
+        if(err1){
+            res.json({status_code:1, message: 'Cannot get the current status', error: err.message});
+        }
+        else{
+          if(results1.row[0].status==0 || results1.row[0].status==1){ //Updating status to reject when status is pending or accepted
+            adminService.updateDriverStatus(req.params,2, function(err2, results2){
+                if(err2){
+                    res.json({status_code:1, message: 'Cannot update status to Reject', error: err2.message});
+                }
+                else{
+                    // console.log(results2)
+                    res.json({
+                        status_code: 0,
+                        message: 'Driver is Rejected!!',
+                        result: results2,
+                        authData: req.headers.authData,
+                        token: req.token
+                    });
+                }
+            });
+          }
+          else if(results1.row[0].status==0 || results1.row[0].status==2){//Updating status to accept when status is pending or rejected
+            adminService.updateDriverStatus(req.params,1, function(err3, results3){
+                if(err3){
+                    res.json({status_code:1, message: 'Cannot update status to Accept', error: err3.message});
+                }
+                else{
+                    // console.log(results2)
+                    res.json({
+                        status_code: 0,
+                        message: 'Driver is accepted!!',
+                        result: results3,
+                        authData: req.headers.authData,
+                        token: req.token
+                    });
+                }
+            });
+          }
+          else{
+            res.json({
+                status_code: 0,
+                message: 'There is no such status',
+                authData: req.headers.authData,
+                token: req.token
+            })
+          }
+        }
+    });
+}
 
 module.exports = {
     viewAllOrganizations:viewAllOrganizations,
@@ -239,5 +313,7 @@ module.exports = {
     viewShops:viewShops,
     viewRestaurants:viewRestaurants,
     updateOrganizationStatus:updateOrganizationStatus,
-    updatePublicStatus:updatePublicStatus
+    updatePublicStatus:updatePublicStatus,
+    viewDriverRequests:viewDriverRequests,
+    updateDriverStatus:updateDriverStatus
 }
