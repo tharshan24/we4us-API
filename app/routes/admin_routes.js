@@ -10,6 +10,11 @@ router.get('/viewNgo/:user_id',authMiddleware.verifyToken,adminController.viewNg
 router.get('/viewCarehomes/:user_id',authMiddleware.verifyToken,adminController.viewCarehomes);
 router.get('/viewShops/:user_id',authMiddleware.verifyToken,adminController.viewShops);
 router.get('/viewRestaurants/:user_id',authMiddleware.verifyToken,adminController.viewRestaurants);
+router.get('/updateOrganizationStatus/:user_id',authMiddleware.verifyToken,adminController.updateOrganizationStatus);
+router.get('/updatePublicStatus/:user_id',authMiddleware.verifyToken,adminController.updatePublicStatus);
+
+
+
 
 // router.get('/viewAllOrganiations/:user_id',authMiddleware.verifyToken,adminController.viewAllOrganiations);
 

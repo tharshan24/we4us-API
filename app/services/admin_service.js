@@ -5,7 +5,10 @@ const main = require('../config/main');
 // Queries for viewing all Organizations data
 function viewAllOrganizations(data,callback){
     try{
-        db.pool.query('SELECT * FROM organizations',
+        db.pool.query('select u.id, u.user_name, u.email, u.user_type, u.profile_picture_path, u.mobile_number, u.land_number, address_1, address_2, u.zipcode, u.bank, u.account_number, u.status, u.is_verified, o.name, o.description, o.contact_person_name, o.contact_person_number, o.contact_person_email, o.license_no, o.license_proof_path, o.social_media, o.website, o.latitude, o.longitude, ut.name, c.name_en from users u ' +
+        'join organizations o on u.id = o.user_id ' +
+        'join cities c on c.id = u.city ' +
+        'join user_types ut on ot.id = u.user_type ',
         (ex, rows) => {
             if(ex){
                 callback(ex);
@@ -23,7 +26,11 @@ function viewAllOrganizations(data,callback){
 // Queries for viewing Organizations by ID
 function viewOrganizationsbyId(data,callback){
     try{
-        db.pool.query('SELECT * FROM organizations WHERE id=?',[authData.user.id],
+        db.pool.query('SELECT u.id, u.user_name, u.email, u.user_type, u.profile_picture_path, u.mobile_number, u.land_number, address_1, address_2, u.zipcode, u.bank, u.account_number, u.status, u.is_verified, o.name, o.description, o.contact_person_name, o.contact_person_number, o.contact_person_email, o.license_no, o.license_proof_path, o.social_media, o.website, o.latitude, o.longitude, ut.name, c.name_en FROM users u ' +
+        'join organizations o on u.id = o.user_id ' +
+        'join cities c on c.id = u.city ' +
+        'join user_types ut on ot.id = u.user_type ' +
+        'WHERE u.id=?', [authData.user.id],
         (ex, rows) => {
             if(ex){
                 callback(ex);
@@ -41,8 +48,49 @@ function viewOrganizationsbyId(data,callback){
 // Queries for viewing Organizations by types
 function viewOrganizationsbyType(data,type,callback){
     try{
-        db.pool.query('SELECT * FROM organizations WHERE organization_type=?',[type],
+        db.pool.query('SELECT u.id, u.user_name, u.email, u.profile_picture_path, u.mobile_number, u.land_number, address_1, address_2, u.zipcode, u.bank, u.account_number, u.status, u.is_verified, o.name, o.description, o.contact_person_name, o.contact_person_number, o.contact_person_email, o.license_no, o.license_proof_path, o.social_media, o.website, o.latitude, o.longitude, ut.name, c.name_en FROM users u ' +
+        'join organizations o on u.id = o.user_id ' +
+        'join cities c on c.id = u.city ' +
+        'join user_types ut on ot.id = u.user_type ' +
+        'WHERE o.organization_type=?',[type],
         (ex, rows) => {
+            if(ex){
+                callback(ex);
+            }
+            else{
+                callback(null,{row: rows});
+            }
+        });
+    }
+    catch(err) {
+    callback(err);
+    }
+}
+
+// Queries for selecting status
+function getUserStatus(data,callback){
+    try{
+        db.pool.query('SELECT status, user_type FROM users  WHERE id=?',
+        [authData.user.id], (ex, rows) => {
+            if(ex){
+                callback(ex);
+            }
+            else{
+                callback(null,{row: rows});
+            }
+        });
+    }
+    catch(err) {
+    callback(err);
+    }
+}
+
+
+// Queries for updating status (Active or Not)
+function updateUserStatus(data,status,callback){
+    try{
+        db.pool.query('UPDATE users SET status=? WHERE id=?',
+        [status,authData.user.id], (ex, rows) => {
             if(ex){
                 callback(ex);
             }
@@ -59,5 +107,7 @@ function viewOrganizationsbyType(data,type,callback){
 module.exports = {
     viewAllOrganizations:viewAllOrganizations,
     viewOrganizationsbyId:viewOrganizationsbyId,
-    viewOrganizationsbyType:viewOrganizationsbyType
+    viewOrganizationsbyType:viewOrganizationsbyType,
+    updateUserStatus:updateUserStatus,
+    getUserStatus:getUserStatus
 }
