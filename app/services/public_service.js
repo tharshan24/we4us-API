@@ -2,6 +2,9 @@ const db = require('../config/database');
 const main = require('../config/main');
 const upload = require('../utilities/multer');
 const cloudinary = require('../utilities/cloudinary');
+const Driver = require('../models/Drivers')
+const mongoose = require('mongoose');
+
 
 function viewProfile(authData,data,callback){
     try {
@@ -172,7 +175,7 @@ function registerDriver(data,callback){
 }
 
 
-function viewProfile(data,callback){
+function vehicleRegister(data,callback){
     try {
         upload.multerCloud(data.files,  (ex, result) => {
             // console.log("aaaaaaaa " + ex, result)
@@ -203,11 +206,43 @@ function viewProfile(data,callback){
     }
 }
 
+function updateDriverLocation(authData, data, callback) {
+
+    try {
+        Driver.updateOne(
+            {driverId: authData.user.id},
+            {
+                $set: {
+                    driverId: authData.user.id,
+                    driverName: authData.user.userName,
+                    location: {
+                        type: "Point",
+                        coordinates: [parseFloat(data.longitude), parseFloat(data.latitude)]
+                    },
+                    socketId: data.socketId
+                }
+                },
+            {upsert: true},
+            (ex, result) => {
+                if(ex){
+                    console.log(ex);
+                    callback(ex);
+                }
+                else{
+                    callback(null,result);
+                }
+            })
+    }
+    catch (err) {
+        console.log(err)
+    }
+}
 
 
 module.exports = {
     viewProfile:viewProfile,
     updateProfile:updateProfile,
     registerDriver:registerDriver,
-    vehicleRegister:vehicleRegister
+    vehicleRegister:vehicleRegister,
+    updateDriverLocation:updateDriverLocation
 }

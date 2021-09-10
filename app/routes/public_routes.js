@@ -11,4 +11,6 @@ router.post('/driverRegister', upload.upload.array('files', 12), authMiddleware.
 router.post('/vehicleRegister', upload.upload.array('files', 12), authMiddleware.verifyToken, publicController.vehicleRegister);
 
 
+router.post('/updateDriverLocation', authMiddleware.verifyToken, publicController.updateDriverLocation);
+
 module.exports  = router;
