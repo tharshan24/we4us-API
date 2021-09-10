@@ -12,4 +12,9 @@ router.get('/acceptAvailSession/:avail_ses_id',authMiddleware.verifyToken,availa
 router.get('/waitingAvailSession/:avail_ses_id',authMiddleware.verifyToken,availabilityController.waitingAvailSession);
 router.get('/dispatchedAvailSession/:avail_ses_id',authMiddleware.verifyToken,availabilityController.dispatchedAvailSession);
 
+router.get('/exploreAvailability/',authMiddleware.verifyToken,availabilityController.exploreAvailability);
+router.get('/exploreMyAvailability/',authMiddleware.verifyToken,availabilityController.exploreMyAvailability);
+router.get('/getSessions/:avail_id',authMiddleware.verifyToken,availabilityController.getSessions);
+router.get('/getSession/:ses_id',authMiddleware.verifyToken,availabilityController.getSession);
+
 module.exports  = router;

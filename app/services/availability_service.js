@@ -175,7 +175,7 @@ function createAvailSession(data,callback){
 //Queries for getting the data for availability session.
 function getAvailSession(data,callback){
     try{
-        //Since the data has to be fetched from 2 tables, the availabilies table and availability_sessions table joined.
+        //Since the data has to be fetched from 2 tables, the availabilities table and availability_sessions table joined.
         db.pool.query('SELECT a.id, aa.status, aa.quantity, aa.requester_delivery_option, aa.final_delivery_option, aa.payment_status,'+
                         ' aa.payment_by, a.available_quantity, a.actual_quantity, a.creator_delivery_option FROM availability_sessions aa'+
                         ' JOIN availabilities a on aa.availability_id = a.id'+
@@ -290,6 +290,90 @@ function cancelAvailSession(data,callback){
     }
 }
 
+function exploreAvailability(authData,data,callback){
+    try{
+        db.pool.query('SELECT a.id, a.user_id, a.name, a.availability_type, a.food_type, a.city, a.status, u.user_name, u.profile_picture_path FROM availabilities a ' +
+            'JOIN users u ON u.id = a.user_id ' +
+            'JOIN cities c ON c.id = a.city ' +
+            'JOIN cities cc ON cc.id = u.city ' +
+            'Join districts d ON d.id = c.district_id ' +
+            'Join districts dd ON dd.id = cc.district_id ' +
+            'WHERE a.status = 1 AND u.status = 1 AND d.id = dd.id AND a.user_id <> ? ' +
+            'ORDER BY a.id DESC',
+        [authData.user.id], (ex, rows) => {
+            if(ex){
+                callback(ex);
+            }
+            else{
+                callback(null,{row: rows});
+            }
+        });
+    }
+    catch(err) {
+    callback(err);
+    }
+}
+
+function exploreMyAvailability(authData,data,callback){
+    try{
+        db.pool.query('SELECT a.id, a.user_id, a.name, a.availability_type, a.food_type, a.city, a.status, u.user_name, u.profile_picture_path FROM availabilities a ' +
+            'JOIN users u ON u.id = a.user_id ' +
+            'WHERE a.status = 1 AND u.status = 1 AND a.user_id = ? ' +
+            'ORDER BY a.id DESC',
+        [authData.user.id], (ex, rows) => {
+            if(ex){
+                callback(ex);
+            }
+            else{
+                callback(null,{row: rows});
+            }
+        });
+    }
+    catch(err) {
+    callback(err);
+    }
+}
+
+function getSessions(authData,data,callback){
+    try{
+        db.pool.query('SELECT s.*, u.user_name, u.profile_picture_path FROM availability_sessions s ' +
+            'JOIN availabilities a ON a.id = s.availability_id ' +
+            'JOIN users u ON u.id=s.user_id ' +
+            'WHERE a.id = ?',
+        [data.avail_id], (ex, rows) => {
+            if(ex){
+                callback(ex);
+            }
+            else{
+                callback(null,{row: rows});
+            }
+        });
+    }
+    catch(err) {
+    callback(err);
+    }
+}
+
+function getSession(authData,data,callback){
+    try{
+        db.pool.query('SELECT s.*, u.user_name, u.profile_picture_path, uu.user_name as cre_user_name, uu.profile_picture_path as cre_profile_picture_path, a.user_id as cre_user_id FROM availability_sessions s ' +
+            'JOIN availabilities a ON a.id = s.availability_id ' +
+            'JOIN users u ON u.id=s.user_id ' +
+            'JOIN users uu ON uu.id=a.user_id ' +
+            'WHERE s.id = ?',
+        [data.ses_id], (ex, rows) => {
+            if(ex){
+                callback(ex);
+            }
+            else{
+                callback(null,{row: rows});
+            }
+        });
+    }
+    catch(err) {
+    callback(err);
+    }
+}
 
 
 module.exports = {
@@ -297,7 +381,11 @@ module.exports = {
     createAvailSession:createAvailSession,
     updateAvailSession: updateAvailSession,
     updateAvailSessionTrans: updateAvailSessionTrans,
-    getAvailSession:getAvailSession
+    getAvailSession:getAvailSession,
+    exploreAvailability:exploreAvailability,
+    exploreMyAvailability:exploreMyAvailability,
+    getSessions:getSessions,
+    getSession:getSession
 }
 
 

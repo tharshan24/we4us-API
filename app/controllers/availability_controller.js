@@ -304,6 +304,86 @@ function dispatchedAvailSession (req, res){
     });
 }
 
+//explore availability session
+function exploreAvailability (req, res){
+    console.log("request body: ",req.params)
+    availabilityService.exploreAvailability(req.authData, req.params, 5, function(err, results){
+        if(err){
+            res.json({status_code:1, message: 'Error', error: err.message});
+        }
+        else{
+            console.log(results)
+            res.json({
+                status_code: 0,
+                message: 'Success',
+                result: results,
+                authData: req.headers.authData,
+                token: req.token
+            });
+        }
+    });
+}
+
+//explore availability session
+function exploreMyAvailability (req, res){
+    console.log("request body: ",req.params)
+    availabilityService.exploreMyAvailability(req.authData, req.params, 5, function(err, results){
+        if(err){
+            res.json({status_code:1, message: 'Error', error: err.message});
+        }
+        else{
+            console.log(results)
+            res.json({
+                status_code: 0,
+                message: 'Success',
+                result: results,
+                authData: req.headers.authData,
+                token: req.token
+            });
+        }
+    });
+}
+
+//explore availability session
+function getSessions (req, res){
+    console.log("request body: ",req.params)
+    availabilityService.getSessions(req.authData, req.params, 5, function(err, results){
+        if(err){
+            res.json({status_code:1, message: 'Error', error: err.message});
+        }
+        else{
+            console.log(results)
+            res.json({
+                status_code: 0,
+                message: 'Success',
+                result: results,
+                authData: req.headers.authData,
+                token: req.token
+            });
+        }
+    });
+}
+
+//explore availability session
+function getSession (req, res){
+    console.log("request body: ",req.params)
+    availabilityService.getSession(req.authData, req.params, 5, function(err, results){
+        if(err){
+            res.json({status_code:1, message: 'Error', error: err.message});
+        }
+        else{
+            console.log(results)
+            res.json({
+                status_code: 0,
+                message: 'Success',
+                result: results,
+                authData: req.headers.authData,
+                token: req.token
+            });
+        }
+    });
+}
+
 module.exports = {
     createAvailability:createAvailability,
     createAvailSession:createAvailSession,
@@ -311,5 +391,9 @@ module.exports = {
     cancelAvailSession:cancelAvailSession,
     acceptAvailSession:acceptAvailSession,
     waitingAvailSession:waitingAvailSession,
-    dispatchedAvailSession:dispatchedAvailSession
+    dispatchedAvailSession:dispatchedAvailSession,
+    exploreAvailability:exploreAvailability,
+    exploreMyAvailability:exploreMyAvailability,
+    getSessions:getSessions,
+    getSession:getSession
 }

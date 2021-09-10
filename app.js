@@ -6,10 +6,13 @@ const organizationRouter = require('./app/routes/organization_routes');
 const adminRouter = require('./app/routes/admin_routes');
 const systemRouter = require('./app/routes/system_routes');
 const availabilityRouter = require('./app/routes/availability_routes');
+const mongoose = require('mongoose');
 const app = express();
 const port = 8000;
 
 // console.log(main);
+
+mongoose.connect('mongodb+srv://root:root@cluster0.rpire.mongodb.net/myFirstDatabase?retryWrites=true&w=majority')
 
 app.use(express.json());
 app.use(express.urlencoded({
