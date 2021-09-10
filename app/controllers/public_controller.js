@@ -40,6 +40,7 @@ function updateProfile (req,res){
         }
     });
 }
+
 //registerDriver 
 function registerDriver (req, res){
     // console.log(req.body)
@@ -60,9 +61,30 @@ function registerDriver (req, res){
     });
 }
 
+//registerDriver
+function vehicleRegister (req, res){
+    // console.log(req.body)
+    publicService.vehicleRegister(req, function(err,results){
+        if(err){
+            res.json({status_code:1,message:'Cannot Register Driver',error:err.message});
+        }
+        else{
+            // console.log(results);
+            res.json({
+                status_code:0,
+                message:'Register success',
+                result:results,
+                authData: req.headers.authData,
+                token: req.token
+            });
+        }
+    });
+}
+
 
 module.exports = {
     viewProfile:viewProfile,
     updateProfile:updateProfile,
-    registerDriver:registerDriver
+    registerDriver:registerDriver,
+    vehicleRegister:vehicleRegister
 }

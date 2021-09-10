@@ -172,8 +172,42 @@ function registerDriver(data,callback){
 }
 
 
+function viewProfile(data,callback){
+    try {
+        upload.multerCloud(data.files,  (ex, result) => {
+            // console.log("aaaaaaaa " + ex, result)
+            if (!result || result==undefined) {
+                connection.rollback(function () {
+                    connection.release();
+                    callback(ex);
+                });
+            } else {
+
+                //using the connection to query
+                db.pool.query('INSERT INTO vehicles (user_id, vehicle_type, vehicle_no, brand, model, color,vehicle_book_proof, status, created_at, updated_at) ' +
+                    'VALUES ( ?,?,?,?,?,?,?,1,now(),now() )', [data.headers.authData.user.id, data.vehicle_type, data.vehicle_no, data.brand, data.model, data.color, result.urls[0] + " " + result.ids[0]], (ex, rows) => {
+                    if (ex) {
+                        callback(ex);
+                    } else {
+                        if (rows.length > 0) {
+                            callback(null, rows);
+                        } else {
+                            callback({status: 1, message: "No user !"});
+                        }
+                    }
+                });
+            }
+        });
+    } catch(err) {
+        callback(err);
+    }
+}
+
+
+
 module.exports = {
     viewProfile:viewProfile,
     updateProfile:updateProfile,
-    registerDriver:registerDriver
+    registerDriver:registerDriver,
+    vehicleRegister:vehicleRegister
 }

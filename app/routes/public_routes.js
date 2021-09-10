@@ -8,6 +8,7 @@ router.get("/viewProfile/:userId", authMiddleware.verifyToken, publicController.
 router.post("/updateProfile", authMiddleware.verifyToken, publicController.updateProfile);
 
 router.post('/driverRegister', upload.upload.array('files', 12), authMiddleware.verifyToken, publicController.registerDriver);
+router.post('/vehicleRegister', upload.upload.array('files', 12), authMiddleware.verifyToken, publicController.vehicleRegister);
 
 
 module.exports  = router;
