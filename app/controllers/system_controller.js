@@ -30,7 +30,22 @@ function getCitiesByDistricts(req,res){
     });
 }
 
+// registration of public
+function getVehicleTypes(req,res){
+    console.log(req.params);
+    systemService.getVehicleTypes(req.params,function(err,results){
+        if(err){
+            res.json({status_code:1,message:'Error in getting cities',error:err.message});
+        }
+        else{
+            // console.log(results);
+            res.json({status_code:0,message:'success',result:results});
+        }
+    });
+}
+
 module.exports = {
     getDistricts:getDistricts,
-    getCitiesByDistricts:getCitiesByDistricts
+    getCitiesByDistricts:getCitiesByDistricts,
+    getVehicleTypes:getVehicleTypes
 }

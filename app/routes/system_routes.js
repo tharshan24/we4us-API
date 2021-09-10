@@ -9,4 +9,6 @@ router.get("/districts", systemController.getDistricts);
 //get cities by district id
 router.get("/citiesByDistrict/:district", systemController.getCitiesByDistricts);
 
+router.get("/getVehicleTypes", systemController.getVehicleTypes);
+
 module.exports = router;

@@ -41,7 +41,30 @@ function getCitiesByDistricts(data,callback){
     }
 }
 
+function getVehicleTypes(data,callback){
+    try {
+        //using the connection to query
+        db.pool.query('select id, name, capacity from vehicle_types where status=1', (ex, rows) => {
+            if (ex) {
+                callback(ex);
+            } else {
+                if(rows.length>0){
+                    callback(null, {
+                        rows
+                    });
+                } else {
+                    callback({status:1, message: "DB error"});
+                }
+            }
+        });
+    } catch(err) {
+        callback(err);
+    }
+}
+
+
 module.exports = {
     getDistricts:getDistricts,
-    getCitiesByDistricts:getCitiesByDistricts
+    getCitiesByDistricts:getCitiesByDistricts,
+    getVehicleTypes:getVehicleTypes
 }
