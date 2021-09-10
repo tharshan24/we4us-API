@@ -238,11 +238,31 @@ function updateDriverLocation(authData, data, callback) {
     }
 }
 
+function getDriverLocation(authData, data, callback) {
+    try {
+        Driver.findOne(
+            {driverId: data.driverId}, 'location.coordinates socketId',
+            {},
+            (ex, result) => {
+                if(ex){
+                    console.log(ex);
+                    callback(ex);
+                }
+                else{
+                    callback(null,result);
+                }
+            })
+    }
+    catch (err) {
+        console.log(err)
+    }
+}
 
 module.exports = {
     viewProfile:viewProfile,
     updateProfile:updateProfile,
     registerDriver:registerDriver,
     vehicleRegister:vehicleRegister,
-    updateDriverLocation:updateDriverLocation
+    updateDriverLocation:updateDriverLocation,
+    getDriverLocation:getDriverLocation
 }
