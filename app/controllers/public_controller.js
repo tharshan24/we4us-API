@@ -66,7 +66,7 @@ function vehicleRegister (req, res){
     // console.log(req.body)
     publicService.vehicleRegister(req, function(err,results){
         if(err){
-            res.json({status_code:1,message:'Cannot Register Driver',error:err.message});
+            res.json({status_code:1,message:'Cannot Register Vehicle',error:err.message});
         }
         else{
             // console.log(results);
