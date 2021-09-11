@@ -188,7 +188,7 @@ function vehicleRegister(data,callback){
 
                 //using the connection to query
                 db.pool.query('INSERT INTO vehicles (user_id, vehicle_type, vehicle_no, brand, model, colour,vehicle_book_proof, status, created_at, updated_at) ' +
-                    'VALUES ( ?,?,?,?,?,?,?,1,now(),now() )', [data.headers.authData.user.id, data.body.vehicle_type, data.body.vehicle_no, data.body.brand, data.body.model, data.body.color, result.urls[0] + " " + result.ids[0]], (ex, rows) => {
+                    'VALUES ( ?,?,?,?,?,?,?,1,now(),now() )', [data.headers.authData.user.id, data.body.vehicle_type, data.body.vehicle_no, data.body.brand, data.body.model, data.body.colour, result.urls[0] + " " + result.ids[0]], (ex, rows) => {
                     if (ex) {
                         callback(ex);
                     } else {
