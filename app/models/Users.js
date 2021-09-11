@@ -1,16 +1,17 @@
 const mongoose = require('mongoose');
 
-const DriverSchema = mongoose.Schema({
+const UserSchema = mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
-    driverId: Number,
-    driverName: String,
+    userId: Number,
+    userName: String,
     location: {
         type: String,
         coordinates: [Number]
     },
+    isDriver: Number,
     driverMode: Number,
     paymentType: Number,
     socketId: String
 },{ typeKey: '$type' })
 
-module.exports = mongoose.model('Driver', DriverSchema);
+module.exports = mongoose.model('User', UserSchema);

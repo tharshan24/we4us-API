@@ -59,6 +59,48 @@ function login(req,res){
     });
 }
 
+
+//registerDriver
+function updateRealUser (req, res){
+    console.log(req.body)
+    userService.updateRealUser(req.headers.authData, req.body, function(err,results){
+        if(err){
+            res.json({status_code:1,message:'Cannot Update User',error:err.message});
+        }
+        else{
+            // console.log(results);
+            res.json({
+                status_code:0,
+                message:'Update success',
+                result:results,
+                authData: req.headers.authData,
+                token: req.token
+            });
+        }
+    });
+}
+
+//registerDriver
+function getRealUser (req, res){
+    console.log(req.body)
+    userService.getRealUser(req.headers.authData, req.params, function(err,results){
+        if(err){
+            res.json({status_code:1,message:'Cannot Get User',error:err.message});
+        }
+        else{
+            // console.log(results);
+            res.json({
+                status_code:0,
+                message:'Success',
+                result:results,
+                authData: req.headers.authData,
+                token: req.token
+            });
+        }
+    });
+}
+
+
 // authentication testing
 function test(req, res){
     res.json({
@@ -73,5 +115,7 @@ module.exports = {
     login:login,
     publicRegister:publicRegister,
     orgRegister:orgRegister,
+    getRealUser:getRealUser,
+    updateRealUser:updateRealUser,
     test:test
 }

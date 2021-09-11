@@ -2,16 +2,15 @@ const db = require('../config/database');
 const main = require('../config/main');
 const upload = require('../utilities/multer');
 const cloudinary = require('../utilities/cloudinary');
-const Driver = require('../models/Drivers')
-const mongoose = require('mongoose');
 
 
 function viewProfile(authData,data,callback){
     try {
         //using the connection to query
-        db.pool.query('select u.id, u.user_name, u.email, u.user_type, u.profile_picture_path, u.mobile_number, u.land_number, address_1, address_2, u.zipcode, u.bank, u.account_number, u.status, u.is_verified, p.first_name, p.last_name, p.nic, p.dob, p.gender, p.driver_status, p.volunteer_status, c.name_en from users u ' +
+        db.pool.query('select u.id, u.user_name, u.email, u.user_type, u.profile_picture_path, u.mobile_number, u.land_number, address_1, address_2, u.zipcode, u.bank, u.account_number, u.status, u.is_verified, p.first_name, p.last_name, p.nic, p.dob, p.gender, p.driver_status, p.volunteer_status, c.name_en, d.driver_mode, d.payment_type from users u ' +
             'join public p on u.id = p.user_id ' +
             'join cities c on c.id = u.city ' +
+            'left join drivers d on d.id = u.id ' +
             'where u.status=1 and u.id=?', [authData.user.id], (ex, rows) => {
             if (ex) {
                 callback(ex);
@@ -202,63 +201,11 @@ function vehicleRegister(data,callback){
     }
 }
 
-function updateDriverLocation(authData, data, callback) {
 
-    try {
-        Driver.updateOne(
-            {driverId: authData.user.id},
-            {
-                $set: {
-                    driverId: authData.user.id,
-                    driverName: authData.user.userName,
-                    location: {
-                        type: "Point",
-                        coordinates: [parseFloat(data.longitude), parseFloat(data.latitude)]
-                    },
-                    socketId: data.socketId
-                }
-                },
-            {upsert: true},
-            (ex, result) => {
-                if(ex){
-                    console.log(ex);
-                    callback(ex);
-                }
-                else{
-                    callback(null,result);
-                }
-            })
-    }
-    catch (err) {
-        console.log(err)
-    }
-}
-
-function getDriverLocation(authData, data, callback) {
-    try {
-        Driver.findOne(
-            {driverId: data.driverId}, 'location.coordinates socketId',
-            {},
-            (ex, result) => {
-                if(ex){
-                    console.log(ex);
-                    callback(ex);
-                }
-                else{
-                    callback(null,result);
-                }
-            })
-    }
-    catch (err) {
-        console.log(err)
-    }
-}
 
 module.exports = {
     viewProfile:viewProfile,
     updateProfile:updateProfile,
     registerDriver:registerDriver,
-    vehicleRegister:vehicleRegister,
-    updateDriverLocation:updateDriverLocation,
-    getDriverLocation:getDriverLocation
+    vehicleRegister:vehicleRegister
 }

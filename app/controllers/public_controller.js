@@ -81,51 +81,9 @@ function vehicleRegister (req, res){
     });
 }
 
-//registerDriver
-function updateDriverLocation (req, res){
-    console.log(req.body)
-    publicService.updateDriverLocation(req.headers.authData, req.body, function(err,results){
-        if(err){
-            res.json({status_code:1,message:'Cannot Update Driver Location',error:err.message});
-        }
-        else{
-            // console.log(results);
-            res.json({
-                status_code:0,
-                message:'Update success',
-                result:results,
-                authData: req.headers.authData,
-                token: req.token
-            });
-        }
-    });
-}
-
-//registerDriver
-function getDriverLocation (req, res){
-    console.log(req.body)
-    publicService.getDriverLocation(req.headers.authData, req.params, function(err,results){
-        if(err){
-            res.json({status_code:1,message:'Cannot Get Driver Location',error:err.message});
-        }
-        else{
-            // console.log(results);
-            res.json({
-                status_code:0,
-                message:'Success',
-                result:results,
-                authData: req.headers.authData,
-                token: req.token
-            });
-        }
-    });
-}
-
 module.exports = {
     viewProfile:viewProfile,
     updateProfile:updateProfile,
     registerDriver:registerDriver,
-    vehicleRegister:vehicleRegister,
-    updateDriverLocation:updateDriverLocation,
-    getDriverLocation:getDriverLocation
+    vehicleRegister:vehicleRegister
 }

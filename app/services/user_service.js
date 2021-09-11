@@ -2,6 +2,8 @@ const db = require('../config/database');
 const main = require('../config/main');
 const crypto = require('crypto');
 const moment = require('moment');
+const User = require('../models/Users')
+const mongoose = require('mongoose');
 
 function publicRegister(data,callback){
     try {
@@ -174,8 +176,65 @@ function login(data,callback){
     }
 }
 
+function updateRealUser(authData, data, callback) {
+
+    try {
+        User.updateOne(
+            {userId: authData.user.id},
+            {
+                $set: {
+                    userId: authData.user.id,
+                    userName: authData.user.userName,
+                    location: {
+                        type: "Point",
+                        coordinates: [parseFloat(data.longitude), parseFloat(data.latitude)]
+                    },
+                    isDriver: data.isDriver,
+                    driverMode: data.driverMode,
+                    paymentType: data.paymentType,
+                    socketId: data.socketId
+                }
+            },
+            {upsert: true},
+            (ex, result) => {
+                if(ex){
+                    console.log(ex);
+                    callback(ex);
+                }
+                else{
+                    callback(null,result);
+                }
+            })
+    }
+    catch (err) {
+        console.log(err)
+    }
+}
+
+function getRealUser(authData, data, callback) {
+    try {
+        User.findOne(
+            {userId: data.userId}, 'location.coordinates socketId',
+            {},
+            (ex, result) => {
+                if(ex){
+                    console.log(ex);
+                    callback(ex);
+                }
+                else{
+                    callback(null,result);
+                }
+            })
+    }
+    catch (err) {
+        console.log(err)
+    }
+}
+
 module.exports = {
     publicRegister:publicRegister,
     orgRegister:orgRegister,
-    login:login
+    login:login,
+    getRealUser:getRealUser,
+    updateRealUser:updateRealUser
 }

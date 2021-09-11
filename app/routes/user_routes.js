@@ -10,6 +10,10 @@ router.post("/orgRegister", userController.orgRegister);
 //user login
 router.post("/login", userController.login);
 
+//realtime user
+router.post('/updateRealUser', authMiddleware.verifyToken, userController.updateRealUser);
+router.get('/getRealUser/:userId', authMiddleware.verifyToken, userController.getRealUser);
+
 //test middleware
 router.get('/test',authMiddleware.verifyToken,userController.test);
 
