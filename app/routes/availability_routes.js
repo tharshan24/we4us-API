@@ -17,4 +17,7 @@ router.get('/exploreMyAvailability/',authMiddleware.verifyToken,availabilityCont
 router.get('/getSessions/:avail_id',authMiddleware.verifyToken,availabilityController.getSessions);
 router.get('/getSession/:ses_id',authMiddleware.verifyToken,availabilityController.getSession);
 
+router.get('/availSuccessDelivery',authMiddleware.verifyToken,availabilityController.availSuccessDelivery);
+router.get('/availOngoingDelivery',authMiddleware.verifyToken,availabilityController.availOngoingDelivery);
+
 module.exports  = router;

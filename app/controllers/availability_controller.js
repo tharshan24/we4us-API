@@ -384,6 +384,45 @@ function getSession (req, res){
     });
 }
 
+//Available success delivery
+function availSuccessDelivery (req, res){
+    console.log("request body: ",req.params)
+    availabilityService.availSuccessDelivery(req.params, function(err, results){
+        if(err){
+            res.json({status_code:1, message: 'Cannot get the count of Success deliveries', error: err.message});
+        }
+        else{
+            console.log(results)
+            res.json({
+                status_code: 0,
+                message: 'Successful Availability deliveries!!',
+                result: results,
+                authData: req.headers.authData,
+                token: req.token
+            });
+        }
+    });
+}
+
+//Available ongoing delivery
+function availOngoingDelivery (req, res){
+    console.log("request body: ",req.params)
+    availabilityService.availOngoingDelivery(req.params, function(err, results){
+        if(err){
+            res.json({status_code:1, message: 'Cannot get the count of Ongoing deliveries', error: err.message});
+        }
+        else{
+            console.log(results)
+            res.json({
+                status_code: 0,
+                message: 'Successful ongoing deliveries!!',
+                result: results,
+                authData: req.headers.authData,
+                token: req.token
+            });
+        }
+    });
+}
 module.exports = {
     createAvailability:createAvailability,
     createAvailSession:createAvailSession,
@@ -395,5 +434,7 @@ module.exports = {
     exploreAvailability:exploreAvailability,
     exploreMyAvailability:exploreMyAvailability,
     getSessions:getSessions,
-    getSession:getSession
+    getSession:getSession,
+    availSuccessDelivery:availSuccessDelivery,
+    availOngoingDelivery:availOngoingDelivery
 }

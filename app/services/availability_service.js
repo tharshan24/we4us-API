@@ -375,6 +375,44 @@ function getSession(authData,data,callback){
     }
 }
 
+// Queries for success availability deliveries.
+function availSuccessDelivery(data,callback){
+    try{
+        db.pool.query('SELECT COUNT(id) FROM availability_sessions'+
+                     ' WHERE status = 4',
+            (ex, rows1) => {
+            if(ex){
+                callback(ex);
+            }
+            else{
+                callback(null,{row: rows1});
+            }
+        });
+    }
+    catch(err) {
+    callback(err);
+    }
+}
+
+// Queries for ongoing availability deliveries.
+function availOngoingDelivery(data,callback){
+    try{
+        db.pool.query('SELECT COUNT(id) FROM availability_sessions'+
+                     ' WHERE status = 1 OR status = 2 OR status = 3 ',
+            (ex, rows1) => {
+            if(ex){
+                callback(ex);
+            }
+            else{
+                callback(null,{row: rows1});
+            }
+        });
+    }
+    catch(err) {
+    callback(err);
+    }
+}
+
 
 module.exports = {
     createAvailability:createAvailability,
@@ -385,7 +423,9 @@ module.exports = {
     exploreAvailability:exploreAvailability,
     exploreMyAvailability:exploreMyAvailability,
     getSessions:getSessions,
-    getSession:getSession
+    getSession:getSession,
+    availSuccessDelivery:availSuccessDelivery,
+    availOngoingDelivery:availOngoingDelivery
 }
 
 
