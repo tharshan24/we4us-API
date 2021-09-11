@@ -2,7 +2,7 @@ const publicService = require('../services/public_service');
 
 // viewProfile of public
 function viewProfile(req,res){
-    console.log(req);
+    console.log(req.params);
 
     publicService.viewProfile(req.headers.authData,req.params,function(err,results){
         if(err){
