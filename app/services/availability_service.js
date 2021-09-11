@@ -23,7 +23,7 @@ function createAvailability(data,callback){
                         //call cloudinary upload
                         upload.multerCloud(data.files, (ex, result) => {
                             // console.log("aaaaa"+ result)
-                            if(!result || result == undefined){
+                            if(!result || result == undefined || result.urls[0] == null){
                                 connection.rollback(function(){
                                 connection.release();
                                 callback(ex);
