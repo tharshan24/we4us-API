@@ -305,6 +305,48 @@ function updateDriverStatus (req, res){
     });
 }
 
+//Getting data of delivery payment 
+function deliveryPayment (req, res){
+    console.log("request body: ",req.params)
+    adminService.deliveryPayment(req.params,function(err, results){
+        if(err){
+            res.json({status_code:1, message: 'Cannot get data of Availability Delivery payments!!', error: err.message});
+        }
+        else{
+            console.log(results)
+            res.json({
+                status_code: 0,
+                message: 'Data of all Availability Delivery payments successfully displayed',
+                result: results,
+                authData: req.headers.authData,
+                token: req.token
+            });
+        }
+    });
+}
+
+//Getting Filtered data of delivery payment 
+function deliveryPaymentFilter (req, res){
+    console.log("request body: ",req.params)
+    adminService.deliveryPaymentFilter(req.params,function(err, results){
+        if(err){
+            res.json({status_code:1, message: 'Cannot Filter data of Availability Delivery payments!!', error: err.message});
+        }
+        else{
+            console.log(results)
+            res.json({
+                status_code: 0,
+                message: 'Data of all Availability Delivery payments successfully Filtered',
+                result: results,
+                authData: req.headers.authData,
+                token: req.token
+            });
+        }
+    });
+}
+
+
+
 module.exports = {
     viewAllOrganizations:viewAllOrganizations,
     viewOrganizationsbyId:viewOrganizationsbyId,
@@ -315,5 +357,7 @@ module.exports = {
     updateOrganizationStatus:updateOrganizationStatus,
     updatePublicStatus:updatePublicStatus,
     viewDriverRequests:viewDriverRequests,
-    updateDriverStatus:updateDriverStatus
+    updateDriverStatus:updateDriverStatus,
+    deliveryPayment:deliveryPayment,
+    deliveryPaymentFilter:deliveryPaymentFilter
 }
