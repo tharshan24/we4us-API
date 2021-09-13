@@ -11,4 +11,7 @@ router.get("/citiesByDistrict/:district", systemController.getCitiesByDistricts)
 
 router.get("/getVehicleTypes", systemController.getVehicleTypes);
 
+router.get("/getAvailabilityType",authMiddleware.verifyToken,systemController.getAvailabilityType);
+router.get("/getRequestType",authMiddleware.verifyToken,systemController.getRequestType);
+
 module.exports = router;

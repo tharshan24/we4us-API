@@ -44,8 +44,49 @@ function getVehicleTypes(req,res){
     });
 }
 
+//getting availability type
+function getAvailabilityType(req,res){
+    console.log(req.params);
+    systemService.getAvailabilityType(req.params,function(err,results){
+        if(err){
+            res.json({status_code:1,message:'Error in getting Availability types',error:err.message});
+        }
+        else{
+            // console.log(results);
+            res.json({
+                status_code:0,
+                message:'Getting availability types successful',
+                result:results,
+                authData: req.headers.authData,
+                token: req.token
+            });
+        }
+    });
+}
+
+//getting request type
+function getRequestType(req,res){
+    console.log(req.params);
+    systemService.getRequestType(req.params,function(err,results){
+        if(err){
+            res.json({status_code:1,message:'Error in getting request types',error:err.message});
+        }
+        else{
+            // console.log(results);
+            res.json({
+                status_code:0,
+                message:'Getting request types successful',
+                result:results,
+                authData: req.headers.authData,
+                token: req.token
+            });
+        }
+    });
+}
 module.exports = {
     getDistricts:getDistricts,
     getCitiesByDistricts:getCitiesByDistricts,
-    getVehicleTypes:getVehicleTypes
+    getVehicleTypes:getVehicleTypes,
+    getAvailabilityType:getAvailabilityType,
+    getRequestType:getRequestType
 }
