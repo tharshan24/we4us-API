@@ -175,7 +175,48 @@ function updateOrganizationStatus (req, res){
     });
 }
 
-//Updating the status of an Public (Enable/Disable)
+//viewing all Public
+function viewAllPublic (req, res){
+    console.log("request body: ",req.params)
+    adminService.viewAllPublic(req.params,function(err, results){
+        if(err){
+            res.json({status_code:1, message: 'Cannot get data of Public', error: err.message});
+        }
+        else{
+            console.log(results)
+            res.json({
+                status_code: 0,
+                message: 'Data of all Public successfully displayed',
+                result: results,
+                authData: req.headers.authData,
+                token: req.token
+            });
+        }
+    });
+}
+
+//viewing Public by ID
+function viewPublicbyId (req, res){
+    console.log("request body: ",req.params)
+    adminService.viewPublicbyId(req.params,function(err, results){
+        if(err){
+            res.json({status_code:1, message: 'Cannot get data of Public With the ID', error: err.message});
+        }
+        else{
+            console.log(results)
+            res.json({
+                status_code: 0,
+                message: 'Data of Public with particular ID successfully displayed',
+                result: results,
+                authData: req.headers.authData,
+                token: req.token
+            });
+        }
+    });
+}
+
+
+//Updating the status of Public (Enable/Disable)
 function updatePublicStatus (req, res){
     console.log("request body: ",req.params)
     adminService.getUserStatus(req.params,function(err1, results1){
@@ -355,6 +396,8 @@ module.exports = {
     viewShops:viewShops,
     viewRestaurants:viewRestaurants,
     updateOrganizationStatus:updateOrganizationStatus,
+    viewAllPublic:viewAllPublic,
+    viewPublicbyId:viewPublicbyId,
     updatePublicStatus:updatePublicStatus,
     viewDriverRequests:viewDriverRequests,
     updateDriverStatus:updateDriverStatus,
