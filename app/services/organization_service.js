@@ -96,7 +96,55 @@ function updateProfile(authData,data,callback){
     }
 }
 
+//Queries for getting Members
+function getMembers(authData,data,callback){
+    try {
+        //console.log(authData)
+        //using the connection to query
+        db.pool.query('SELECT u.id, u.user_name, p.first_name, p.last_name' +
+            'FROM users u '+
+            'JOIN public p ON u.id = p.user_id'+
+            'WHERE u.status=1 AND (u.user_name LIKE "%?%" OR p.first_name LIKE "%?%" OR p.last_name LIKE "%?%") LIMIT 10 ',
+            [data.names, data.names, data.names], 
+            (ex, rows) => {
+            if (ex) {
+                callback(ex);
+            } else {
+                if(rows.length>0){
+                    callback(null, {row: rows});
+                } else {
+                    callback({status:1, message: "No user found !"});
+                }
+            }
+        });
+    } catch(err) {
+        callback(err);
+    }
+}
+
+//Queries for adding Members
+function addMembers(data,callback){
+    try {
+        db.pool.query('INSERT INTO members (user_id, organization_id, description, status, 	created_at, updated_at)'+
+        ' values(?,?,?,?,now(),now())',
+        [data.headers.authData.user.id, data.organization_id, data.description, 1], 
+        (ex, rows) => {
+            if(ex){
+                callback(ex);
+            } 
+            else{
+              callback(null,{row: rows});
+             }
+        });
+    }
+    catch(err) {
+    callback(err);
+    }
+}
+
 module.exports = {
     viewProfile:viewProfile,
-    updateProfile:updateProfile
+    updateProfile:updateProfile,
+    getMembers:getMembers,
+    addMembers:addMembers
 }

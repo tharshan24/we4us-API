@@ -7,4 +7,8 @@ router.get("/viewProfile/:userId", authMiddleware.verifyToken, orgController.vie
 //new change...
 router.post("/updateProfile", authMiddleware.verifyToken, orgController.updateProfile);
 //.....
+router.get("/getMembers/:names", authMiddleware.verifyToken, orgController.getMembers);
+router.post("/addMembers", authMiddleware.verifyToken, orgController.addMembers);
+
+
 module.exports  = router;
