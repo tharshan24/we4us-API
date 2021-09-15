@@ -307,7 +307,7 @@ function dispatchedAvailSession (req, res){
 //explore availability session
 function exploreAvailability (req, res){
     console.log("request body: ",req.params)
-    availabilityService.exploreAvailability(req.authData, req.params, function(err, results){
+    availabilityService.exploreAvailability(req.headers.authData, req.params, function(err, results){
         if(err){
             res.json({status_code:1, message: 'Error', error: err.message});
         }
@@ -327,7 +327,7 @@ function exploreAvailability (req, res){
 //explore availability session
 function exploreMyAvailability (req, res){
     console.log("request body: ",req.params)
-    availabilityService.exploreMyAvailability(req.authData, req.params, function(err, results){
+    availabilityService.exploreMyAvailability(req.headers.authData, req.params, function(err, results){
         if(err){
             res.json({status_code:1, message: 'Error', error: err.message});
         }
@@ -347,7 +347,7 @@ function exploreMyAvailability (req, res){
 //explore availability session
 function getSessions (req, res){
     console.log("request body: ",req.params)
-    availabilityService.getSessions(req.authData, req.params, function(err, results){
+    availabilityService.getSessions(req.headers.authData, req.params, function(err, results){
         if(err){
             res.json({status_code:1, message: 'Error', error: err.message});
         }
@@ -367,7 +367,7 @@ function getSessions (req, res){
 //explore availability session
 function getSession (req, res){
     console.log("request body: ",req.params)
-    availabilityService.getSession(req.authData, req.params, function(err, results){
+    availabilityService.getSession(req.headers.authData, req.params, function(err, results){
         if(err){
             res.json({status_code:1, message: 'Error', error: err.message});
         }
