@@ -129,7 +129,7 @@ function getMembers(authData,data,callback){
 //Queries for adding Members
 function addMembers(data,callback){
     try {
-        db.pool.query('INSERT INTO members (user_id, organization_id, description, status, 	created_at, updated_at)'+
+        db.pool.query('INSERT INTO members (user_id, organization_id, description, status, created_at, updated_at)'+
         ' values(?,?,?,?,now(),now())',
         [data.headers.authData.user.id, data.organization_id, data.description, 1], 
         (ex, rows) => {
@@ -146,9 +146,30 @@ function addMembers(data,callback){
     }
 }
 
+//Queries for adding Members
+function createCollectionPoint(data,callback){
+    try {
+        db.pool.query('INSERT INTO collection_points (ngo_id, description, assigned_to, start_time, end_time, status, location, address_1, city, latitude, longitude, created_at, updated_at)'+
+        ' values(?,?,?,?,?,?,?,?,?,?,?,now(),now())',
+        [data.headers.authData.user.id, data.description, data.assigned_to, data.start_time, data.end_time, data.status, data.location, data.address_1, data.city, data.latitude, data.longitude],
+        (ex, rows) => {
+            if(ex){
+                callback(ex);
+            }
+            else{
+              callback(null,{row: rows});
+             }
+        });
+    }
+    catch(err) {
+    callback(err);
+    }
+}
+
 module.exports = {
     viewProfile:viewProfile,
     updateProfile:updateProfile,
     getMembers:getMembers,
-    addMembers:addMembers
+    addMembers:addMembers,
+    createCollectionPoint:createCollectionPoint
 }

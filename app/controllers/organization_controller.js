@@ -87,9 +87,30 @@ function addMembers(req,res){
     });
 }
 
+//Collection point creation
+function createCollectionPoint(req,res){
+    console.log(req.body);
+    orgService.createCollectionPoint(req.headers.authData,req.body,function(err,results){
+        if(err){
+            res.json({status_code:1,message:'Cannot Create Collection Point',error:err.message});
+        }
+        else{
+            // console.log(results);
+            res.json({
+                status_code:0,
+                message:'Create Collection Point Successful',
+                result:results,
+                authData: req.headers.authData,
+                token: req.token
+            });
+        }
+    });
+}
+
 module.exports = {
     viewProfile:viewProfile,
     updateProfile:updateProfile,
     getMembers:getMembers,
-    addMembers:addMembers
+    addMembers:addMembers,
+    createCollectionPoint:createCollectionPoint
 }
