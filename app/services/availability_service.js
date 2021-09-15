@@ -337,7 +337,7 @@ function exploreMyAvailability(authData,data,callback){
 
 function exploreAvailabilityById(data,callback){
     try{
-        db.pool.query('SELECT a.*, u.user_name, u.profile_picture_path FROM availabilities a ' +
+        db.pool.query('SELECT a.*, u.user_name, u.profile_picture_path, at.name as availability_type_name FROM availabilities a ' +
             'JOIN users u ON u.id = a.user_id ' +
             'JOIN availability_types at ON at.id = a.availability_type ' +
             'WHERE a.id = ?',
