@@ -100,6 +100,26 @@ function getRealUser (req, res){
     });
 }
 
+//registerDriver
+function updateAccount (req, res){
+    console.log(req.body)
+    userService.updateAccount(req.headers.authData, req.body, function(err,results){
+        if(err){
+            res.json({status_code:1,message:'Update Failed',error:err.message});
+        }
+        else{
+            // console.log(results);
+            res.json({
+                status_code:0,
+                message:'Success',
+                result:results,
+                authData: req.headers.authData,
+                token: req.token
+            });
+        }
+    });
+}
+
 
 // authentication testing
 function test(req, res){
@@ -117,5 +137,6 @@ module.exports = {
     orgRegister:orgRegister,
     getRealUser:getRealUser,
     updateRealUser:updateRealUser,
+    updateAccount:updateAccount,
     test:test
 }

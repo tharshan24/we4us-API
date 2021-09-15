@@ -231,10 +231,28 @@ function getRealUser(authData, data, callback) {
     }
 }
 
+function updateAccount(authData,data,callback){
+    try{
+        db.pool.query('UPDATE users SET bank=?, account_number=?, updated_at=now() WHERE id=?',
+            [data.bank, data.account_number, authData.user.id], (ex, rows) => {
+                if(ex){
+                    callback(ex);
+                }
+                else{
+                    callback(null,{row: rows});
+                }
+            });
+    }
+    catch(err) {
+        callback(err);
+    }
+}
+
 module.exports = {
     publicRegister:publicRegister,
     orgRegister:orgRegister,
     login:login,
     getRealUser:getRealUser,
-    updateRealUser:updateRealUser
+    updateRealUser:updateRealUser,
+    updateAccount:updateAccount
 }

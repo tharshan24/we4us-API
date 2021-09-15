@@ -6,6 +6,7 @@ const router = express.Router();
 //user registration
 router.post("/publicRegister", userController.publicRegister);
 router.post("/orgRegister", userController.orgRegister);
+router.post("/updateAccount", authMiddleware.verifyToken, userController.updateAccount);
 
 //user login
 router.post("/login", userController.login);
