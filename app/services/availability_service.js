@@ -294,13 +294,14 @@ function exploreAvailability(authData,data,callback){
     try{
         db.pool.query('SELECT a.id, a.user_id, a.name, a.availability_type, a.food_type, a.available_quantity, a.city, a.status, u.user_name, u.profile_picture_path FROM availabilities a ' +
             'JOIN users u ON u.id = a.user_id ' +
+            'JOIN users uu ON uu.id = ? ' +
             'JOIN cities c ON c.id = a.city ' +
-            'JOIN cities cc ON cc.id = u.city ' +
+            'JOIN cities cc ON cc.id = uu.city ' +
             'Join districts d ON d.id = c.district_id ' +
             'Join districts dd ON dd.id = cc.district_id ' +
             'WHERE a.status = 1 AND u.status = 1 AND d.id = dd.id AND a.user_id <> ? ' +
             'ORDER BY a.id DESC',
-        [authData.user.id], (ex, rows) => {
+        [authData.user.id,authData.user.id], (ex, rows) => {
             if(ex){
                 callback(ex);
             }
