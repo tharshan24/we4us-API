@@ -6,13 +6,17 @@ const cloudinary = require('../utilities/cloudinary');
 
 function viewProfile(authData,data,callback){
     try {
+        let iid = authData.user.id;
+        if(data.userId != null && data.userId != undefined && data.userId){
+            iid=data.userId;
+        }
         console.log(authData.user.id)
         //using the connection to query
         db.pool.query('select u.id, u.user_name, u.email, u.user_type, u.profile_picture_path, u.mobile_number, u.land_number, address_1, address_2, u.zipcode, u.bank, u.account_number, u.status, u.is_verified, p.first_name, p.last_name, p.nic, p.dob, p.gender, p.driver_status, p.volunteer_status, c.name_en, d.driver_mode, d.payment_type from users u ' +
             'join public p on u.id = p.user_id ' +
             'join cities c on c.id = u.city ' +
             'left join drivers d on d.user_id = u.id ' +
-            'where u.status=1 and u.id=?', [authData.user.id], (ex, rows) => {
+            'where u.status=1 and u.id=?', [iid], (ex, rows) => {
             if (ex) {
                 callback(ex);
             } else {

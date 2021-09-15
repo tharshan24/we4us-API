@@ -4,6 +4,7 @@ const authMiddleware = require('../middlewares/auth');
 const router = express.Router();
 
 router.get("/viewProfile/:userId", authMiddleware.verifyToken, orgController.viewProfile);
+router.get("/viewProfile/", authMiddleware.verifyToken, orgController.viewProfile);
 //new change...
 router.post("/updateProfile", authMiddleware.verifyToken, orgController.updateProfile);
 //.....
