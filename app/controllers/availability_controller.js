@@ -2,7 +2,7 @@ const availabilityService = require('../services/availability_service');
 
 //createAvailability of public
 function createAvailability (req, res){
-    console.log("request body: ",req.body)
+    console.log("request body: ",req.body,req.files)
     availabilityService.createAvailability(req, function(err, results){
         if(err){
             res.json({status_code:1, message: 'Cannot create Availability', error: err.message});
@@ -423,6 +423,27 @@ function availOngoingDelivery (req, res){
         }
     });
 }
+
+//Available ongoing delivery
+function exploreAvailabilityById (req, res){
+    console.log("request params: ",req.params)
+    availabilityService.exploreAvailabilityById(req.params, function(err, results){
+        if(err){
+            res.json({status_code:1, message: 'Cannot get availability', error: err.message});
+        }
+        else{
+            console.log(results)
+            res.json({
+                status_code: 0,
+                message: 'Successful',
+                result: results,
+                authData: req.headers.authData,
+                token: req.token
+            });
+        }
+    });
+}
+
 module.exports = {
     createAvailability:createAvailability,
     createAvailSession:createAvailSession,
@@ -436,5 +457,6 @@ module.exports = {
     getSessions:getSessions,
     getSession:getSession,
     availSuccessDelivery:availSuccessDelivery,
-    availOngoingDelivery:availOngoingDelivery
+    availOngoingDelivery:availOngoingDelivery,
+    exploreAvailabilityById:exploreAvailabilityById
 }

@@ -292,7 +292,7 @@ function cancelAvailSession(data,callback){
 
 function exploreAvailability(authData,data,callback){
     try{
-        db.pool.query('SELECT a.id, a.user_id, a.name, a.availability_type, a.food_type, a.city, a.status, u.user_name, u.profile_picture_path FROM availabilities a ' +
+        db.pool.query('SELECT a.id, a.user_id, a.name, a.availability_type, a.food_type, a.quantity, a.city, a.status, u.user_name, u.profile_picture_path FROM availabilities a ' +
             'JOIN users u ON u.id = a.user_id ' +
             'JOIN cities c ON c.id = a.city ' +
             'JOIN cities cc ON cc.id = u.city ' +
@@ -316,7 +316,7 @@ function exploreAvailability(authData,data,callback){
 
 function exploreMyAvailability(authData,data,callback){
     try{
-        db.pool.query('SELECT a.id, a.user_id, a.name, a.availability_type, a.food_type, a.city, a.status, u.user_name, u.profile_picture_path FROM availabilities a ' +
+        db.pool.query('SELECT a.id, a.user_id, a.name, a.availability_type, a.food_type, a.quantity, a.city, a.status, u.user_name, u.profile_picture_path FROM availabilities a ' +
             'JOIN users u ON u.id = a.user_id ' +
             'WHERE a.status = 1 AND u.status = 1 AND a.user_id = ? ' +
             'ORDER BY a.id DESC',
@@ -326,6 +326,38 @@ function exploreMyAvailability(authData,data,callback){
             }
             else{
                 callback(null,{row: rows});
+            }
+        });
+    }
+    catch(err) {
+    callback(err);
+    }
+}
+
+function exploreAvailabilityById(data,callback){
+    try{
+        db.pool.query('SELECT a.*, u.user_name, u.profile_picture_path FROM availabilities a ' +
+            'JOIN users u ON u.id = a.user_id ' +
+            'JOIN availability_types at ON at.id = a.availability_type ' +
+            'WHERE a.id = ?' +
+        [data.availId], (ex, rows1) => {
+            if(ex){
+                callback(ex);
+            }
+            else{
+                db.pool.query('SELECT name, image_path FROM availability_images ' +
+                    'WHERE availability_id = ?' +
+                    [data.availId], (ex, rows2) => {
+                        if(ex){
+                            callback(ex);
+                        }
+                        else {
+                            callback(null,{
+                                data: rows1,
+                                images: rows2
+                            });
+                        }
+                });
             }
         });
     }
@@ -425,7 +457,8 @@ module.exports = {
     getSessions:getSessions,
     getSession:getSession,
     availSuccessDelivery:availSuccessDelivery,
-    availOngoingDelivery:availOngoingDelivery
+    availOngoingDelivery:availOngoingDelivery,
+    exploreAvailabilityById:exploreAvailabilityById
 }
 
 

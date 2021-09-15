@@ -14,6 +14,7 @@ router.get('/dispatchedAvailSession/:avail_ses_id',authMiddleware.verifyToken,av
 
 router.get('/exploreAvailability/',authMiddleware.verifyToken,availabilityController.exploreAvailability);
 router.get('/exploreMyAvailability/',authMiddleware.verifyToken,availabilityController.exploreMyAvailability);
+router.get('/exploreAvailabilityById/:availId',authMiddleware.verifyToken,availabilityController.exploreAvailabilityById);
 router.get('/getSessions/:avail_id',authMiddleware.verifyToken,availabilityController.getSessions);
 router.get('/getSession/:ses_id',authMiddleware.verifyToken,availabilityController.getSession);
 
