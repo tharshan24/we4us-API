@@ -23,11 +23,11 @@ function createRequest(data,callback){
                                 //insert query for requests table
                                 connection.query("INSERT INTO requests (user_id, name, request_type, other_description, description, items_priority, need_before, " + 
                                 "location, address_1, address_2, city, latitude, longitude," +
-                                "creator_delivery_option, status, created_at, updated_at)" +
-                                "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,now(),now())",
+                                "status, created_at, updated_at)" +
+                                "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,now(),now())",
                                 [data.headers.authData.user.id,data.body.name,data.body.request_type, data.body.other_description, data.body.description,
                                 data.body.items_priority,data.body.need_before,data.body.location,data.body.address_1,data.body.address_2,data.body.city,
-                                data.body.latitude,data.body.longitude,data.body.creator_delivery_option,1],
+                                data.body.latitude,data.body.longitude,1],
                                 (ex, rows1) => {
                                     if(ex){
                                         connection.rollback(function () {
@@ -88,7 +88,144 @@ function createRequest(data,callback){
 }
 
 
+//Quereis for creating request sessions.
+function createReqSession(data,callback){
+    try {
+        db.pool.query('INSERT INTO request_sessions (request_id, user_id, attender_message, status, location, address_1, address_2, city, latitude, longitude, creator_feedback, attender_feedback, created_at, updated_at)'+
+        ' values(?,?,?,?,?,?,?,?,?,?,?,?,now(),now())',
+        [data.request_id, data.headers.authData.user.id, data.attender_message, 0, data.location, data.address_1, data.address_2, data.city, data.latitude, data.longitude, data.creator_feedback, data.requester_feedback], (ex, rows) => {
+            if(ex){
+                callback(ex);
+            } 
+            else{
+              callback(null,{row: rows});
+             }
+        });
+    }
+    catch(err) {
+    callback(err);
+    }
+}
+
+
+//Queries for getting the data from request session.
+function getReqSessionStatus(data,callback){
+    try{
+        db.pool.query('SELECT status FROM request_sessions WHERE id=?'
+            [data.req_ses_id], (ex, rows) => {
+            if(ex){
+                callback(ex);
+            }
+            else{
+                callback(null,{row: rows});
+            }
+        });
+    }
+    catch(err) {
+    callback(err);
+    }
+}
+
+// Queries for Updating the request session status.
+function updateReqSessionStatus(data,status,callback){
+    try{
+        db.pool.query('UPDATE request_sessions SET status=?, updated_at=now() WHERE id=?',
+        [status,data.req_ses_id], (ex, rows) => {
+            if(ex){
+                callback(ex);
+            }
+            else{
+                callback(null,{row: rows});
+            }
+        });
+    }
+    catch(err) {
+    callback(err);
+    }
+}
+
+//Quereis for creating availability sessions.
+function addReqSessionItems(data,callback){
+    try {
+        // db.pool.query('INSERT INTO request_session_items (request_session_id, item_id, quantity, status, created_at, updated_at)'+
+        // ' values(?,?,?,?,now(),now())',
+        // [data.body.request_session_id, data.body.item_id, data.body.quantity,1],
+        let q = "INSERT INTO request_session_items (request_session_id, item_id, quantity, status, created_at, updated_at) VALUES ?";
+        let v = [];
+        for (let i = 0; i < data.body.item_id.length; i++){
+            // console.log("i:",i)
+            let vv = {request_session_id:data.body.request_session_id,item_id:data.body.item_id[i],quantity:data.body.quantity[i]};
+            // console.log("qq:",vv)
+            v.push(vv)
+        }
+        connection.query(q,[v.map(item => [item.request_session_id,item.item_id,item.quantity,1,now,now])], 
+        (ex, rows) => {
+            if(ex){
+                callback(ex);
+            } 
+            else{
+              callback(null,{row: rows});
+             }
+        });
+    }
+    catch(err) {
+    callback(err);
+    }
+}
+
+//Queries for getting the data from request types.
+function getRequestType(data,callback){
+    try{
+        db.pool.query('SELECT id,name FROM request_types WHERE status = 1',
+            (ex, rows) => {
+            if(ex){
+                callback(ex);
+            }
+            else{
+                callback(null,{row: rows});
+            }
+        });
+    }
+    catch(err) {
+    callback(err);
+    }
+}
+
+
+//Queries for getting the request session items.
+function getReqSessionItems(data,callback){
+    try{
+        db.pool.query('SELECT id FROM request_sessions WHERE status = 1',
+            (ex, rows) => {
+            if(ex){
+                callback(ex);
+            }
+            else{
+                    db.pool.query('SELECT id,name FROM request_types WHERE status = 1',
+                    (ex, rows) => {
+                    if(ex){
+                    callback(ex);
+                    }
+                     else{
+                    callback(null,{row: rows});
+                 }
+             });
+            }
+        });
+    }
+    catch(err) {
+    callback(err);
+    }
+}
+
+
 
 module.exports = {
-    createRequest:createRequest
+    createRequest:createRequest,
+    createReqSession:createReqSession,
+    getReqSessionStatus:getReqSessionStatus,
+    updateReqSessionStatus:updateReqSessionStatus,
+    addReqSessionItems:addReqSessionItems,
+    getRequestType:getRequestType,
+    getReqSessionItems:getReqSessionItems
 }
