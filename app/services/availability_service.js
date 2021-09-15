@@ -299,7 +299,7 @@ function exploreAvailability(authData,data,callback){
             'JOIN cities cc ON cc.id = uu.city ' +
             'Join districts d ON d.id = c.district_id ' +
             'Join districts dd ON dd.id = cc.district_id ' +
-            'WHERE a.status = 1 AND u.status = 1 AND d.id = dd.id AND a.user_id <> ? ' +
+            'WHERE a.status = 1 AND u.status = 1 AND d.id = dd.id AND a.user_id <> ? AND a.best_before > now() ' +
             'ORDER BY a.id DESC',
         [authData.user.id,authData.user.id], (ex, rows) => {
             if(ex){
