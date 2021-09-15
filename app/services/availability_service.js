@@ -340,14 +340,14 @@ function exploreAvailabilityById(data,callback){
         db.pool.query('SELECT a.*, u.user_name, u.profile_picture_path FROM availabilities a ' +
             'JOIN users u ON u.id = a.user_id ' +
             'JOIN availability_types at ON at.id = a.availability_type ' +
-            'WHERE a.id = ?' +
+            'WHERE a.id = ?',
         [data.availId], (ex, rows1) => {
             if(ex){
                 callback(ex);
             }
             else{
                 db.pool.query('SELECT name, image_path FROM availability_images ' +
-                    'WHERE availability_id = ?' +
+                    'WHERE availability_id = ?',
                     [data.availId], (ex, rows2) => {
                         if(ex){
                             callback(ex);

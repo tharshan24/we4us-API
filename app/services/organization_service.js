@@ -215,7 +215,7 @@ function getCollectionPointsById(data,callback){
     try{
         db.pool.query('SELECT cp.*, u.user_name, u.profile_picture_path FROM collection_points cp ' +
             'JOIN users u ON u.id = cp.ngo_id ' +
-            'WHERE cp.id = ?' +
+            'WHERE cp.id = ?',
             [data.col_id], (ex, rows1) => {
             if(ex){
                 callback(ex);
