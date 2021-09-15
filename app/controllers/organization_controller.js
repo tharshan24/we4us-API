@@ -107,10 +107,73 @@ function createCollectionPoint(req,res){
     });
 }
 
+//Collection points get all
+function getCollectionPoints(req,res){
+    // console.log(req.body);
+    orgService.getCollectionPoints(req.headers.authData,req.params,function(err,results){
+        if(err){
+            res.json({status_code:1,message:'Cannot Get Collection Point',error:err.message});
+        }
+        else{
+            // console.log(results);
+            res.json({
+                status_code:0,
+                message:'Get Collection Point Successful',
+                result:results,
+                authData: req.headers.authData,
+                token: req.token
+            });
+        }
+    });
+}
+
+//Collection points get my
+function getMyCollectionPoints(req,res){
+    // console.log(req.body);
+    orgService.getMyCollectionPoints(req.headers.authData,req.params,function(err,results){
+        if(err){
+            res.json({status_code:1,message:'Cannot Get Collection Point',error:err.message});
+        }
+        else{
+            // console.log(results);
+            res.json({
+                status_code:0,
+                message:'Get Collection Point Successful',
+                result:results,
+                authData: req.headers.authData,
+                token: req.token
+            });
+        }
+    });
+}
+
+//Collection points get my
+function getCollectionPointsById(req,res){
+    // console.log(req.body);
+    orgService.getCollectionPointsById(req.params,function(err,results){
+        if(err){
+            res.json({status_code:1,message:'Cannot Get Collection Point',error:err.message});
+        }
+        else{
+            // console.log(results);
+            res.json({
+                status_code:0,
+                message:'Get Collection Point Successful',
+                result:results,
+                authData: req.headers.authData,
+                token: req.token
+            });
+        }
+    });
+}
+
 module.exports = {
     viewProfile:viewProfile,
     updateProfile:updateProfile,
     getMembers:getMembers,
     addMembers:addMembers,
-    createCollectionPoint:createCollectionPoint
+    createCollectionPoint:createCollectionPoint,
+    getCollectionPoints:getCollectionPoints,
+    getMyCollectionPoints:getMyCollectionPoints,
+    getCollectionPointsById:getCollectionPointsById
 }

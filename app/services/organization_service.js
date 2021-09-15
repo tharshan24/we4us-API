@@ -166,10 +166,79 @@ function createCollectionPoint(data,callback){
     }
 }
 
+function getCollectionPoints(authData,data,callback){
+    try{
+        db.pool.query('SELECT cp.*, u.user_name, u.profile_picture_path FROM collection_points cp ' +
+            'JOIN users u ON u.id = cp.ngo_id ' +
+            'JOIN users uu ON uu.id = ? ' +
+            'JOIN cities c ON c.id = cp.city ' +
+            'JOIN cities cc ON cc.id = uu.city ' +
+            'Join districts d ON d.id = c.district_id ' +
+            'Join districts dd ON dd.id = cc.district_id ' +
+            'WHERE cp.status = 1 AND u.status = 1 AND d.id = dd.id AND cp.ngo_id <> ? AND cp.end_time > now() ' +
+            'ORDER BY cp.id DESC',
+            [authData.user.id,authData.user.id], (ex, rows) => {
+                if(ex){
+                    callback(ex);
+                }
+                else{
+                    callback(null,{row: rows});
+                }
+            });
+    }
+    catch(err) {
+        callback(err);
+    }
+}
+
+function getMyCollectionPoints(authData,data,callback){
+    try{
+        db.pool.query('SELECT cp.*, u.user_name, u.profile_picture_path FROM collection_points cp ' +
+            'JOIN users u ON u.id = cp.ngo_id ' +
+            'WHERE cp.status = 1 AND u.status = 1 AND cp.user_id = ? ' +
+            'ORDER BY a.id DESC',
+            [authData.user.id], (ex, rows) => {
+                if(ex){
+                    callback(ex);
+                }
+                else{
+                    callback(null,{row: rows});
+                }
+            });
+    }
+    catch(err) {
+        callback(err);
+    }
+}
+
+function getCollectionPointsById(data,callback){
+    try{
+        db.pool.query('SELECT cp.*, u.user_name, u.profile_picture_path FROM collection_points cp ' +
+            'JOIN users u ON u.id = cp.ngo_id ' +
+            'WHERE cp.id = ?' +
+            [data.col_id], (ex, rows1) => {
+            if(ex){
+                callback(ex);
+            }
+            else{
+                callback(null,{
+                    data: rows1
+                });
+            }
+        });
+    }
+    catch(err) {
+        callback(err);
+    }
+}
+
 module.exports = {
     viewProfile:viewProfile,
     updateProfile:updateProfile,
     getMembers:getMembers,
     addMembers:addMembers,
-    createCollectionPoint:createCollectionPoint
+    createCollectionPoint:createCollectionPoint,
+    getCollectionPoints:getCollectionPoints,
+    getMyCollectionPoints:getMyCollectionPoints,
+    getCollectionPointsById:getCollectionPointsById
 }
