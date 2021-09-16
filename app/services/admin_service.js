@@ -260,7 +260,27 @@ function deliveryPaymentFilter(data,callback){
     }
 }
 
-
+function exploreAvailability(authData,data,callback){
+    try{
+        db.pool.query('SELECT a.id, a.user_id, a.name, a.availability_type, a.food_type, a.available_quantity, a.city, a.status, u.user_name, u.profile_picture_path, a.best_before, c.name_en, d.name_en FROM availabilities a ' +
+            'JOIN users u ON u.id = a.user_id ' +
+            'JOIN cities c ON c.id = a.city ' +
+            'JOIN districts d ON d.id = c.district_id ' +
+            'WHERE a.status = 1 ' +
+            'ORDER BY a.id DESC',
+            (ex, rows) => {
+            if(ex){
+                callback(ex);
+            }
+            else{
+                callback(null,{row: rows});
+            }
+        });
+    }
+    catch(err) {
+    callback(err);
+    }
+}
 
 module.exports = {
     viewAllOrganizations:viewAllOrganizations,
@@ -274,5 +294,6 @@ module.exports = {
     getAllDrivers:getAllDrivers,
     updateDriverStatus:updateDriverStatus,
     deliveryPayment:deliveryPayment,
-    deliveryPaymentFilter:deliveryPaymentFilter
+    deliveryPaymentFilter:deliveryPaymentFilter,
+    exploreAvailability:exploreAvailability
 }

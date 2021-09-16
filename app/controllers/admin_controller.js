@@ -406,6 +406,25 @@ function deliveryPaymentFilter (req, res){
     });
 }
 
+//explore availability 
+function exploreAvailability (req, res){
+    console.log("request body: ",req.params)
+    adminService.exploreAvailability(req.headers.authData, req.params, function(err, results){
+        if(err){
+            res.json({status_code:1, message: 'Error', error: err.message});
+        }
+        else{
+            console.log(results)
+            res.json({
+                status_code: 0,
+                message: 'Success',
+                result: results,
+                authData: req.headers.authData,
+                token: req.token
+            });
+        }
+    });
+}
 
 
 module.exports = {
@@ -423,5 +442,6 @@ module.exports = {
     viewAllDrivers:viewAllDrivers,
     updateDriverStatus:updateDriverStatus,
     deliveryPayment:deliveryPayment,
-    deliveryPaymentFilter:deliveryPaymentFilter
+    deliveryPaymentFilter:deliveryPaymentFilter,
+    exploreAvailability:exploreAvailability
 }

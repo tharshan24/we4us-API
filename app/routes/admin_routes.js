@@ -20,11 +20,14 @@ router.get('/viewPublicbyId/:user_id',authMiddleware.verifyToken,adminController
 router.get('/updatePublicStatus/:user_id',authMiddleware.verifyToken,adminController.updatePublicStatus);
 
 router.get('/viewDriverById/:user_id',authMiddleware.verifyToken,adminController.viewDriverById);
-router.get('/viewAllDrivers/:user_id',authMiddleware.verifyToken,adminController.viewAllDrivers);
+router.get('/viewAllDrivers/',authMiddleware.verifyToken,adminController.viewAllDrivers);
 router.get('/updateDriverStatus/:user_id',authMiddleware.verifyToken,adminController.updateDriverStatus);
 
 router.get('/deliveryPayment',authMiddleware.verifyToken,adminController.deliveryPayment);
 router.get('/deliveryPaymentFilter/:startDate/:endDate',authMiddleware.verifyToken,adminController.deliveryPaymentFilter);
+
+router.get('/exploreAvailability',authMiddleware.verifyToken,adminController.exploreAvailability);
+
 
 
 
