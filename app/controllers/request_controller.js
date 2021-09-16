@@ -62,9 +62,144 @@ function getRequestType (req, res){
     });
 }
 
+//Updating the status to accepted.
+function acceptReqSession (req, res){
+    console.log("request body: ",req.params)
+    requestService.getReqSessionStatus(req.params,function(err1, results1){
+        if(err1){
+            res.json({status_code:1, message: 'Cannot get the current status', error: err1.message});
+        }
+        else{
+          if(results1.row[0].status==0){ //Updating status to accepted when the current stage is pending
+            requestService.updateReqSessionStatus(req.params, 1, function(err2, results2){
+                if(err2){
+                    res.json({status_code:1, message: 'Cannot update Session to Accepted', error: err2.message});
+                }
+                else{
+                    // console.log(results2)
+                    res.json({
+                        status_code: 0,
+                        message: 'Request Session updating to accepted is Success',
+                        result: results2,
+                        authData: req.headers.authData,
+                        token: req.token
+                    });
+                }
+            });
+          }
+          else{
+            res.json({
+                status_code: 0,
+                message: 'The current status is not in waiting stage',
+                authData: req.headers.authData,
+                token: req.token
+            })
+          }
+        }
+    });
+}
+
+
+//Updating the status to cancelled.
+function cancelReqSession (req, res){
+    console.log("request body: ",req.params)
+    requestService.getReqSessionStatus(req.params,function(err1, results1){
+        if(err1){
+            res.json({status_code:1, message: 'Cannot get the current status', error: err1.message});
+        }
+        else{
+          if(results1.row[0].status==0){ //Updating status to cancelled when the current stage is pending
+            requestService.updateReqSessionStatus(req.params,6, function(err2, results2){
+                if(err2){
+                    res.json({status_code:1, message: 'Cannot update Session to cancelled', error: err2.message});
+                }
+                else{
+                    // console.log(results2)
+                    res.json({
+                        status_code: 0,
+                        message: 'Request Session updating to cancelled is Success',
+                        result: results2,
+                        authData: req.headers.authData,
+                        token: req.token
+                    });
+                }
+            });
+          }
+
+        //   else if(results1.row[0].status==1){ //Updating status to cancelled when the current stage is accepted
+        //     requestService.updateReqSessionStatus(req.params,6, function(err3, results3){
+        //         if(err3){
+        //             res.json({status_code:1, message: 'Cannot update Session to cancelled', error: err3.message});
+        //         }
+        //         else{
+        //             // console.log(results2)
+        //             res.json({
+        //                 status_code: 0,
+        //                 message: 'Request Session updating to cancelled is Success',
+        //                 result: results3,
+        //                 authData: req.headers.authData,
+        //                 token: req.token
+        //             });
+        //         }
+        //     });
+        //   }
+          else{
+            res.json({
+                status_code: 0,
+                message: 'The current status is not in waiting stage',
+                authData: req.headers.authData,
+                token: req.token
+            })
+          }
+        }
+    });
+}
+
+
+//Updating the status to rejected.
+function rejectReqSession (req, res){
+    console.log("request body: ",req.params)
+    requestService.getReqSessionStatus(req.params,function(err1, results1){
+        if(err1){
+            res.json({status_code:1, message: 'Cannot get the current status', error: err1.message});
+        }
+        else{
+          if(results1.row[0].status==1){ //Updating status to cancelled when the current stage is pending
+            requestService.updateReqSessionStatus(req.params,6, function(err2, results2){
+                if(err2){
+                    res.json({status_code:1, message: 'Cannot update Session to rejected', error: err2.message});
+                }
+                else{
+                    // console.log(results2)
+                    res.json({
+                        status_code: 0,
+                        message: 'Request Session updating to rejected is Success',
+                        result: results2,
+                        authData: req.headers.authData,
+                        token: req.token
+                    });
+                }
+            });
+          }
+          else{
+            res.json({
+                status_code: 0,
+                message: 'The current status is not in accepted stage',
+                authData: req.headers.authData,
+                token: req.token
+            })
+          }
+        }
+    });
+}
+
+
 module.exports = {
     createRequest:createRequest,
     createReqSession:createReqSession,
-    getRequestType:getRequestType
+    getRequestType:getRequestType,
+    acceptReqSession:acceptReqSession,
+    cancelReqSession:cancelReqSession,
+    rejectReqSession:rejectReqSession
 
 }
