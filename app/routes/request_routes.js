@@ -9,7 +9,7 @@ router.post('/createReqSession', authMiddleware.verifyToken, requestController.c
 router.get('/acceptReqSession/:req_ses_id', authMiddleware.verifyToken, requestController.acceptReqSession);
 router.get('/cancelReqSession/:req_ses_id', authMiddleware.verifyToken, requestController.cancelReqSession);
 router.get('/rejectReqSession/:req_ses_id', authMiddleware.verifyToken, requestController.rejectReqSession);
-// router.get('/deliverReqSession/:req_ses_id', authMiddleware.verifyToken, requestController.deliverReqSession);
+router.get('/deliverReqSession/:req_ses_id', authMiddleware.verifyToken, requestController.deliverReqSession);
 
 router.get('/getRequestType/', authMiddleware.verifyToken, requestController.getRequestType);
 

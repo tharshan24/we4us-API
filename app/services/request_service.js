@@ -38,7 +38,6 @@ function createRequest(data,callback){
                                     else{
                                         // console.log("results table1",result)
                                         //insert query for request_items table
-                                    
                                             let q = "INSERT INTO request_items (request_id, name, description, items, needed_quantity, status) VALUES ?";
                                             let v = [];
                                             for (let i = 0; i < data.body.items.length; i++){
@@ -150,9 +149,10 @@ function addReqSessionItems(data,callback){
         // db.pool.query('INSERT INTO request_session_items (request_session_id, item_id, quantity, status, created_at, updated_at)'+
         // ' values(?,?,?,?,now(),now())',
         // [data.body.request_session_id, data.body.item_id, data.body.quantity,1],
+        let c = "SELECT COUNT(ri.items) FROM request_items ri JOIN requests r ON r.id = ri.request_id WHERE ri.status=1"
         let q = "INSERT INTO request_session_items (request_session_id, item_id, quantity, status, created_at, updated_at) VALUES ?";
         let v = [];
-        for (let i = 0; i < data.body.item_id.length; i++){
+        for (let i = 0; i < c; i++){
             // console.log("i:",i)
             let vv = {request_session_id:data.body.request_session_id,item_id:data.body.item_id[i],quantity:data.body.quantity[i]};
             // console.log("qq:",vv)
@@ -196,18 +196,18 @@ function getRequestType(data,callback){
 function getReqSessionItems(data,callback){
     try{
         db.pool.query('SELECT id FROM request_sessions WHERE status = 1',
-            (ex, rows) => {
+            (ex, rows1) => {
             if(ex){
                 callback(ex);
             }
             else{
                     db.pool.query('SELECT id,name FROM request_types WHERE status = 1',
-                    (ex, rows) => {
+                    (ex, rows2) => {
                     if(ex){
                     callback(ex);
                     }
                      else{
-                    callback(null,{row: rows});
+                    callback(null,{row: rows1,rows2});
                  }
              });
             }

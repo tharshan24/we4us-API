@@ -151,11 +151,30 @@ function viewPublicbyId(data,callback){
 }
 
 // Queries for selecting status for driver
-function getDriverRequests(data,callback){
+function getDriverById(data,callback){
     try{
         db.pool.query('SELECT license_no,license_proof_path,extension,payment_type,driver_mode,rating,rating_count,'+
-        'status FROM users  WHERE user_id=?',
+        'status FROM drivers  WHERE user_id=?',
         [authData.user.id], (ex, rows) => {
+            if(ex){
+                callback(ex);
+            }
+            else{
+                callback(null,{row: rows});
+            }
+        });
+    }
+    catch(err) {
+    callback(err);
+    }
+}
+
+// Queries for selecting status for driver
+function getAllDrivers(data,callback){
+    try{
+        db.pool.query('SELECT license_no,license_proof_path,extension,payment_type,driver_mode,rating,rating_count,'+
+        'status FROM drivers ',
+        (ex, rows) => {
             if(ex){
                 callback(ex);
             }
@@ -251,7 +270,8 @@ module.exports = {
     viewAllPublic:viewAllPublic,
     viewPublicbyId:viewPublicbyId,
     getUserStatus:getUserStatus,
-    getDriverRequests:getDriverRequests,
+    getDriverById:getDriverById,
+    getAllDrivers:getAllDrivers,
     updateDriverStatus:updateDriverStatus,
     deliveryPayment:deliveryPayment,
     deliveryPaymentFilter:deliveryPaymentFilter

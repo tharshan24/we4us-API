@@ -271,12 +271,32 @@ function updatePublicStatus (req, res){
 }
 
 
-//viewing Driver Requests
-function viewDriverRequests (req, res){
+//viewing Driver by ID
+function viewDriverById (req, res){
     console.log("request body: ",req.params)
-    adminService.getDriverRequests(req.params,function(err, results){
+    adminService.getDriverById(req.params,function(err, results){
         if(err){
-            res.json({status_code:1, message: 'Cannot get data of Driver Requests!!', error: err.message});
+            res.json({status_code:1, message: 'Cannot get data of a Driver!!', error: err.message});
+        }
+        else{
+            console.log(results)
+            res.json({
+                status_code: 0,
+                message: 'Data drivers with particular ID successfully displayed',
+                result: results,
+                authData: req.headers.authData,
+                token: req.token
+            });
+        }
+    });
+}
+
+//viewing all Drivers
+function viewAllDrivers (req, res){
+    console.log("request body: ",req.params)
+    adminService.getAllDrivers(req.params,function(err, results){
+        if(err){
+            res.json({status_code:1, message: 'Cannot get data of all drivers!!', error: err.message});
         }
         else{
             console.log(results)
@@ -295,7 +315,7 @@ function viewDriverRequests (req, res){
 //Updating the status of an Driver(accept/rejected/pending)
 function updateDriverStatus (req, res){
     console.log("request body: ",req.params)
-    adminService.getDriverRequests(req.params,function(err1, results1){
+    adminService.getDriverById(req.params,function(err1, results1){
         if(err1){
             res.json({status_code:1, message: 'Cannot get the current status', error: err.message});
         }
@@ -399,7 +419,8 @@ module.exports = {
     viewAllPublic:viewAllPublic,
     viewPublicbyId:viewPublicbyId,
     updatePublicStatus:updatePublicStatus,
-    viewDriverRequests:viewDriverRequests,
+    viewDriverById:viewDriverById,
+    viewAllDrivers:viewAllDrivers,
     updateDriverStatus:updateDriverStatus,
     deliveryPayment:deliveryPayment,
     deliveryPaymentFilter:deliveryPaymentFilter

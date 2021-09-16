@@ -193,6 +193,44 @@ function rejectReqSession (req, res){
     });
 }
 
+//Updating the status to delivered.
+function deliverReqSession (req, res){
+    console.log("request body: ",req.params)
+    requestService.getReqSessionStatus(req.params,function(err1, results1){
+        if(err1){
+            res.json({status_code:1, message: 'Cannot get the current status', error: err1.message});
+        }
+        else{
+          if(results1.row[0].status==1){ //Updating status to delivered when the current stage is pending
+            requestService.updateReqSessionStatus(req.params,4, function(err2, results2){
+                if(err2){
+                    res.json({status_code:1, message: 'Cannot update Session to delivered', error: err2.message});
+                }
+                else{
+                    // console.log(results2)
+                    res.json({
+                        status_code: 0,
+                        message: 'Request Session updating to Delivered is Success',
+                        result: results2,
+                        authData: req.headers.authData,
+                        token: req.token
+                    });
+                }
+            });
+          }
+          else{
+            res.json({
+                status_code: 0,
+                message: 'The current status is not in accepted stage',
+                authData: req.headers.authData,
+                token: req.token
+            })
+          }
+        }
+    });
+}
+
+
 
 module.exports = {
     createRequest:createRequest,
@@ -200,6 +238,7 @@ module.exports = {
     getRequestType:getRequestType,
     acceptReqSession:acceptReqSession,
     cancelReqSession:cancelReqSession,
-    rejectReqSession:rejectReqSession
+    rejectReqSession:rejectReqSession,
+    deliverReqSession:deliverReqSession
 
 }

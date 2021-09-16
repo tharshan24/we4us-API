@@ -19,7 +19,8 @@ router.get('/viewPublicbyId/:user_id',authMiddleware.verifyToken,adminController
 
 router.get('/updatePublicStatus/:user_id',authMiddleware.verifyToken,adminController.updatePublicStatus);
 
-router.get('/viewDriverRequests/:user_id',authMiddleware.verifyToken,adminController.viewDriverRequests);
+router.get('/viewDriverById/:user_id',authMiddleware.verifyToken,adminController.viewDriverById);
+router.get('/viewAllDrivers/:user_id',authMiddleware.verifyToken,adminController.viewAllDrivers);
 router.get('/updateDriverStatus/:user_id',authMiddleware.verifyToken,adminController.updateDriverStatus);
 
 router.get('/deliveryPayment',authMiddleware.verifyToken,adminController.deliveryPayment);
