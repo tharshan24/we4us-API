@@ -34,12 +34,12 @@ function createAvailability(data,callback){
                                 //insert query for availabilities table
                                 connection.query("INSERT INTO availabilities (user_id, name, availability_type, other_description, description, food_type, total_quantity, " + 
                                 "available_quantity, actual_quantity, cooked_time, best_before, storage_description, location, address_1, address_2, city, latitude, longitude," +
-                                "cater_description, creator_delivery_option, delivery_vehicle_option, status, image_status, created_at, updated_at)" +
-                                "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,now(),now())",
+                                "cater_description, creator_delivery_option, status, image_status, created_at, updated_at)" +
+                                "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,now(),now())",
                                 [data.headers.authData.user.id,data.body.name,data.body.availability_type, data.body.other_description, data.body.description,
                                 data.body.food_type,data.body.total_quantity,data.body.total_quantity,data.body.total_quantity,data.body.cooked_time,
                                 data.body.best_before,data.body.storage_description,data.body.location,data.body.address_1,data.body.address_2,data.body.city,
-                                data.body.latitude,data.body.longitude,data.body.cater_description,data.body.creator_delivery_option,data.body.delivery_vehicle_option,
+                                data.body.latitude,data.body.longitude,data.body.cater_description,data.body.creator_delivery_option,
                                 1,data.body.image_status] , (ex,rows1) => {
                                     if(ex){
                                            // console.log("222222")
@@ -472,7 +472,7 @@ function exploreAvailabilityByMySessions(data,callback){
 
 function exploreAvailabilityByMySession(data,callback){
     try{
-        db.pool.query('SELECT a.*, u.user_name, u.profile_picture_path, at.name as availability_type_name, s.quantity, s.requester_delivery_option, s.final_delivery_option, s.id as session_id, s.status as session_status FROM availabilities a ' +
+        db.pool.query('SELECT a.*, u.user_name, u.profile_picture_path, at.name as availability_type_name, s.quantity, s.requester_delivery_option, s.final_delivery_option, s.id as session_id, s.status as session_status, s.payment_by, s.payment_status FROM availabilities a ' +
             'JOIN users u ON u.id = a.user_id ' +
             'JOIN availability_sessions s ON s.availability_id = a.id ' +
             'JOIN availability_types at ON at.id = a.availability_type ' +

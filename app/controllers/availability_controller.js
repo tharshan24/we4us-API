@@ -56,7 +56,10 @@ function acceptAvailSession (req, res){
                     avail_id:results1.row[0].id,
                     available_quantity:results1.row[0].available_quantity - results1.row[0].quantity,
                     actual_quantity:results1.row[0].actual_quantity,
-                    quantity:results1.row[0].quantity
+                    quantity:results1.row[0].quantity,
+                    final_delivery_option:0,
+                    payment_status:0,
+                    payment_by:0
                 }
     
                 console.log("check2",data)
