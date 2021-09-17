@@ -218,7 +218,85 @@ function getReqSessionItems(data,callback){
     }
 }
 
+function getQuantityWithStatus(authData,data,callback){
+    try{
+        db.pool.query('SELECT rs.status, rsi.id, rsi.item_id, rsi.quantity FROM request_sessions rs ' +
+            'JOIN request_session_items rsi ON rs.id = rsi.request_session_id ' +
+            'JOIN request_items ri ON ri.id = rsi.item_id ' +
+            'WHERE rs.id=? rs.status = 1 AND rsi.status = 1 AND ri.status = 1',
+            [data.req_ses_id], (ex, rows) => {
+            if(ex){
+                callback(ex);
+            }
+            else{
+                callback(null,{row: rows});
+            }
+        });
+    }
+    catch(err) {
+    callback(err);
+    }
+}
 
+function updateQuantityWithStatus(data,callback){
+    try {
+        db.pool.getConnection(function(error, connection) {
+            if (error) {
+                callback(error);
+            } else {
+                //use transaction as 2 tables are involved
+                connection.beginTransaction(function(err) {
+                    if (err) {
+                        connection.rollback(function () {
+                            connection.release();
+                            callback(err);
+                        });
+                    } else {
+                        // update query for request sessions
+                        connection.query("update request_sessions set status=?, updated_at=now()"+
+                            " where id=?",
+                            [data.status,data.req_ses_id], (ex, rows1) => {
+                                if (ex) {
+                                    connection.rollback(function () {
+                                        connection.release();
+                                        callback(ex);
+                                    });
+                                } else {
+                                    // update query for request_items table
+                                    connection.query("update request_items set total_quantity=?, needed_quantity=?, actual_quantity=?, updated_at=now()" +
+                                        " where id=?",
+                                        [data.total_quantity, data.needed_quantity, data.actual_quantity, data.avail_id], (ex, rows2) => {
+                                            if (ex) {
+                                                connection.rollback(function () {
+                                                    connection.release();
+                                                    callback(ex);
+                                                });
+                                            } else {
+                                                //committing the transaction
+                                                connection.commit(function (err) {
+                                                    if (err) {
+                                                        connection.rollback(function () {
+                                                            connection.release();
+                                                            callback(err);
+                                                        });
+                                                    } else {
+                                                        // Updating successful
+                                                        connection.release();
+                                                        callback(null, {row1:rows1.insertId});
+                                                    }
+                                                });
+                                            }
+                                        });
+                                }
+                            });
+                    }
+                });
+            }
+        });
+    } catch(err) {
+        callback(err);
+    }
+}
 
 module.exports = {
     createRequest:createRequest,
@@ -227,5 +305,7 @@ module.exports = {
     updateReqSessionStatus:updateReqSessionStatus,
     addReqSessionItems:addReqSessionItems,
     getRequestType:getRequestType,
-    getReqSessionItems:getReqSessionItems
+    getReqSessionItems:getReqSessionItems,
+    getQuantityWithStatus:getQuantityWithStatus,
+    updateQuantityWithStatus:updateQuantityWithStatus
 }
