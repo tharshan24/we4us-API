@@ -482,9 +482,10 @@ function exploreAvailabilityByMySession(data,callback){
                     callback(ex);
                 }
                 else{
+                    console.log(rows1)
                     db.pool.query('SELECT name, image_path FROM availability_images ' +
                         'WHERE availability_id = ?',
-                        [rows1.id], (ex, rows2) => {
+                        [rows1[0].id], (ex, rows2) => {
                             if(ex){
                                 callback(ex);
                             }
