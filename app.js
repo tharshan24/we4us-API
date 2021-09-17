@@ -8,8 +8,8 @@ const systemRouter = require('./app/routes/system_routes');
 const availabilityRouter = require('./app/routes/availability_routes');
 const mongoose = require('mongoose');
 const app = express();
-const port = 8000;
-// const port = process.env.PORT || 80;
+// const port = 8000;
+const port = process.env.PORT || 80;
 
 // console.log(main);
 
@@ -44,7 +44,8 @@ app.use('/system', systemRouter);
 app.use('/availability', availabilityRouter);
 
 app.listen(port, () => {
-  console.log(`We4uS app listening at http://localhost:${port}`);
+  // console.log(`We4uS app listening at http://localhost:${port}`);
+  console.log(`We4uS app listening at https://we4us.herokuapp.com:${port}`);
 });
 
 // app.listen('https://we4us.herokuapp.com/', () => {

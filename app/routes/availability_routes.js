@@ -17,6 +17,8 @@ router.get('/exploreMyAvailability/',authMiddleware.verifyToken,availabilityCont
 router.get('/exploreAvailabilityById/:availId',authMiddleware.verifyToken,availabilityController.exploreAvailabilityById);
 router.get('/getSessions/:avail_id',authMiddleware.verifyToken,availabilityController.getSessions);
 router.get('/getSession/:ses_id',authMiddleware.verifyToken,availabilityController.getSession);
+router.get('/exploreAvailabilityByMySessions',authMiddleware.verifyToken,availabilityController.exploreAvailabilityByMySessions);
+router.get('/exploreAvailabilityByMySession/:ses_id',authMiddleware.verifyToken,availabilityController.exploreAvailabilityByMySession);
 
 router.get('/availSuccessDelivery',authMiddleware.verifyToken,availabilityController.availSuccessDelivery);
 router.get('/availOngoingDelivery',authMiddleware.verifyToken,availabilityController.availOngoingDelivery);

@@ -444,6 +444,46 @@ function exploreAvailabilityById (req, res){
     });
 }
 
+//Available ongoing delivery
+function exploreAvailabilityByMySessions (req, res){
+    console.log("request params: ",req.params)
+    availabilityService.exploreAvailabilityByMySessions(req, function(err, results){
+        if(err){
+            res.json({status_code:1, message: 'Cannot get sessions', error: err.message});
+        }
+        else{
+            console.log(results)
+            res.json({
+                status_code: 0,
+                message: 'Successful',
+                result: results,
+                authData: req.headers.authData,
+                token: req.token
+            });
+        }
+    });
+}
+
+//Available ongoing delivery
+function exploreAvailabilityByMySession (req, res){
+    console.log("request params: ",req.params)
+    availabilityService.exploreAvailabilityByMySession(req.params, function(err, results){
+        if(err){
+            res.json({status_code:1, message: 'Cannot get availability', error: err.message});
+        }
+        else{
+            console.log(results)
+            res.json({
+                status_code: 0,
+                message: 'Successful',
+                result: results,
+                authData: req.headers.authData,
+                token: req.token
+            });
+        }
+    });
+}
+
 module.exports = {
     createAvailability:createAvailability,
     createAvailSession:createAvailSession,
@@ -458,5 +498,7 @@ module.exports = {
     getSession:getSession,
     availSuccessDelivery:availSuccessDelivery,
     availOngoingDelivery:availOngoingDelivery,
-    exploreAvailabilityById:exploreAvailabilityById
+    exploreAvailabilityById:exploreAvailabilityById,
+    exploreAvailabilityByMySessions:exploreAvailabilityByMySessions,
+    exploreAvailabilityByMySession:exploreAvailabilityByMySession
 }
