@@ -13,7 +13,7 @@ function publicRegister(req,res){
         }
         else{
             // console.log(results);
-            fs.readFile(__dirname + '/../public/userVerification.html', 'utf8', function (err,data) {
+            fs.readFile(__dirname + '/../utilities/userVerification.html', 'utf8', function (err,data) {
                 if (err) {
                     console.log(err);
                     res.json({status_code:1,message:'Error in reading email html',error:err.message});
@@ -47,7 +47,7 @@ function orgRegister(req,res){
         }
         else{
             // console.log(results);
-            fs.readFile(__dirname + '/../public/userVerification.html', 'utf8', function (err,data) {
+            fs.readFile(__dirname + '/../utilities/userVerification.html', 'utf8', function (err,data) {
                 if (err) {
                     console.log(err);
                     res.json({status_code:1,message:'Error in reading email html',error:err.message});
@@ -170,7 +170,7 @@ function userVerification (req, res){
             res.json({status_code:1,message:'Update Failed',error:err.message});
         }
         else{
-            fs.readFile(__dirname + '/../public/VerifyConfirm.html', 'utf8', function (err,data) {
+            fs.readFile(__dirname + '/../utilities/VerifyConfirm.html', 'utf8', function (err,data) {
                 if (err) {
                     console.log(err);
                     res.json({status_code:1,message:'Error in reading email html',error:err.message});

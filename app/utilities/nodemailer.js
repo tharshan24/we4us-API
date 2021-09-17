@@ -31,7 +31,7 @@ function sendEmail (options, callback) {
     });
 }
 
-// fs.readFile(__dirname + '/../public/userVerification.html', 'utf8', function (err,data) {
+// fs.readFile(__dirname + '/../utilities/userVerification.html', 'utf8', function (err,data) {
 //     if (err) {
 //         console.log(err);
 //     }
