@@ -472,7 +472,7 @@ function exploreAvailabilityByMySessions(data,callback){
 
 function exploreAvailabilityByMySession(data,callback){
     try{
-        db.pool.query('SELECT a.*, u.user_name, u.profile_picture_path, at.name as availability_type_name, s.quantity, s.requester_delivery_option, s.final_delivery_option, s.id as session_id FROM availabilities a ' +
+        db.pool.query('SELECT a.*, u.user_name, u.profile_picture_path, at.name as availability_type_name, s.quantity, s.requester_delivery_option, s.final_delivery_option, s.id as session_id, s.status as session_status FROM availabilities a ' +
             'JOIN users u ON u.id = a.user_id ' +
             'JOIN availability_sessions s ON s.availability_id = a.id ' +
             'JOIN availability_types at ON at.id = a.availability_type ' +
