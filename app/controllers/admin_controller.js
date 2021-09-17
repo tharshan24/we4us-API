@@ -406,6 +406,128 @@ function deliveryPaymentFilter (req, res){
     });
 }
 
+
+//Getting data of all availabilities 
+function viewAvailability (req, res){
+    console.log("request body: ",req.params)
+    adminService.viewAvailability(req.params,function(err, results){
+        if(err){
+            res.json({status_code:1, message: 'Cannot get data of Availabilties!!', error: err.message});
+        }
+        else{
+            console.log(results)
+            res.json({
+                status_code: 0,
+                message: 'Data of all Availabilities successfully displayed',
+                result: results,
+                authData: req.headers.authData,
+                token: req.token
+            });
+        }
+    });
+}
+
+//Getting data of availability by Id
+function viewAvailabilityById (req, res){
+    console.log("request body: ",req.params)
+    adminService.viewAvailabilityById(req.params,function(err, results){
+        if(err){
+            res.json({status_code:1, message: 'Cannot get data of Availability!!', error: err.message});
+        }
+        else{
+            console.log(results)
+            res.json({
+                status_code: 0,
+                message: 'Data of Availability successfully displayed',
+                result: results,
+                authData: req.headers.authData,
+                token: req.token
+            });
+        }
+    });
+}
+
+//Getting data of availability by Date
+function viewAvailabilityByDate (req, res){
+    console.log("request body: ",req.params)
+    adminService.viewAvailabilityByDate(req.params,function(err, results){
+        if(err){
+            res.json({status_code:1, message: 'Cannot get data of Availability!!', error: err.message});
+        }
+        else{
+            console.log(results)
+            res.json({
+                status_code: 0,
+                message: 'Data of Availability successfully displayed',
+                result: results,
+                authData: req.headers.authData,
+                token: req.token
+            });
+        }
+    });
+}
+
+
+//Getting data of all requests 
+function viewRequest (req, res){
+    console.log("request body: ",req.params)
+    adminService.viewRequest(req.params,function(err, results){
+        if(err){
+            res.json({status_code:1, message: 'Cannot get data of Requests!!', error: err.message});
+        }
+        else{
+            console.log(results)
+            res.json({
+                status_code: 0,
+                message: 'Data of all Requests successfully displayed',
+                result: results,
+                authData: req.headers.authData,
+                token: req.token
+            });
+        }
+    });
+}
+
+//Getting data of request by Id
+function viewRequestById (req, res){
+    console.log("request body: ",req.params)
+    adminService.viewRequestById(req.params,function(err, results){
+        if(err){
+            res.json({status_code:1, message: 'Cannot get data of Request!!', error: err.message});
+        }
+        else{
+            console.log(results)
+            res.json({
+                status_code: 0,
+                message: 'Data of Request successfully displayed',
+                result: results,
+                authData: req.headers.authData,
+                token: req.token
+            });
+        }
+    });
+}
+
+//Getting data of request by date
+function viewRequestByDate (req, res){
+    console.log("request body: ",req.params)
+    adminService.viewRequestByDate(req.params,function(err, results){
+        if(err){
+            res.json({status_code:1, message: 'Cannot get data of Request!!', error: err.message});
+        }
+        else{
+            console.log(results)
+            res.json({
+                status_code: 0,
+                message: 'Data of Request successfully displayed',
+                result: results,
+                authData: req.headers.authData,
+                token: req.token
+            });
+        }
+    });
+}
+
 //explore availability 
 function exploreAvailability (req, res){
     console.log("request body: ",req.params)
@@ -443,5 +565,11 @@ module.exports = {
     updateDriverStatus:updateDriverStatus,
     deliveryPayment:deliveryPayment,
     deliveryPaymentFilter:deliveryPaymentFilter,
-    exploreAvailability:exploreAvailability
+    exploreAvailability:exploreAvailability,
+    viewAvailability:viewAvailability,
+    viewAvailabilityById:viewAvailabilityById,
+    viewAvailabilityByDate:viewAvailabilityByDate,
+    viewRequest:viewRequest,
+    viewRequestById:viewRequestById,
+    viewRequestByDate:viewRequestByDate,
 }

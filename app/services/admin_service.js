@@ -282,6 +282,145 @@ function exploreAvailability(authData,data,callback){
     }
 }
 
+//Queries to view Availability
+function viewAvailability(data,callback){
+    try{
+        db.pool.query('SELECT a.id, a.availability_type, a.description, a.food_type, a.total_quantity, a.status, u.id, u.user_name, u.status, p.first_name, p.last_name, c.name_en FROM users u '+
+        'JOIN public p on u.id = p.user_id '+
+        'JOIN cities c on c.id = u.city ' +
+        'JOIN availabilities a on a.user_id = u.id ' +
+        'WHERE u.status=1 AND a.status=1',
+        (ex, rows) => {
+            if(ex){
+                callback(ex);
+            }
+            else{
+                callback(null,{row: rows});
+            }
+        });
+    }
+    catch(err) {
+    callback(err);
+    }
+}
+
+//Queries to view Availability by ID
+function viewAvailabilityById(data,callback){
+    try{
+        db.pool.query('SELECT a.id, a.name, a.availability_type, a.description, a.food_type, a.total_quantity, a.status, u.id, u.user_name, u.status, p.first_name, p.last_name, c.name_en FROM users u '+
+        'JOIN public p on u.id = p.user_id '+
+        'JOIN cities c on c.id = u.city ' +
+        'JOIN availabilities a on a.user_id = u.id ' +
+        'WHERE a.id=? AND u.status=1 AND a.status=1',
+        [data.avail_id],
+        (ex, rows) => {
+            if(ex){
+                callback(ex);
+            }
+            else{
+                callback(null,{row: rows});
+            }
+        });
+    }
+    catch(err) {
+    callback(err);
+    }
+}
+
+//Queries to view Availability by Date
+function viewAvailabilityByDate(data,callback){
+    try{
+        db.pool.query('SELECT a.id, a.availability_type, a.description, a.food_type, a.total_quantity, a.status, u.id, u.user_name, u.status, p.first_name, p.last_name, c.name_en FROM users u '+
+        'JOIN public p on u.id = p.user_id '+
+        'JOIN cities c on c.id = u.city ' +
+        'JOIN availabilities a on a.user_id = u.id ' +
+        'WHERE (a.created_at BETWEEN "?" AND "?") AND u.status=1 AND a.status=1',
+        [data.startDate, data.endDate],
+        (ex, rows) => {
+            if(ex){
+                callback(ex);
+            }
+            else{
+                callback(null,{row: rows});
+            }
+        });
+    }
+    catch(err) {
+    callback(err);
+    }
+}
+
+//Queries to view Request
+function viewRequest(data,callback){
+    try{
+        db.pool.query('SELECT r.id, r.request_type , r.description, r.status, ri.total_quantity, ri.status, u.id, u.user_name, u.status, p.first_name, p.last_name, c.name_en FROM users u '+
+        'JOIN public p on u.id = p.user_id '+
+        'JOIN cities c on c.id = u.city ' +
+        'JOIN requests r on r.user_id = u.id ' +
+        'JOIN request_items ri on r.id = ri.request_id ' +
+        'WHERE u.status=1 AND r.status=1 AND ri.status=1',
+        (ex, rows) => {
+            if(ex){
+                callback(ex);
+            }
+            else{
+                callback(null,{row: rows});
+            }
+        });
+    }
+    catch(err) {
+    callback(err);
+    }
+}
+
+//Queries to view Availability by ID
+function viewRequestById(data,callback){
+    try{
+        db.pool.query('SELECT r.id, r.request_type , r.description, r.status, ri.total_quantity, ri.status, u.id, u.user_name, u.status, p.first_name, p.last_name, c.name_en FROM users u '+
+        'JOIN public p on u.id = p.user_id '+
+        'JOIN cities c on c.id = u.city ' +
+        'JOIN requests r on r.user_id = u.id ' +
+        'JOIN request_items ri on r.id = ri.request_id ' +
+        'WHERE r.id=? AND u.status=1 AND r.status=1 AND ri.status=1',
+        [data.req_id],
+        (ex, rows) => {
+            if(ex){
+                callback(ex);
+            }
+            else{
+                callback(null,{row: rows});
+            }
+        });
+    }
+    catch(err) {
+    callback(err);
+    }
+}
+
+//Queries to view Availability by ID
+function viewRequestByDate(data,callback){
+    try{
+        db.pool.query('SELECT r.id, r.request_type , r.description, r.status, ri.total_quantity, ri.status, u.id, u.user_name, u.status, p.first_name, p.last_name, c.name_en FROM users u '+
+        'JOIN public p on u.id = p.user_id '+
+        'JOIN cities c on c.id = u.city ' +
+        'JOIN requests r on r.user_id = u.id ' +
+        'JOIN request_items ri on r.id = ri.request_id ' +
+        'WHERE (r.created_at BETWEEN "?" AND "?") AND  u.status=1 AND r.status=1 AND ri.status=1',
+        [data.startDate, data.endDate],
+        (ex, rows) => {
+            if(ex){
+                callback(ex);
+            }
+            else{
+                callback(null,{row: rows});
+            }
+        });
+    }
+    catch(err) {
+    callback(err);
+    }
+}
+
 module.exports = {
     viewAllOrganizations:viewAllOrganizations,
     viewOrganizationsbyId:viewOrganizationsbyId,
@@ -295,5 +434,11 @@ module.exports = {
     updateDriverStatus:updateDriverStatus,
     deliveryPayment:deliveryPayment,
     deliveryPaymentFilter:deliveryPaymentFilter,
-    exploreAvailability:exploreAvailability
+    exploreAvailability:exploreAvailability,
+    viewAvailability:viewAvailability,
+    viewAvailabilityById:viewAvailabilityById,
+    viewAvailabilityByDate:viewAvailabilityByDate,
+    viewRequest:viewRequest,
+    viewRequestById:viewRequestById,
+    viewRequestByDate:viewRequestByDate
 }

@@ -26,6 +26,19 @@ router.get('/updateDriverStatus/:user_id',authMiddleware.verifyToken,adminContro
 router.get('/deliveryPayment',authMiddleware.verifyToken,adminController.deliveryPayment);
 router.get('/deliveryPaymentFilter/:startDate/:endDate',authMiddleware.verifyToken,adminController.deliveryPaymentFilter);
 
+router.get('/viewAvailability',authMiddleware.verifyToken,adminController.viewAvailability);
+router.get('/viewAvailabilityById/:avail_id',authMiddleware.verifyToken,adminController.viewAvailability);
+router.get('/viewAvailabilityByDate/:startDate/:endDate',authMiddleware.verifyToken,adminController.viewAvailabilityByDate);
+
+router.get('/viewRequest',authMiddleware.verifyToken,adminController.viewRequest);
+router.get('/viewRequestById/:req_id',authMiddleware.verifyToken,adminController.viewRequestById);
+router.get('/viewRequestByDate/:startDate/:endDate',authMiddleware.verifyToken,adminController.viewRequestByDate);
+
+router.get('/viewColPoint',authMiddleware.verifyToken,adminController.viewColPoint);
+
+
+
+
 router.get('/exploreAvailability',authMiddleware.verifyToken,adminController.exploreAvailability);
 
 
