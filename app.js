@@ -8,8 +8,8 @@ const systemRouter = require('./app/routes/system_routes');
 const availabilityRouter = require('./app/routes/availability_routes');
 const mongoose = require('mongoose');
 const app = express();
-// const port = 8000;
-const port = process.env.PORT || 80;
+const port = 8000;
+// const port = process.env.PORT || 80;
 
 // console.log(main);
 
