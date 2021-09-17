@@ -446,6 +446,62 @@ function availOngoingDelivery(data,callback){
     }
 }
 
+function exploreAvailabilityByMySessions(data,callback){
+    try{
+        db.pool.query('SELECT a.name, a.best_before, u.user_name, u.profile_picture_path, at.name as availability_type_name, s.quantity FROM availabilities a ' +
+            'JOIN users u ON u.id = a.user_id ' +
+            'JOIN availability_sessions s ON s.availability_id = a.id ' +
+            'JOIN availability_types at ON at.id = a.availability_type ' +
+            'WHERE s.user_id = ? AND a.status=1 AND s.status NOT IN (4,5,6)',
+            [data.headers.authData.user.id], (ex, rows1) => {
+                if(ex){
+                    callback(ex);
+                }
+                else{
+
+                    callback(null,{
+                        data: rows1
+                    });
+                }
+            });
+    }
+    catch(err) {
+        callback(err);
+    }
+}
+
+function exploreAvailabilityByMySession(data,callback){
+    try{
+        db.pool.query('SELECT a.*, u.user_name, u.profile_picture_path, at.name as availability_type_name, s.quantity, s.requester_delivery_option, s.final_delivery_option FROM availabilities a ' +
+            'JOIN users u ON u.id = a.user_id ' +
+            'JOIN availability_sessions s ON s.availability_id = a.id ' +
+            'JOIN availability_types at ON at.id = a.availability_type ' +
+            'WHERE s.id = ?',
+            [data.ses_id], (ex, rows1) => {
+                if(ex){
+                    callback(ex);
+                }
+                else{
+                    db.pool.query('SELECT name, image_path FROM availability_images ' +
+                        'WHERE availability_id = ?',
+                        [rows1.id], (ex, rows2) => {
+                            if(ex){
+                                callback(ex);
+                            }
+                            else {
+                                callback(null,{
+                                    data: rows1,
+                                    images: rows2
+                                });
+                            }
+                        });
+                }
+            });
+    }
+    catch(err) {
+        callback(err);
+    }
+}
 
 module.exports = {
     createAvailability:createAvailability,
@@ -459,7 +515,9 @@ module.exports = {
     getSession:getSession,
     availSuccessDelivery:availSuccessDelivery,
     availOngoingDelivery:availOngoingDelivery,
-    exploreAvailabilityById:exploreAvailabilityById
+    exploreAvailabilityById:exploreAvailabilityById,
+    exploreAvailabilityByMySessions:exploreAvailabilityByMySessions,
+    exploreAvailabilityByMySession:exploreAvailabilityByMySession
 }
 
 
