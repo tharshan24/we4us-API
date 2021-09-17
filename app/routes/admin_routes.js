@@ -34,7 +34,7 @@ router.get('/viewRequest',authMiddleware.verifyToken,adminController.viewRequest
 router.get('/viewRequestById/:req_id',authMiddleware.verifyToken,adminController.viewRequestById);
 router.get('/viewRequestByDate/:startDate/:endDate',authMiddleware.verifyToken,adminController.viewRequestByDate);
 
-router.get('/viewColPoint',authMiddleware.verifyToken,adminController.viewColPoint);
+// router.get('/viewColPoint',authMiddleware.verifyToken,adminController.viewColPoint);
 
 
 
