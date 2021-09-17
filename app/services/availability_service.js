@@ -116,7 +116,7 @@ function createAvailability(data,callback){
 function createAvailSession(data,callback){
     try {
         db.pool.query('INSERT INTO availability_sessions (availability_id, user_id, quantity, status, requester_message, location, address_1, address_2, city, latitude, longitude, requester_delivery_option, created_at, updated_at)'+
-        ' values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,now(),now())',
+        ' values(?,?,?,?,?,?,?,?,?,?,?,?,now(),now())',
         [data.body.availability_id, data.headers.authData.user.id, data.body.quantity,0,data.body.requester_message, data.body.location, data.body.address_1, data.body.address_2, data.body.city, data.body.latitude, data.body.longitude, data.body.requester_delivery_option], (ex, rows) => {
             if(ex){
                 callback(ex);
