@@ -20,6 +20,26 @@ function createAvailability (req, res){
     });
 }
 
+//cancelAvailability
+function cancelAvailability (req, res){
+    console.log("request params: ",req.params)
+    availabilityService.cancelAvailability(req.params, function(err, results){
+        if(err){
+            res.json({status_code:1, message: 'Cannot cancel Availability', error: err.message});
+        }
+        else{
+            console.log(results)
+            res.json({
+                status_code: 0,
+                message: 'Availability cancel Success',
+                result: results,
+                authData: req.headers.authData,
+                token: req.token
+            });
+        }
+    });
+}
+
 //creating availability sessions
 function createAvailSession (req, res){
     console.log(req.body)
@@ -489,6 +509,7 @@ function exploreAvailabilityByMySession (req, res){
 
 module.exports = {
     createAvailability:createAvailability,
+    cancelAvailability:cancelAvailability,
     createAvailSession:createAvailSession,
     rejectAvailSession:rejectAvailSession,
     cancelAvailSession:cancelAvailSession,

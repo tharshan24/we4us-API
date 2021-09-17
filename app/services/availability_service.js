@@ -112,6 +112,23 @@ function createAvailability(data,callback){
     }
 }
 
+function cancelAvailability(data,callback){
+    try {
+        db.pool.query('UPDATE availabilities SET status=0, updated_at=now() WHERE id=?',
+        [data.availId], (ex, rows) => {
+            if(ex){
+                callback(ex);
+            } 
+            else{
+              callback(null,{row: rows});
+             }
+        });
+    }
+    catch(err) {
+    callback(err);
+    }
+}
+
 //Quereis for creating availability sessions.
 function createAvailSession(data,callback){
     try {
@@ -120,7 +137,7 @@ function createAvailSession(data,callback){
         [data.body.availability_id, data.headers.authData.user.id, data.body.quantity,0,data.body.requester_message, data.body.location, data.body.address_1, data.body.address_2, data.body.city, data.body.latitude, data.body.longitude, data.body.requester_delivery_option], (ex, rows) => {
             if(ex){
                 callback(ex);
-            } 
+            }
             else{
               callback(null,{row: rows});
              }
@@ -372,7 +389,7 @@ function getSessions(authData,data,callback){
         db.pool.query('SELECT s.*, u.user_name, u.profile_picture_path FROM availability_sessions s ' +
             'JOIN availabilities a ON a.id = s.availability_id ' +
             'JOIN users u ON u.id=s.user_id ' +
-            'WHERE a.id = ?',
+            'WHERE a.id = ? AND s.status=1',
         [data.avail_id], (ex, rows) => {
             if(ex){
                 callback(ex);
@@ -506,6 +523,7 @@ function exploreAvailabilityByMySession(data,callback){
 
 module.exports = {
     createAvailability:createAvailability,
+    cancelAvailability:cancelAvailability,
     createAvailSession:createAvailSession,
     updateAvailSession: updateAvailSession,
     updateAvailSessionTrans: updateAvailSessionTrans,
