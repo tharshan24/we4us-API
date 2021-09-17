@@ -389,7 +389,7 @@ function getSessions(authData,data,callback){
         db.pool.query('SELECT s.*, u.user_name, u.profile_picture_path FROM availability_sessions s ' +
             'JOIN availabilities a ON a.id = s.availability_id ' +
             'JOIN users u ON u.id=s.user_id ' +
-            'WHERE a.id = ? AND s.status=1',
+            'WHERE a.id = ? AND s.status NOT IN (4,5,6)',
         [data.avail_id], (ex, rows) => {
             if(ex){
                 callback(ex);
