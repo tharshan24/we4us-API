@@ -433,7 +433,7 @@ function exploreRequestById(authData,data,callback){
                     callback(ex);
                 }
                 else{
-                    db.pool.query('SELECT name, total_quantity, total_quantity, actual_quantity,needed_quantity FROM request_items ' +
+                    db.pool.query('SELECT id, name, total_quantity, total_quantity, actual_quantity,needed_quantity FROM request_items ' +
                         'WHERE request_id = ?',
                         [data.reqId], (ex, rows2) => {
                             if(ex){
@@ -532,14 +532,14 @@ function exploreRequestByMySession(data,callback){
                     callback(ex);
                 }
                 else{
-                    db.pool.query('SELECT name, total_quantity, total_quantity, actual_quantity,needed_quantity FROM request_items ' +
+                    db.pool.query('SELECT id, name, total_quantity, total_quantity, actual_quantity,needed_quantity FROM request_items ' +
                         'WHERE request_id = ?',
                         [rows1[0].id], (ex, rows2) => {
                             if(ex){
                                 callback(ex);
                             }
                             else {
-                                db.pool.query('SELECT name, quantity FROM request_session_items ' +
+                                db.pool.query('SELECT id, name, quantity FROM request_session_items ' +
                                     'WHERE request_session_id = ?',
                                     [rows1[0].session_id], (ex, rows3) => {
                                         if(ex){
