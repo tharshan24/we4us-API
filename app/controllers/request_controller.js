@@ -262,7 +262,7 @@ function exploreRequest (req, res){
 //explore availability session
 function exploreMyRequest (req, res){
     console.log("request body: ",req.params)
-    requestService.exploreRequest(req.headers.authData, req.params, function(err, results){
+    requestService.exploreMyRequest(req.headers.authData, req.params, function(err, results){
         if(err){
             res.json({status_code:1, message: 'Error', error: err.message});
         }
@@ -282,7 +282,48 @@ function exploreMyRequest (req, res){
 //explore availability session
 function exploreRequestById (req, res){
     console.log("request body: ",req.params)
-    requestService.exploreRequest(req.headers.authData, req.params, function(err, results){
+    requestService.exploreRequestById(req.headers.authData, req.params, function(err, results){
+        if(err){
+            res.json({status_code:1, message: 'Error', error: err.message});
+        }
+        else{
+            console.log(results)
+            res.json({
+                status_code: 0,
+                message: 'Success',
+                result: results,
+                authData: req.headers.authData,
+                token: req.token
+            });
+        }
+    });
+}
+
+
+//explore availability session
+function getSessions (req, res){
+    console.log("request body: ",req.params)
+    requestService.getSessions(req.headers.authData, req.params, function(err, results){
+        if(err){
+            res.json({status_code:1, message: 'Error', error: err.message});
+        }
+        else{
+            console.log(results)
+            res.json({
+                status_code: 0,
+                message: 'Success',
+                result: results,
+                authData: req.headers.authData,
+                token: req.token
+            });
+        }
+    });
+}
+
+//explore availability session
+function getSession (req, res){
+    console.log("request body: ",req.params)
+    requestService.getSession(req.headers.authData, req.params, function(err, results){
         if(err){
             res.json({status_code:1, message: 'Error', error: err.message});
         }
@@ -310,6 +351,8 @@ module.exports = {
     deliverReqSession:deliverReqSession,
     exploreRequest:exploreRequest,
     exploreMyRequest:exploreMyRequest,
-    exploreRequestById:exploreRequestById
+    exploreRequestById:exploreRequestById,
+    getSessions:getSessions,
+    getSession:getSession
 
 }

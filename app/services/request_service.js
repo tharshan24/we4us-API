@@ -380,7 +380,7 @@ function updateQuantityWithStatus(data,callback){
     }
 }
 
-function exploreRequest(data,callback){
+function exploreRequest(authData,data,callback){
     try{
         db.pool.query('SELECT u.user_name, u.profile_picture, r.name, r.request_type, r.need_before, r.items_priority, c.name_en FROM requests r ' +
             'JOIN users u ON u.id = r.user_id ' +
@@ -457,6 +457,49 @@ function exploreRequestById(data,callback){
     }
 }
 
+
+function getSessions(authData,data,callback){
+    try{
+        db.pool.query('SELECT s.*, u.user_name, u.profile_picture_path FROM request_sessions s ' +
+            'JOIN requests r ON r.id = s.request_id ' +
+            'JOIN users u ON u.id=s.user_id ' +
+            'WHERE r.id = ? AND s.status NOT IN (4,5,6)',
+            [data.reqId], (ex, rows) => {
+                if(ex){
+                    callback(ex);
+                }
+                else{
+                    callback(null,{row: rows});
+                }
+            });
+    }
+    catch(err) {
+        callback(err);
+    }
+}
+
+function getSession(authData,data,callback){
+    try{
+        db.pool.query('SELECT s.*, u.user_name, u.profile_picture_path, uu.user_name as cre_user_name, uu.profile_picture_path as cre_profile_picture_path, r.user_id as cre_user_id FROM request_sessions s ' +
+            'JOIN requests r ON r.id = s.request_id ' +
+            'JOIN users u ON u.id=s.user_id ' +
+            'JOIN users uu ON uu.id=r.user_id ' +
+            'WHERE s.id = ?',
+            [data.ses_id], (ex, rows) => {
+                if(ex){
+                    callback(ex);
+                }
+                else{
+                    callback(null,{row: rows});
+                }
+            });
+    }
+    catch(err) {
+        callback(err);
+    }
+}
+
+
 module.exports = {
     createRequest:createRequest,
     createReqSession:createReqSession,
@@ -469,5 +512,7 @@ module.exports = {
     updateQuantityWithStatus:updateQuantityWithStatus,
     exploreRequest:exploreRequest,
     exploreMyRequest:exploreMyRequest,
-    exploreRequestById:exploreRequestById
+    exploreRequestById:exploreRequestById,
+    getSessions:getSessions,
+    getSession:getSession
 }
