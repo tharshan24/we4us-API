@@ -127,7 +127,7 @@ function getMembers(authData,data,callback){
 }
 
 //Queries for adding Members
-function addMembers(data,callback){
+function addMembers(authData, data,callback){
     try {
         db.pool.query('INSERT INTO members (user_id, organization_id, description, status, created_at, updated_at)'+
         ' values(?,?,?,?,now(),now())',
@@ -147,7 +147,7 @@ function addMembers(data,callback){
 }
 
 //Queries for adding Members
-function createCollectionPoint(data,callback){
+function createCollectionPoint(authData,data,callback){
     try {
         db.pool.query('INSERT INTO collection_points (ngo_id, description, assigned_to, start_time, end_time, status, location, address_1, city, latitude, longitude, created_at, updated_at)'+
         ' values(?,?,?,?,?,?,?,?,?,?,?,now(),now())',
