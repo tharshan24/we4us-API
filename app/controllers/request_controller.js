@@ -173,7 +173,7 @@ function rejectReqSession (req, res){
         }
         else{
           if(results1.row[0].status==1){ //Updating status to cancelled when the current stage is pending
-            requestService.updateReqSessionStatus(req.params,6, function(err2, results2){
+            requestService.updateReqSessionStatus(req.params,5, function(err2, results2){
                 if(err2){
                     res.json({status_code:1, message: 'Cannot update Session to rejected', error: err2.message});
                 }
