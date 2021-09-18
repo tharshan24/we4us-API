@@ -382,8 +382,9 @@ function updateQuantityWithStatus(data,callback){
 
 function exploreRequest(authData,data,callback){
     try{
-        db.pool.query('SELECT u.user_name, u.profile_picture_path, r.id as request_id, r.name, r.request_type, r.need_before, r.items_priority FROM requests r ' +
+        db.pool.query('SELECT u.user_name, u.profile_picture_path, r.id as request_id, r.name, r.request_type, r.need_before, r.items_priority, rt.name as request_type_name FROM requests r ' +
             'JOIN users u ON u.id = r.user_id ' +
+            'JOIN request_types rt ON rt.id = r.request_type ' +
             'WHERE r.status = 1 AND u.status = 1 AND r.user_id <> ? AND r.need_before > now() ' +
             'ORDER BY r.id DESC',
             [authData.user.id,authData.user.id], (ex, rows) => {
@@ -402,8 +403,9 @@ function exploreRequest(authData,data,callback){
 
 function exploreMyRequest(authData,data,callback){
     try{
-        db.pool.query('SELECT u.user_name, u.profile_picture_path, r.id, r.name, r.request_type, r.need_before, r.items_priority FROM requests r ' +
+        db.pool.query('SELECT u.user_name, u.profile_picture_path, rt.name as request_type_name, r.id, r.name, r.request_type, r.need_before, r.items_priority FROM requests r ' +
             'JOIN users u ON u.id = r.user_id ' +
+            'JOIN request_types rt ON rt.id = r.request_type ' +
             'WHERE r.status = 1 AND u.status = 1 AND r.user_id = ? ' +
             'ORDER BY r.id DESC',
             [authData.user.id], (ex, rows) => {
@@ -424,7 +426,7 @@ function exploreRequestById(data,callback){
     try{
         db.pool.query('SELECT r.*, u.user_name, u.profile_picture_path, rt.name as request_type_name FROM requests r ' +
             'JOIN users u ON u.id = r.user_id ' +
-            'JOIN request_types at ON at.id = r.request_type ' +
+            'JOIN request_types rt ON rt.id = r.request_type ' +
             'WHERE r.id = ?',
             [data.reqId], (ex, rows1) => {
                 if(ex){
