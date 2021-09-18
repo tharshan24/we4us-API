@@ -27,7 +27,7 @@ router.get('/deliveryPayment',authMiddleware.verifyToken,adminController.deliver
 router.get('/deliveryPaymentFilter/:startDate/:endDate',authMiddleware.verifyToken,adminController.deliveryPaymentFilter);
 
 router.get('/viewAvailability',authMiddleware.verifyToken,adminController.viewAvailability);
-router.get('/viewAvailabilityById/:avail_id',authMiddleware.verifyToken,adminController.viewAvailability);
+router.get('/viewAvailabilityById/:avail_id',authMiddleware.verifyToken,adminController.viewAvailabilityById);
 router.get('/viewAvailabilityByDate/:startDate/:endDate',authMiddleware.verifyToken,adminController.viewAvailabilityByDate);
 
 router.get('/viewRequest',authMiddleware.verifyToken,adminController.viewRequest);
