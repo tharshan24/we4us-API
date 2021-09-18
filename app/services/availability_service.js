@@ -245,9 +245,9 @@ function updateAvailSessionTrans(data,callback){
                         });
                     } else {
                         // update query for users table
-                        connection.query("update availability_sessions set status=?, final_delivery_option=?, payment_status=?, payment_by=?, updated_at=now()"+
+                        connection.query("update availability_sessions set status=?, final_delivery_option=?, delivery_vehicle_option=?, payment_status=?, payment_by=?, updated_at=now()"+
                             " where id=?",
-                            [data.status, data.final_delivery_option, data.payment_status, data.payment_by, data.avail_ses_id], (ex, rows1) => {
+                            [data.status, data.final_delivery_option, data.delivery_vehicle_option, data.payment_status, data.payment_by, data.avail_ses_id], (ex, rows1) => {
                                 if (ex) {
                                     connection.rollback(function () {
                                         connection.release();
