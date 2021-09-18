@@ -38,16 +38,16 @@ function createRequest(data,callback){
                                     else{
                                         // console.log("results table1",result)
                                         //insert query for request_items table
-                                            let q = "INSERT INTO request_items (request_id, name, description, total_quantity, actual_quantity, needed_quantity, status) VALUES ?";
+                                            let q = "INSERT INTO request_items (request_id, name, total_quantity, actual_quantity, needed_quantity, status) VALUES ?";
                                             let v = [];
                                             for (let i = 0; i < data.body.items.length; i++){
                                                 // console.log("i:",i)
-                                                let vv = {request_id:rows1.insertId, name:data.body.name, description:data.body.description, total_quantity:data.body.quantity[i], actual_quantity:data.body.quantity[i], total_quantity:data.body.quantity[i]};
+                                                let vv = {request_id:rows1.insertId, name:data.body.items[i].name, total_quantity:data.body.items[i].quantity, actual_quantity:data.body.items[i].quantity, total_quantity:data.body.items[i].quantity[i]};
                                                 // console.log("qq:",vv)
                                                 v.push(vv)
                                             }
                                             // console.log("queries "+ q,[v.map(item => [item.availabilty_id,item.name,item.description,item.image_path,1])]);
-                                            connection.query(q,[v.map(item => [item.request_id, item.name,item.description, item.total_quantity, item.actual_quantity, item.needed_quantity, 1])], (ex,rows2) => {
+                                            connection.query(q,[v.map(item => [item.request_id, item.name, item.total_quantity, item.actual_quantity, item.needed_quantity, 1])], (ex,rows2) => {
                                                 if (ex) {
                                                     // console.log("error table2")
                                                     connection.rollback(function () {
@@ -120,16 +120,16 @@ function createReqSession(data,callback){
                                     else{
                                         // console.log("results table1",result)
                                         //insert query for request_items table
-                                            let q = "INSERT INTO request_session_items (request_id, name, description, quantity, status) VALUES ?";
+                                            let q = "INSERT INTO request_session_items (request_id, name, quantity, status) VALUES ?";
                                             let v = [];
                                             for (let i = 0; i < data.body.items.length; i++){
                                                 // console.log("i:",i)
-                                                let vv = {request_id:rows1.insertId,name:data.body.name,description:data.body.description, quantity:data.body.quantity[i]};
+                                                let vv = {request_id:rows1.insertId,name:data.body.items[i].name, quantity:data.body.items[i].quantity};
                                                 // console.log("qq:",vv)
                                                 v.push(vv)
                                             }
                                             // console.log("queries "+ q,[v.map(item => [item.availabilty_id,item.name,item.description,item.image_path,1])]);
-                                            connection.query(q,[v.map(item => [item.request_id,item.name,item.description, item.quantity,1])], (ex,rows2) => {
+                                            connection.query(q,[v.map(item => [item.request_id,item.name, item.quantity,1])], (ex,rows2) => {
                                                 if (ex) {
                                                     // console.log("error table2")
                                                     connection.rollback(function () {
