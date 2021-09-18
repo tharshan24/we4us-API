@@ -422,7 +422,7 @@ function exploreMyRequest(authData,data,callback){
     }
 }
 
-function exploreRequestById(data,callback){
+function exploreRequestById(authData,data,callback){
     try{
         db.pool.query('SELECT r.*, u.user_name, u.profile_picture_path, rt.name as request_type_name FROM requests r ' +
             'JOIN users u ON u.id = r.user_id ' +
