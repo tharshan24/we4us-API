@@ -19,4 +19,6 @@ router.get('/getRealUser/:userId', authMiddleware.verifyToken, userController.ge
 //test middleware
 router.get('/test',authMiddleware.verifyToken,userController.test);
 
+router.get('/getUserDetails/:userId', authMiddleware.verifyToken, userController.getUserDetails);
+
 module.exports  = router;

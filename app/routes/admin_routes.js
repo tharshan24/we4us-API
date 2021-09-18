@@ -34,7 +34,9 @@ router.get('/viewRequest',authMiddleware.verifyToken,adminController.viewRequest
 router.get('/viewRequestById/:req_id',authMiddleware.verifyToken,adminController.viewRequestById);
 router.get('/viewRequestByDate/:startDate/:endDate',authMiddleware.verifyToken,adminController.viewRequestByDate);
 
-// router.get('/viewColPoint',authMiddleware.verifyToken,adminController.viewColPoint);
+router.get('/viewColPoint',authMiddleware.verifyToken,adminController.viewColPoint);
+router.get('/viewColPointById/:cp_id',authMiddleware.verifyToken,adminController.viewColPointById);
+router.get('/viewColPointByDate/:startDate/:endDate',authMiddleware.verifyToken,adminController.viewColPointByDate);
 
 
 
@@ -42,11 +44,5 @@ router.get('/viewRequestByDate/:startDate/:endDate',authMiddleware.verifyToken,a
 router.get('/exploreAvailability',authMiddleware.verifyToken,adminController.exploreAvailability);
 
 
-
-
-
-
-
-// router.get('/viewAllOrganiations/:user_id',authMiddleware.verifyToken,adminController.viewAllOrganiations);
 
 module.exports  = router;
