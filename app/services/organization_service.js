@@ -131,7 +131,7 @@ function addMembers(authData, data,callback){
     try {
         db.pool.query('INSERT INTO members (user_id, organization_id, description, status, created_at, updated_at)'+
         ' values(?,?,?,?,now(),now())',
-        [data.headers.authData.user.id, data.organization_id, data.description, 1], 
+        [data.user_id, data.organization_id, data.description, 1],
         (ex, rows) => {
             if(ex){
                 callback(ex);
