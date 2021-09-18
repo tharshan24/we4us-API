@@ -589,6 +589,129 @@ function viewColPointByDate (req, res){
     });
 }
 
+//Getting count of public 
+function countPublic (req, res){
+    console.log("request body: ",req.params)
+    adminService.countUsers(req.params, 1, function(err, results){
+        if(err){
+            res.json({status_code:1, message: 'Cannot get count of Public!!', error: err.message});
+        }
+        else{
+            console.log(results)
+            res.json({
+                status_code: 0,
+                message: 'Count of the public is displayed',
+                result: results,
+                authData: req.headers.authData,
+                token: req.token
+            });
+        }
+    });
+}
+
+//Getting count of NGO 
+function countNgo (req, res){
+    console.log("request body: ",req.params)
+    adminService.countUsers(req.params, 2, function(err, results){
+        if(err){
+            res.json({status_code:1, message: 'Cannot get count of NGO!!', error: err.message});
+        }
+        else{
+            console.log(results)
+            res.json({
+                status_code: 0,
+                message: 'Count of the NGO is displayed',
+                result: results,
+                authData: req.headers.authData,
+                token: req.token
+            });
+        }
+    });
+}
+
+//Getting count of Carehomes 
+function countCarehomes (req, res){
+    console.log("request body: ",req.params)
+    adminService.countUsers(req.params, 3, function(err, results){
+        if(err){
+            res.json({status_code:1, message: 'Cannot get count of Carehomes!!', error: err.message});
+        }
+        else{
+            console.log(results)
+            res.json({
+                status_code: 0,
+                message: 'Count of the Carehomes is displayed',
+                result: results,
+                authData: req.headers.authData,
+                token: req.token
+            });
+        }
+    });
+}
+
+
+//Getting count of Shops 
+function countShops (req, res){
+    console.log("request body: ",req.params)
+    adminService.countUsers(req.params, 4, function(err, results){
+        if(err){
+            res.json({status_code:1, message: 'Cannot get count of Carehomes!!', error: err.message});
+        }
+        else{
+            console.log(results)
+            res.json({
+                status_code: 0,
+                message: 'Count of the Carehomes is displayed',
+                result: results,
+                authData: req.headers.authData,
+                token: req.token
+            });
+        }
+    });
+}
+
+
+//Getting count of Restaurants 
+function countRestaurants (req, res){
+    console.log("request body: ",req.params)
+    adminService.countUsers(req.params, 5, function(err, results){
+        if(err){
+            res.json({status_code:1, message: 'Cannot get count of Carehomes!!', error: err.message});
+        }
+        else{
+            console.log(results)
+            res.json({
+                status_code: 0,
+                message: 'Count of the Carehomes is displayed',
+                result: results,
+                authData: req.headers.authData,
+                token: req.token
+            });
+        }
+    });
+}
+
+
+//Getting count of Drivers 
+function countDrivers (req, res){
+    console.log("request body: ",req.params)
+    adminService.countDrivers(req.params, function(err, results){
+        if(err){
+            res.json({status_code:1, message: 'Cannot get count of Drivers!!', error: err.message});
+        }
+        else{
+            console.log(results)
+            res.json({
+                status_code: 0,
+                message: 'Count of the Drivers is displayed',
+                result: results,
+                authData: req.headers.authData,
+                token: req.token
+            });
+        }
+    });
+}
+
 //explore availability 
 function exploreAvailability (req, res){
     console.log("request body: ",req.params)
@@ -608,6 +731,7 @@ function exploreAvailability (req, res){
         }
     });
 }
+
 
 
 module.exports = {
@@ -635,5 +759,11 @@ module.exports = {
     viewRequestByDate:viewRequestByDate,
     viewColPoint:viewColPoint,
     viewColPointById:viewColPointById,
-    viewColPointByDate:viewColPointByDate
+    viewColPointByDate:viewColPointByDate,
+    countPublic:countPublic,
+    countNgo:countNgo,
+    countCarehomes:countCarehomes,
+    countShops:countShops,
+    countRestaurants:countRestaurants,
+    countDrivers:countDrivers
 }

@@ -8,7 +8,7 @@ function viewAllOrganizations(data,callback){
         db.pool.query('select u.id, u.user_name, u.email, u.user_type, u.profile_picture_path, u.mobile_number, u.land_number, address_1, address_2, u.zipcode, u.bank, u.account_number, u.status, u.is_verified, o.name, o.description, o.contact_person_name, o.contact_person_number, o.contact_person_email, o.license_no, o.license_proof_path, o.social_media, o.website, o.latitude, o.longitude, ut.name, c.name_en from users u ' +
         'join organizations o on u.id = o.user_id ' +
         'join cities c on c.id = u.city ' +
-        'join user_types ut on ot.id = u.user_type ',
+        'join user_types ut on ut.id = u.user_type ',
         (ex, rows) => {
             if(ex){
                 callback(ex);
@@ -29,7 +29,7 @@ function viewOrganizationsbyId(data,callback){
         db.pool.query('SELECT u.id, u.user_name, u.email, u.user_type, u.profile_picture_path, u.mobile_number, u.land_number, address_1, address_2, u.zipcode, u.bank, u.account_number, u.status, u.is_verified, o.name, o.description, o.contact_person_name, o.contact_person_number, o.contact_person_email, o.license_no, o.license_proof_path, o.social_media, o.website, o.latitude, o.longitude, ut.name, c.name_en FROM users u ' +
         'join organizations o on u.id = o.user_id ' +
         'join cities c on c.id = u.city ' +
-        'join user_types ut on ot.id = u.user_type ' +
+        'join user_types ut on ut.id = u.user_type ' +
         'WHERE u.id=?', [authData.user.id],
         (ex, rows) => {
             if(ex){
@@ -51,7 +51,7 @@ function viewOrganizationsbyType(data,type,callback){
         db.pool.query('SELECT u.id, u.user_name, u.email, u.profile_picture_path, u.mobile_number, u.land_number, address_1, address_2, u.zipcode, u.bank, u.account_number, u.status, u.is_verified, o.name, o.description, o.contact_person_name, o.contact_person_number, o.contact_person_email, o.license_no, o.license_proof_path, o.social_media, o.website, o.latitude, o.longitude, ut.name, c.name_en FROM users u ' +
         'join organizations o on u.id = o.user_id ' +
         'join cities c on c.id = u.city ' +
-        'join user_types ut on ot.id = u.user_type ' +
+        'join user_types ut on ut.id = u.user_type ' +
         'WHERE o.organization_type=?',[type],
         (ex, rows) => {
             if(ex){
@@ -492,6 +492,46 @@ function viewColPointByDate(data,callback){
     }
 }
 
+
+// Queries for selecting the counts of the Users.
+function countUsers(data,u_type,callback){
+    try{
+        db.pool.query('SELECT COUNT(id) FROM users WHERE user_type=?',
+        [u_type], 
+        (ex, rows) => {
+            if(ex){
+                callback(ex);
+            }
+            else{
+                callback(null,{row: rows});
+            }
+        });
+    }
+    catch(err) {
+    callback(err);
+    }
+}
+
+
+// Queries for selecting the counts of the Users.
+function countDrivers(data, callback){
+    try{
+        db.pool.query('SELECT COUNT(user_id) FROM public WHERE driver_status=1',
+        (ex, rows) => {
+            if(ex){
+                callback(ex);
+            }
+            else{
+                callback(null,{row: rows});
+            }
+        });
+    }
+    catch(err) {
+    callback(err);
+    }
+}
+
+
 module.exports = {
     viewAllOrganizations:viewAllOrganizations,
     viewOrganizationsbyId:viewOrganizationsbyId,
@@ -514,5 +554,8 @@ module.exports = {
     viewRequestByDate:viewRequestByDate,
     viewColPoint:viewColPoint,
     viewColPointById:viewColPointById,
-    viewColPointByDate:viewColPointByDate
+    viewColPointByDate:viewColPointByDate,
+    countUsers:countUsers,
+    countDrivers:countDrivers
+    
 }
