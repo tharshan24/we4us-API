@@ -41,16 +41,8 @@ router.get('/viewColPointByDate/:startDate/:endDate',authMiddleware.verifyToken,
 
 
 
-
-
 router.get('/exploreAvailability',authMiddleware.verifyToken,adminController.exploreAvailability);
 
 
-
-
-
-
-
-// router.get('/viewAllOrganiations/:user_id',authMiddleware.verifyToken,adminController.viewAllOrganiations);
 
 module.exports  = router;

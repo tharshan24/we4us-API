@@ -34,12 +34,12 @@ function createAvailability(data,callback){
                                 //insert query for availabilities table
                                 connection.query("INSERT INTO availabilities (user_id, name, availability_type, other_description, description, food_type, total_quantity, " + 
                                 "available_quantity, actual_quantity, cooked_time, best_before, storage_description, location, address_1, address_2, city, latitude, longitude," +
-                                "cater_description, creator_delivery_option, delivery_vehicle_option, status, image_status, created_at, updated_at)" +
-                                "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,now(),now())",
+                                "cater_description, creator_delivery_option, status, image_status, created_at, updated_at)" +
+                                "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,now(),now())",
                                 [data.headers.authData.user.id,data.body.name,data.body.availability_type, data.body.other_description, data.body.description,
                                 data.body.food_type,data.body.total_quantity,data.body.total_quantity,data.body.total_quantity,data.body.cooked_time,
                                 data.body.best_before,data.body.storage_description,data.body.location,data.body.address_1,data.body.address_2,data.body.city,
-                                data.body.latitude,data.body.longitude,data.body.cater_description,data.body.creator_delivery_option,data.body.delivery_vehicle_option,
+                                data.body.latitude,data.body.longitude,data.body.cater_description,data.body.creator_delivery_option,
                                 1,data.body.image_status] , (ex,rows1) => {
                                     if(ex){
                                            // console.log("222222")
@@ -112,6 +112,23 @@ function createAvailability(data,callback){
     }
 }
 
+function cancelAvailability(data,callback){
+    try {
+        db.pool.query('UPDATE availabilities SET status=0, updated_at=now() WHERE id=?',
+        [data.availId], (ex, rows) => {
+            if(ex){
+                callback(ex);
+            } 
+            else{
+              callback(null,{row: rows});
+             }
+        });
+    }
+    catch(err) {
+    callback(err);
+    }
+}
+
 //Quereis for creating availability sessions.
 function createAvailSession(data,callback){
     try {
@@ -120,7 +137,7 @@ function createAvailSession(data,callback){
         [data.body.availability_id, data.headers.authData.user.id, data.body.quantity,0,data.body.requester_message, data.body.location, data.body.address_1, data.body.address_2, data.body.city, data.body.latitude, data.body.longitude, data.body.requester_delivery_option], (ex, rows) => {
             if(ex){
                 callback(ex);
-            } 
+            }
             else{
               callback(null,{row: rows});
              }
@@ -372,7 +389,7 @@ function getSessions(authData,data,callback){
         db.pool.query('SELECT s.*, u.user_name, u.profile_picture_path FROM availability_sessions s ' +
             'JOIN availabilities a ON a.id = s.availability_id ' +
             'JOIN users u ON u.id=s.user_id ' +
-            'WHERE a.id = ?',
+            'WHERE a.id = ? AND s.status NOT IN (4,5,6)',
         [data.avail_id], (ex, rows) => {
             if(ex){
                 callback(ex);
@@ -448,7 +465,7 @@ function availOngoingDelivery(data,callback){
 
 function exploreAvailabilityByMySessions(data,callback){
     try{
-        db.pool.query('SELECT a.name, a.best_before, u.user_name, u.profile_picture_path, at.name as availability_type_name, s.quantity FROM availabilities a ' +
+        db.pool.query('SELECT a.name, a.best_before, u.user_name, u.profile_picture_path, at.name as availability_type_name, s.quantity, s.id as session_id FROM availabilities a ' +
             'JOIN users u ON u.id = a.user_id ' +
             'JOIN availability_sessions s ON s.availability_id = a.id ' +
             'JOIN availability_types at ON at.id = a.availability_type ' +
@@ -472,7 +489,7 @@ function exploreAvailabilityByMySessions(data,callback){
 
 function exploreAvailabilityByMySession(data,callback){
     try{
-        db.pool.query('SELECT a.*, u.user_name, u.profile_picture_path, at.name as availability_type_name, s.quantity, s.requester_delivery_option, s.final_delivery_option FROM availabilities a ' +
+        db.pool.query('SELECT a.*, u.user_name, u.profile_picture_path, at.name as availability_type_name, s.quantity, s.requester_delivery_option, s.final_delivery_option, s.id as session_id, s.status as session_status, s.payment_by, s.payment_status FROM availabilities a ' +
             'JOIN users u ON u.id = a.user_id ' +
             'JOIN availability_sessions s ON s.availability_id = a.id ' +
             'JOIN availability_types at ON at.id = a.availability_type ' +
@@ -482,9 +499,10 @@ function exploreAvailabilityByMySession(data,callback){
                     callback(ex);
                 }
                 else{
+                    console.log(rows1)
                     db.pool.query('SELECT name, image_path FROM availability_images ' +
                         'WHERE availability_id = ?',
-                        [rows1.id], (ex, rows2) => {
+                        [rows1[0].id], (ex, rows2) => {
                             if(ex){
                                 callback(ex);
                             }
@@ -505,6 +523,7 @@ function exploreAvailabilityByMySession(data,callback){
 
 module.exports = {
     createAvailability:createAvailability,
+    cancelAvailability:cancelAvailability,
     createAvailSession:createAvailSession,
     updateAvailSession: updateAvailSession,
     updateAvailSessionTrans: updateAvailSessionTrans,
