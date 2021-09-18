@@ -6,6 +6,7 @@ const organizationRouter = require('./app/routes/organization_routes');
 const adminRouter = require('./app/routes/admin_routes');
 const systemRouter = require('./app/routes/system_routes');
 const availabilityRouter = require('./app/routes/availability_routes');
+const requestRouter = require('./app/routes/request_routes');
 const mongoose = require('mongoose');
 const app = express();
 // const port = 8000;
@@ -42,6 +43,9 @@ app.use('/system', systemRouter);
 
 // availability specified requests
 app.use('/availability', availabilityRouter);
+
+// request specified requests
+app.use('/request', requestRouter);
 
 app.listen(port, () => {
   // console.log(`We4uS app listening at http://localhost:${port}`);
