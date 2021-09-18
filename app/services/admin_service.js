@@ -30,7 +30,7 @@ function viewOrganizationsbyId(data,callback){
         'join organizations o on u.id = o.user_id ' +
         'join cities c on c.id = u.city ' +
         'join user_types ut on ut.id = u.user_type ' +
-        'WHERE u.id=?', [authData.user.id],
+        'WHERE u.id=?', [data.user_id],
         (ex, rows) => {
             if(ex){
                 callback(ex);

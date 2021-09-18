@@ -24,7 +24,7 @@ function viewAllOrganizations (req, res){
 //viewing Organizations by ID
 function viewOrganizationsbyId (req, res){
     console.log("request body: ",req.params)
-    adminService.viewAllOrganizations(req.params,function(err, results){
+    adminService.viewOrganizationsbyId(req.params,function(err, results){
         if(err){
             res.json({status_code:1, message: 'Cannot get data of Organizations With the ID', error: err.message});
         }
