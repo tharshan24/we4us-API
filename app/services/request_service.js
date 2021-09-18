@@ -402,7 +402,7 @@ function exploreRequest(authData,data,callback){
 
 function exploreMyRequest(authData,data,callback){
     try{
-        db.pool.query('SELECT u.user_name, u.profile_picture_path, r.name, r.request_type, r.need_before, r.items_priority FROM requests r ' +
+        db.pool.query('SELECT u.user_name, u.profile_picture_path, r.id, r.name, r.request_type, r.need_before, r.items_priority FROM requests r ' +
             'JOIN users u ON u.id = r.user_id ' +
             'WHERE r.status = 1 AND u.status = 1 AND r.user_id = ? ' +
             'ORDER BY r.id DESC',
@@ -495,6 +495,73 @@ function getSession(authData,data,callback){
 }
 
 
+function exploreRequestByMySessions(data,callback){
+    try{
+        db.pool.query('SELECT r.id, r.name, r.need_before, u.user_name, u.profile_picture_path, rt.name as request_type_name, s.id as session_id FROM requests r ' +
+            'JOIN users u ON u.id = r.user_id ' +
+            'JOIN request_sessions s ON s.request_id = r.id ' +
+            'JOIN request_types rt ON rt.id = r.request_type ' +
+            'WHERE s.user_id = ? AND r.status=1 AND s.status NOT IN (4,5,6)',
+            [data.headers.authData.user.id], (ex, rows1) => {
+                if(ex){
+                    callback(ex);
+                }
+                else{
+                    callback(null,{
+                        row: rows1
+                    });
+                }
+            });
+    }
+    catch(err) {
+        callback(err);
+    }
+}
+
+function exploreRequestByMySession(data,callback){
+    try{
+        db.pool.query('SELECT r.*, u.user_name, u.profile_picture_path, rt.name as availability_type_name, s.quantity, s.requester_delivery_option, s.final_delivery_option, s.id as session_id, s.status as session_status, s.payment_by, s.payment_status FROM requests r ' +
+            'JOIN users u ON u.id = r.user_id ' +
+            'JOIN request_sessions s ON s.request_id = a.id ' +
+            'JOIN request_types at ON rt.id = r.request_type ' +
+            'WHERE s.id = ?',
+            [data.ses_id], (ex, rows1) => {
+                if(ex){
+                    callback(ex);
+                }
+                else{
+                    db.pool.query('SELECT name, total_quantity, total_quantity, actual_quantity FROM request_items ' +
+                        'WHERE request_id = ?',
+                        [rows1[0].id], (ex, rows2) => {
+                            if(ex){
+                                callback(ex);
+                            }
+                            else {
+                                db.pool.query('SELECT name, quantity FROM request_session_items ' +
+                                    'WHERE request_session_id = ?',
+                                    [rows1[0].session_id], (ex, rows3) => {
+                                        if(ex){
+                                            callback(ex);
+                                        }
+                                        else {
+                                            callback(null,{
+                                                data: rows1,
+                                                items_creator: rows2,
+                                                items: rows3
+                                            });
+                                        }
+                                    });
+                            }
+                        });
+                }
+            });
+    }
+    catch(err) {
+        callback(err);
+    }
+}
+
+
 module.exports = {
     createRequest:createRequest,
     createReqSession:createReqSession,
@@ -509,5 +576,7 @@ module.exports = {
     exploreMyRequest:exploreMyRequest,
     exploreRequestById:exploreRequestById,
     getSessions:getSessions,
-    getSession:getSession
+    getSession:getSession,
+    exploreRequestByMySessions:exploreRequestByMySessions,
+    exploreRequestByMySession:exploreRequestByMySession
 }

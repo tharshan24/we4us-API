@@ -18,7 +18,7 @@ router.get('/exploreMyRequest/',authMiddleware.verifyToken,requestController.exp
 router.get('/exploreRequestById/:reqId',authMiddleware.verifyToken,requestController.exploreRequestById);
 router.get('/getSessions/:reqId',authMiddleware.verifyToken,requestController.getSessions);
 router.get('/getSession/:ses_id',authMiddleware.verifyToken,requestController.getSession);
-// router.get('/exploreRequestByMySessions',authMiddleware.verifyToken,requestController.exploreRequestByMySessions);
-// router.get('/exploreRequestByMySession/:ses_id',authMiddleware.verifyToken,requestController.exploreRequestByMySession);
+router.get('/exploreRequestByMySessions',authMiddleware.verifyToken,requestController.exploreRequestByMySessions);
+router.get('/exploreRequestByMySession/:ses_id',authMiddleware.verifyToken,requestController.exploreRequestByMySession);
 
 module.exports  = router;

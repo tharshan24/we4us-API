@@ -341,6 +341,47 @@ function getSession (req, res){
 }
 
 
+//Available ongoing delivery
+function exploreRequestByMySessions (req, res){
+    console.log("request params: ",req.params)
+    requestService.exploreRequestByMySessions(req, function(err, results){
+        if(err){
+            res.json({status_code:1, message: 'Cannot get sessions', error: err.message});
+        }
+        else{
+            console.log(results)
+            res.json({
+                status_code: 0,
+                message: 'Successful',
+                result: results,
+                authData: req.headers.authData,
+                token: req.token
+            });
+        }
+    });
+}
+
+//Available ongoing delivery
+function exploreRequestByMySession (req, res){
+    console.log("request params: ",req.params)
+    requestService.exploreRequestByMySession(req.params, function(err, results){
+        if(err){
+            res.json({status_code:1, message: 'Cannot get availability', error: err.message});
+        }
+        else{
+            console.log(results)
+            res.json({
+                status_code: 0,
+                message: 'Successful',
+                result: results,
+                authData: req.headers.authData,
+                token: req.token
+            });
+        }
+    });
+}
+
+
 module.exports = {
     createRequest:createRequest,
     createReqSession:createReqSession,
@@ -353,6 +394,7 @@ module.exports = {
     exploreMyRequest:exploreMyRequest,
     exploreRequestById:exploreRequestById,
     getSessions:getSessions,
-    getSession:getSession
-
+    getSession:getSession,
+    exploreRequestByMySessions:exploreRequestByMySessions,
+    exploreRequestByMySession:exploreRequestByMySession
 }
