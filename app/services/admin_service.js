@@ -251,8 +251,7 @@ function deliveryPaymentFilter(data,callback){
         // 'JOIN availability_delivery_payments adp ON adp.delivery_id = ad.id'+
         // 'WHERE adp.status=0',
         db.pool.query('SELECT SUM(amount) FROM availability_delivery_payments'+
-        'WHERE created_at BETWEEN "?" AND "?" ',
-        [data.startDate, data.endDate],
+        `WHERE created_at BETWEEN "${data.startDate}" AND "${data.endDate}" `,
         (ex, rows) => {
             if(ex){
                 callback(ex);
@@ -292,8 +291,7 @@ function exploreAvailability(authData,data,callback){
 //Queries to view Availability
 function viewAvailability(data,callback){
     try{
-        db.pool.query('SELECT a.id, a.availability_type, a.description, a.food_type, a.total_quantity, a.status AS avail_status, u.id, u.user_name, u.status AS user_status, p.first_name, p.last_name, c.name_en FROM users u '+
-        'JOIN public p on u.id = p.user_id '+
+        db.pool.query('SELECT a.id, a.availability_type, a.description, a.food_type, a.total_quantity, a.status AS avail_status, u.id, u.user_name, u.status AS user_status, c.name_en FROM users u '+
         'JOIN cities c on c.id = u.city ' +
         'JOIN availabilities a on a.user_id = u.id ' +
         'WHERE u.status=1 AND a.status=1',
@@ -314,8 +312,7 @@ function viewAvailability(data,callback){
 //Queries to view Availability by ID
 function viewAvailabilityById(data,callback){
     try{
-        db.pool.query('SELECT a.id, a.name, a.availability_type, a.description, a.food_type, a.total_quantity, a.status AS avail_status, u.id, u.user_name, u.status AS user_status, p.first_name, p.last_name, c.name_en FROM users u '+
-        'JOIN public p on u.id = p.user_id '+
+        db.pool.query('SELECT a.id, a.name, a.availability_type, a.description, a.food_type, a.total_quantity, a.status AS avail_status, u.id, u.user_name, u.status AS user_status, c.name_en FROM users u '+
         'JOIN cities c on c.id = u.city ' +
         'JOIN availabilities a on a.user_id = u.id ' +
         'WHERE a.id=? AND u.status=1 AND a.status=1',
@@ -337,12 +334,10 @@ function viewAvailabilityById(data,callback){
 //Queries to view Availability by Date
 function viewAvailabilityByDate(data,callback){
     try{
-        db.pool.query('SELECT a.id, a.availability_type, a.description, a.food_type, a.total_quantity, a.status AS avail_status, u.id, u.user_name, u.status AS user_status, p.first_name, p.last_name, c.name_en FROM users u '+
-        'JOIN public p on u.id = p.user_id '+
+        db.pool.query('SELECT a.id, a.availability_type, a.description, a.food_type, a.total_quantity, a.status AS avail_status, u.id, u.user_name, u.status AS user_status, c.name_en FROM users u '+
         'JOIN cities c on c.id = u.city ' +
         'JOIN availabilities a on a.user_id = u.id ' +
-        'WHERE (a.created_at BETWEEN "?" AND "?") AND u.status=1 AND a.status=1',
-        [data.startDate, data.endDate],
+        `WHERE (a.created_at BETWEEN "${data.startDate}" AND "${data.endDate}") AND u.status=1 AND a.status=1`,
         (ex, rows) => {
             if(ex){
                 callback(ex);
@@ -360,8 +355,7 @@ function viewAvailabilityByDate(data,callback){
 //Queries to view Request
 function viewRequest(data,callback){
     try{
-        db.pool.query('SELECT r.id, r.request_type , r.description, r.status AS req_statuss, ri.total_quantity, ri.status AS req_items_status, u.id, u.user_name, u.status AS user_status, p.first_name, p.last_name, c.name_en FROM users u '+
-        'JOIN public p on u.id = p.user_id '+
+        db.pool.query('SELECT r.id, r.request_type , r.description, r.status AS req_statuss, ri.total_quantity, ri.status AS req_items_status, u.id, u.user_name, u.status AS user_status, c.name_en FROM users u '+
         'JOIN cities c on c.id = u.city ' +
         'JOIN requests r on r.user_id = u.id ' +
         'JOIN request_items ri on r.id = ri.request_id ' +
@@ -383,8 +377,7 @@ function viewRequest(data,callback){
 //Queries to view Availability by ID
 function viewRequestById(data,callback){
     try{
-        db.pool.query('SELECT r.id, r.request_type , r.description, r.status AS req_status, ri.total_quantity, ri.status AS req_items_status, u.id, u.user_name, u.status AS user_status, p.first_name, p.last_name, c.name_en FROM users u '+
-        'JOIN public p on u.id = p.user_id '+
+        db.pool.query('SELECT r.id, r.request_type , r.description, r.status AS req_status, ri.total_quantity, ri.status AS req_items_status, u.id, u.user_name, u.status AS user_status, c.name_en FROM users u '+
         'JOIN cities c on c.id = u.city ' +
         'JOIN requests r on r.user_id = u.id ' +
         'JOIN request_items ri on r.id = ri.request_id ' +
@@ -407,13 +400,11 @@ function viewRequestById(data,callback){
 //Queries to view Availability by Date
 function viewRequestByDate(data,callback){
     try{
-        db.pool.query('SELECT r.id, r.request_type , r.description, r.status AS req_status, ri.total_quantity, ri.status AS req_items_status, u.id, u.user_name, u.status AS user_status, p.first_name, p.last_name, c.name_en FROM users u '+
-        'JOIN public p on u.id = p.user_id '+
+        db.pool.query('SELECT r.id, r.request_type , r.description, r.status AS req_status, ri.total_quantity, ri.status AS req_items_status, u.id, u.user_name, u.status AS user_status, c.name_en FROM users u '+
         'JOIN cities c on c.id = u.city ' +
         'JOIN requests r on r.user_id = u.id ' +
         'JOIN request_items ri on r.id = ri.request_id ' +
-        'WHERE (r.created_at BETWEEN "?" AND "?") AND  u.status=1 AND r.status=1 AND ri.status=1',
-        [data.startDate, data.endDate],
+        `WHERE (r.created_at BETWEEN "${data.startDate}" AND "${data.endDate}") AND  u.status=1 AND r.status=1 AND ri.status=1`,
         (ex, rows) => {
             if(ex){
                 callback(ex);
@@ -483,8 +474,7 @@ function viewColPointByDate(data,callback){
         'JOIN collection_points cp on cp.ngo_id = u.user_type '+
         'JOIN cities c on c.id = u.city ' +
         'JOIN user_types ut on ut.id = u.user_type ' +
-        'WHERE u.status=1 AND (cp.created_at BETWEEN "?" AND "?")',
-        [data.startDate,data.endDate],
+        `WHERE u.status=1 AND (cp.created_at "${data.startDate}" AND "${data.endDate}")`,
         (ex, rows) => {
             if(ex){
                 callback(ex);
@@ -554,8 +544,7 @@ function viewSellPointByDate(data,callback){
         'JOIN selling_points sp on sp.shop_id = u.user_type '+
         'JOIN cities c on c.id = u.city ' +
         'JOIN user_types ut on ut.id = u.user_type ' +
-        'WHERE u.status=1 and AND (sp.created_at BETWEEN "?" AND "?")',
-        [data.startDate,data.endDate],
+        `WHERE u.status=1 and AND (sp.created_at "${data.startDate}" AND "${data.endDate}")`,
         (ex, rows) => {
             if(ex){
                 callback(ex);
