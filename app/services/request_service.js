@@ -305,7 +305,7 @@ function getQuantityWithStatus(authData,data,callback){
         db.pool.query('SELECT rs.status, rsi.id, rsi.item_id, rsi.quantity FROM request_sessions rs ' +
             'JOIN request_session_items rsi ON rs.id = rsi.request_session_id ' +
             'JOIN request_items ri ON ri.id = rsi.item_id ' +
-            'WHERE rs.id=? rs.status = 1 AND rsi.status = 1 AND ri.status = 1',
+            'WHERE rs.id=? AND rs.status = 1 AND rsi.status = 1 AND ri.status = 1',
             [data.req_ses_id], (ex, rows) => {
             if(ex){
                 callback(ex);
@@ -433,7 +433,7 @@ function exploreRequestById(authData,data,callback){
                     callback(ex);
                 }
                 else{
-                    db.pool.query('SELECT name, total_quantity, total_quantity, actual_quantity FROM request_items ' +
+                    db.pool.query('SELECT name, total_quantity, total_quantity, actual_quantity,needed_quantity FROM request_items ' +
                         'WHERE request_id = ?',
                         [data.reqId], (ex, rows2) => {
                             if(ex){
@@ -532,7 +532,7 @@ function exploreRequestByMySession(data,callback){
                     callback(ex);
                 }
                 else{
-                    db.pool.query('SELECT name, total_quantity, total_quantity, actual_quantity FROM request_items ' +
+                    db.pool.query('SELECT name, total_quantity, total_quantity, actual_quantity,needed_quantity FROM request_items ' +
                         'WHERE request_id = ?',
                         [rows1[0].id], (ex, rows2) => {
                             if(ex){

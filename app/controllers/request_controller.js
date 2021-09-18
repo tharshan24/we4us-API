@@ -70,7 +70,7 @@ function acceptReqSession (req, res){
             res.json({status_code:1, message: 'Cannot get the current status', error: err1.message});
         }
         else{
-            let q = results1.row[0].quantity; 
+            // let q = results1.row[0].quantity;
           if(results1.row[0].status==0){ //Updating status to accepted when the current stage is pending
             const data = {
                 status:1,
