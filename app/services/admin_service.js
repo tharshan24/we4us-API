@@ -353,12 +353,12 @@ function viewAvailabilityByDate(data,callback){
 //Queries to view Request
 function viewRequest(data,callback){
     try{
-        db.pool.query('SELECT r.id, r.request_type , r.description, r.status AS rs, ri.total_quantity, ri.status AS ris, u.id, u.user_name, u.status AS us, p.first_name, p.last_name, c.name_en FROM users u '+
+        db.pool.query('SELECT r.id, r.request_type , r.description, r.status AS req_statuss, ri.total_quantity, ri.status AS req_items_status, u.id, u.user_name, u.status AS user_status, p.first_name, p.last_name, c.name_en FROM users u '+
         'JOIN public p on u.id = p.user_id '+
         'JOIN cities c on c.id = u.city ' +
         'JOIN requests r on r.user_id = u.id ' +
         'JOIN request_items ri on r.id = ri.request_id ' +
-        'WHERE us=1 AND rs=1 AND ris=1',
+        'WHERE u.status=1 AND r.status=1 AND ri.status=1',
         (ex, rows) => {
             if(ex){
                 callback(ex);
@@ -376,12 +376,12 @@ function viewRequest(data,callback){
 //Queries to view Availability by ID
 function viewRequestById(data,callback){
     try{
-        db.pool.query('SELECT r.id, r.request_type , r.description, r.status AS rs, ri.total_quantity, ri.status AS ris, u.id, u.user_name, u.status AS us, p.first_name, p.last_name, c.name_en FROM users u '+
+        db.pool.query('SELECT r.id, r.request_type , r.description, r.status AS req_status, ri.total_quantity, ri.status AS req_items_status, u.id, u.user_name, u.status AS user_status, p.first_name, p.last_name, c.name_en FROM users u '+
         'JOIN public p on u.id = p.user_id '+
         'JOIN cities c on c.id = u.city ' +
         'JOIN requests r on r.user_id = u.id ' +
         'JOIN request_items ri on r.id = ri.request_id ' +
-        'WHERE r.id=? AND us=1 AND rs=1 AND ris=1',
+        'WHERE r.id=? AND u.status=1 AND r.status=1 AND ri.status=1',
         [data.req_id],
         (ex, rows) => {
             if(ex){
@@ -400,12 +400,12 @@ function viewRequestById(data,callback){
 //Queries to view Availability by Date
 function viewRequestByDate(data,callback){
     try{
-        db.pool.query('SELECT r.id, r.request_type , r.description, r.status AS rs, ri.total_quantity, ri.status AS ris, u.id, u.user_name, u.status AS us, p.first_name, p.last_name, c.name_en FROM users u '+
+        db.pool.query('SELECT r.id, r.request_type , r.description, r.status AS req_status, ri.total_quantity, ri.status AS req_items_status, u.id, u.user_name, u.status AS user_status, p.first_name, p.last_name, c.name_en FROM users u '+
         'JOIN public p on u.id = p.user_id '+
         'JOIN cities c on c.id = u.city ' +
         'JOIN requests r on r.user_id = u.id ' +
         'JOIN request_items ri on r.id = ri.request_id ' +
-        'WHERE (r.created_at BETWEEN "?" AND "?") AND  us=1 AND rs=1 AND ris=1',
+        'WHERE (r.created_at BETWEEN "?" AND "?") AND  u.status=1 AND r.status=1 AND ri.status=1',
         [data.startDate, data.endDate],
         (ex, rows) => {
             if(ex){
