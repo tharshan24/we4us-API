@@ -150,7 +150,7 @@ function getMyCollectionPoints(req,res){
 //Collection points get my
 function getCollectionPointsById(req,res){
     // console.log(req.body);
-    orgService.getCollectionPointsById(req.params,function(err,results){
+    orgService.getCollectionPointsById(req.headers.authData,req.params,function(err,results){
         if(err){
             res.json({status_code:1,message:'Cannot Get Collection Point',error:err.message});
         }
@@ -167,6 +167,26 @@ function getCollectionPointsById(req,res){
     });
 }
 
+//Collection points get my
+function getAllMembers(req,res){
+    // console.log(req.body);
+    orgService.getAllMembers(req.headers.authData, req.params,function(err,results){
+        if(err){
+            res.json({status_code:1,message:'Cannot Get Mmebers',error:err.message});
+        }
+        else{
+            // console.log(results);
+            res.json({
+                status_code:0,
+                message:'Get Members Successful',
+                result:results,
+                authData: req.headers.authData,
+                token: req.token
+            });
+        }
+    });
+}
+
 module.exports = {
     viewProfile:viewProfile,
     updateProfile:updateProfile,
@@ -175,5 +195,6 @@ module.exports = {
     createCollectionPoint:createCollectionPoint,
     getCollectionPoints:getCollectionPoints,
     getMyCollectionPoints:getMyCollectionPoints,
-    getCollectionPointsById:getCollectionPointsById
+    getCollectionPointsById:getCollectionPointsById,
+    getAllMembers:getAllMembers
 }

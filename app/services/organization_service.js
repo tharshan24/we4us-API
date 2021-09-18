@@ -232,6 +232,28 @@ function getCollectionPointsById(data,callback){
     }
 }
 
+function getAllMembers(authData,data,callback){
+    try{
+        db.pool.query('SELECT m.user_id, p.first_name, p.last_name, u.user_name, u.profile_picture_path FROM members m ' +
+            'JOIN users u ON u.id = m.user_id ' +
+            'JOIN public p ON u.id = p.user_id ' +
+            'WHERE m.organization_id = ?',
+            [25], (ex, rows1) => {
+            if(ex){
+                callback(ex);
+            }
+            else{
+                callback(null,{
+                    data: rows1
+                });
+            }
+        });
+    }
+    catch(err) {
+        callback(err);
+    }
+}
+
 module.exports = {
     viewProfile:viewProfile,
     updateProfile:updateProfile,
@@ -240,5 +262,6 @@ module.exports = {
     createCollectionPoint:createCollectionPoint,
     getCollectionPoints:getCollectionPoints,
     getMyCollectionPoints:getMyCollectionPoints,
-    getCollectionPointsById:getCollectionPointsById
+    getCollectionPointsById:getCollectionPointsById,
+    getAllMembers:getAllMembers
 }
