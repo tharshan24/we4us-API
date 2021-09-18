@@ -239,6 +239,66 @@ function deliverReqSession (req, res){
 }
 
 
+//explore availability session
+function exploreRequest (req, res){
+    console.log("request body: ",req.params)
+    requestService.exploreRequest(req.headers.authData, req.params, function(err, results){
+        if(err){
+            res.json({status_code:1, message: 'Error', error: err.message});
+        }
+        else{
+            console.log(results)
+            res.json({
+                status_code: 0,
+                message: 'Success',
+                result: results,
+                authData: req.headers.authData,
+                token: req.token
+            });
+        }
+    });
+}
+
+//explore availability session
+function exploreMyRequest (req, res){
+    console.log("request body: ",req.params)
+    requestService.exploreRequest(req.headers.authData, req.params, function(err, results){
+        if(err){
+            res.json({status_code:1, message: 'Error', error: err.message});
+        }
+        else{
+            console.log(results)
+            res.json({
+                status_code: 0,
+                message: 'Success',
+                result: results,
+                authData: req.headers.authData,
+                token: req.token
+            });
+        }
+    });
+}
+
+//explore availability session
+function exploreRequestById (req, res){
+    console.log("request body: ",req.params)
+    requestService.exploreRequest(req.headers.authData, req.params, function(err, results){
+        if(err){
+            res.json({status_code:1, message: 'Error', error: err.message});
+        }
+        else{
+            console.log(results)
+            res.json({
+                status_code: 0,
+                message: 'Success',
+                result: results,
+                authData: req.headers.authData,
+                token: req.token
+            });
+        }
+    });
+}
+
 
 module.exports = {
     createRequest:createRequest,
@@ -247,6 +307,9 @@ module.exports = {
     acceptReqSession:acceptReqSession,
     cancelReqSession:cancelReqSession,
     rejectReqSession:rejectReqSession,
-    deliverReqSession:deliverReqSession
+    deliverReqSession:deliverReqSession,
+    exploreRequest:exploreRequest,
+    exploreMyRequest:exploreMyRequest,
+    exploreRequestById:exploreRequestById
 
 }
