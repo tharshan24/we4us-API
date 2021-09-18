@@ -65,7 +65,7 @@ function getRequestType (req, res){
 //Updating the status to accepted.
 function acceptReqSession (req, res){
     console.log("request body: ",req.params)
-    requestService.getQuantityWithStatus(req.params,function(err1, results1){
+    requestService.getQuantityWithStatus(req.headers.authData,req.params,function(err1, results1){
         if(err1){
             res.json({status_code:1, message: 'Cannot get the current status', error: err1.message});
         }
