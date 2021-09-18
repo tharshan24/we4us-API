@@ -52,7 +52,7 @@ function viewOrganizationsbyType(data,type,callback){
         'join organizations o on u.id = o.user_id ' +
         'join cities c on c.id = u.city ' +
         'join user_types ut on ut.id = u.user_type ' +
-        'WHERE o.organization_type=?',[type],
+        'WHERE u.user_type=?',[type],
         (ex, rows) => {
             if(ex){
                 callback(ex);
