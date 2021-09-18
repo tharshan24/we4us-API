@@ -9,6 +9,7 @@ router.get("/viewProfile/", authMiddleware.verifyToken, orgController.viewProfil
 router.post("/updateProfile", authMiddleware.verifyToken, orgController.updateProfile);
 //.....
 router.get("/getMembers/:names", authMiddleware.verifyToken, orgController.getMembers);
+router.get("/getAllMembers", authMiddleware.verifyToken, orgController.getAllMembers);
 router.post("/addMembers", authMiddleware.verifyToken, orgController.addMembers);
 
 //collection points
