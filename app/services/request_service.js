@@ -382,14 +382,9 @@ function updateQuantityWithStatus(data,callback){
 
 function exploreRequest(authData,data,callback){
     try{
-        db.pool.query('SELECT u.user_name, u.profile_picture_path, r.name, r.request_type, r.need_before, r.items_priority, c.name_en FROM requests r ' +
+        db.pool.query('SELECT u.user_name, u.profile_picture_path, r.name, r.request_type, r.need_before, r.items_priority FROM requests r ' +
             'JOIN users u ON u.id = r.user_id ' +
-            'JOIN users uu ON uu.id = ? ' +
-            'JOIN cities c ON c.id = r.city ' +
-            'JOIN cities cc ON cc.id = uu.city ' +
-            'Join districts d ON d.id = c.district_id ' +
-            'Join districts dd ON dd.id = cc.district_id ' +
-            'WHERE r.status = 1 AND u.status = 1 AND d.id = dd.id AND r.user_id <> ? AND r.need_before > now() ' +
+            'WHERE r.status = 1 AND u.status = 1 AND r.user_id <> ? AND r.need_before > now() ' +
             'ORDER BY r.id DESC',
             [authData.user.id,authData.user.id], (ex, rows) => {
                 if(ex){
@@ -407,7 +402,7 @@ function exploreRequest(authData,data,callback){
 
 function exploreMyRequest(authData,data,callback){
     try{
-        db.pool.query('SELECT u.user_name, u.profile_picture_path, r.name, r.request_type, r.need_before, r.items_priority, c.name_en FROM requests r ' +
+        db.pool.query('SELECT u.user_name, u.profile_picture_path, r.name, r.request_type, r.need_before, r.items_priority FROM requests r ' +
             'JOIN users u ON u.id = r.user_id ' +
             'WHERE r.status = 1 AND u.status = 1 AND r.user_id = ? ' +
             'ORDER BY r.id DESC',
