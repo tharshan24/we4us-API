@@ -217,11 +217,11 @@ function updateDriverStatus(data,status,callback){
 //Queries to get the data of delivery payments
 function deliveryPayment(data,callback){
     try{
-        db.pool.query('SELECT u.id AS user_id, a.id AS avail_id, a.name, as.id, as.quantity, ad.id AS availdelivery_id, d.user_id , adp.id AS availdeliverpay_id, adp.amount, adp.created_at, adp.updated_at '+
+        db.pool.query('SELECT u.id AS user_id, a.id AS avail_id, a.name, ass.id, ass.quantity, ad.id AS availdelivery_id, d.user_id , adp.id AS availdeliverpay_id, adp.amount, adp.created_at, adp.updated_at '+
         'FROM users u'+
         'JOIN availabilities a ON u.id = a.user_id'+
-        'JOIN availability_sessions as ON a.id = as.availability_id'+
-        'JOIN availability_deliveries ad ON as.id = ad.availability_session_id'+
+        'JOIN availability_sessions ass ON a.id = ass.availability_id'+
+        'JOIN availability_deliveries ad ON ass.id = ad.availability_session_id'+
         'JOIN drivers d ON d.user_id = ad.driver_id'+
         'JOIN availability_delivery_payments adp ON adp.delivery_id = ad.id'+
         'WHERE adp.status=0',
