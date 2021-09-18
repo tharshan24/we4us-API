@@ -528,6 +528,67 @@ function viewRequestByDate (req, res){
     });
 }
 
+//Getting data of all Collection points 
+function viewColPoint (req, res){
+    console.log("request body: ",req.params)
+    adminService.viewColPoint(req.params,function(err, results){
+        if(err){
+            res.json({status_code:1, message: 'Cannot get data of Collection points!!', error: err.message});
+        }
+        else{
+            console.log(results)
+            res.json({
+                status_code: 0,
+                message: 'Data of all Collection points successfully displayed',
+                result: results,
+                authData: req.headers.authData,
+                token: req.token
+            });
+        }
+    });
+}
+
+//Getting data of Collection point by Id 
+function viewColPointById (req, res){
+    console.log("request body: ",req.params)
+    adminService.viewColPointById(req.params,function(err, results){
+        if(err){
+            res.json({status_code:1, message: 'Cannot get data of Collection points!!', error: err.message});
+        }
+        else{
+            console.log(results)
+            res.json({
+                status_code: 0,
+                message: 'Data of all Collection point successfully displayed',
+                result: results,
+                authData: req.headers.authData,
+                token: req.token
+            });
+        }
+    });
+}
+
+
+//Getting data of Collection point by Date 
+function viewColPointByDate (req, res){
+    console.log("request body: ",req.params)
+    adminService.viewColPointByDate(req.params,function(err, results){
+        if(err){
+            res.json({status_code:1, message: 'Cannot get data of Collection points!!', error: err.message});
+        }
+        else{
+            console.log(results)
+            res.json({
+                status_code: 0,
+                message: 'Data of all Collection point successfully displayed',
+                result: results,
+                authData: req.headers.authData,
+                token: req.token
+            });
+        }
+    });
+}
+
 //explore availability 
 function exploreAvailability (req, res){
     console.log("request body: ",req.params)
@@ -572,4 +633,7 @@ module.exports = {
     viewRequest:viewRequest,
     viewRequestById:viewRequestById,
     viewRequestByDate:viewRequestByDate,
+    viewColPoint:viewColPoint,
+    viewColPointById:viewColPointById,
+    viewColPointByDate:viewColPointByDate
 }

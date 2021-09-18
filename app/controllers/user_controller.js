@@ -191,6 +191,27 @@ function test(req, res){
     });
 }
 
+//get user details
+function getUserDetails (req, res){
+   // console.log(req.params)
+   // console.log('check')
+    userService.getUserDetails(req.headers.authData, req.params, function(err,results){
+        if(err){
+            res.json({status_code:1,message:'Cannot Get User details',error:err.message});
+        }
+        else{
+            // console.log(results);
+            res.json({
+                status_code:0,
+                message:'Success displaying User details',
+                result:results,
+                authData: req.headers.authData,
+                token: req.token
+            });
+        }
+    });
+}
+
 
 module.exports = {
     login:login,
@@ -200,5 +221,6 @@ module.exports = {
     updateRealUser:updateRealUser,
     updateAccount:updateAccount,
     userVerification:userVerification,
-    test:test
+    test:test,
+    getUserDetails:getUserDetails
 }

@@ -265,6 +265,25 @@ function userVerification(data,callback){
     }
 }
 
+//Queries to obtain user details
+function getUserDetails(authData, data, callback){
+    console.log(data,"2222222222222222222222222222222222222222222222222222222")
+    try{
+        db.pool.query('SELECT user_name, email, profile_picture_path, mobile_number, land_number FROM users WHERE id=?',
+            [data.userId], (ex, rows) => {
+                if(ex){
+                    callback(ex);
+                }
+                else{
+                    callback(null,{row: rows});
+                }
+            });
+    }
+    catch(err) {
+        callback(err);
+    }
+}
+
 module.exports = {
     publicRegister:publicRegister,
     orgRegister:orgRegister,
@@ -272,5 +291,6 @@ module.exports = {
     getRealUser:getRealUser,
     updateRealUser:updateRealUser,
     updateAccount:updateAccount,
-    userVerification:userVerification
+    userVerification:userVerification,
+    getUserDetails:getUserDetails
 }
