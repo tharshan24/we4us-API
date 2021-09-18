@@ -135,7 +135,7 @@ function viewPublicbyId(data,callback){
         'join cities c on c.id = u.city ' +
         'left join drivers d on d.user_id = u.id '+
         'WHERE u.id = ?',
-        [authData.user.id],
+        [data.user_id],
         (ex, rows) => {
             if(ex){
                 callback(ex);
