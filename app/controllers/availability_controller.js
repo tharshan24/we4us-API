@@ -78,6 +78,7 @@ function acceptAvailSession (req, res){
                     actual_quantity:results1.row[0].actual_quantity,
                     quantity:results1.row[0].quantity,
                     final_delivery_option:0,
+                    delivery_vehicle_option:req.query.delivery_vehicle_option,
                     payment_status:0,
                     payment_by:0
                 }
