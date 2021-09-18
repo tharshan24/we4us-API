@@ -42,7 +42,7 @@ function createRequest(data,callback){
                                             let v = [];
                                             for (let i = 0; i < data.body.items.length; i++){
                                                 // console.log("i:",i)
-                                                let vv = {request_id:rows1.insertId, name:data.body.name, description:data.body.description, total_quantity:data.body.total_quantity[i], actual_quantity:data.body.actual_quantity[i], total_quantity:data.body.needed_quantity[i]};
+                                                let vv = {request_id:rows1.insertId, name:data.body.name, description:data.body.description, total_quantity:data.body.quantity[i], actual_quantity:data.body.quantity[i], total_quantity:data.body.quantity[i]};
                                                 // console.log("qq:",vv)
                                                 v.push(vv)
                                             }
@@ -169,23 +169,23 @@ function createReqSession(data,callback){
 }
 
 //Quereis for creating request sessions.
-function createReqSession(data,callback){
-    try {
-        db.pool.query('INSERT INTO request_sessions (request_id, user_id, attender_message, status, location, address_1, address_2, city, latitude, longitude, creator_feedback, attender_feedback, created_at, updated_at)'+
-        ' values(?,?,?,?,?,?,?,?,?,?,?,?,now(),now())',
-        [data.request_id, data.headers.authData.user.id, data.attender_message, 0, data.location, data.address_1, data.address_2, data.city, data.latitude, data.longitude, data.creator_feedback, data.requester_feedback], (ex, rows) => {
-            if(ex){
-                callback(ex);
-            } 
-            else{
-              callback(null,{row: rows});
-             }
-        });
-    }
-    catch(err) {
-    callback(err);
-    }
-}
+// function createReqSession(data,callback){
+//     try {
+//         db.pool.query('INSERT INTO request_sessions (request_id, user_id, attender_message, status, location, address_1, address_2, city, latitude, longitude, creator_feedback, attender_feedback, created_at, updated_at)'+
+//         ' values(?,?,?,?,?,?,?,?,?,?,?,?,now(),now())',
+//         [data.request_id, data.headers.authData.user.id, data.attender_message, 0, data.location, data.address_1, data.address_2, data.city, data.latitude, data.longitude, data.creator_feedback, data.requester_feedback], (ex, rows) => {
+//             if(ex){
+//                 callback(ex);
+//             }
+//             else{
+//               callback(null,{row: rows});
+//              }
+//         });
+//     }
+//     catch(err) {
+//     callback(err);
+//     }
+// }
 
 
 //Queries for getting the data from request session.
