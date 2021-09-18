@@ -105,11 +105,10 @@ function getMembers(authData,data,callback){
     try {
         //console.log(authData)
         //using the connection to query
-        db.pool.query('SELECT u.id, u.user_name, p.first_name, p.last_name ' +
+       let query =db.pool.query('SELECT u.id, u.user_name, p.first_name, p.last_name ' +
             'FROM users u '+
             'JOIN public p ON u.id = p.user_id '+
-            'WHERE u.status=1 AND (u.user_name LIKE "%?%" OR p.first_name LIKE "%?%" OR p.last_name LIKE "%?%") LIMIT 10 ',
-            [data.names, data.names, data.names], 
+            `WHERE u.status=1 AND (u.user_name LIKE "%${data.names}%" OR p.first_name LIKE "%${data.names}%" OR p.last_name LIKE "%${data.names}%") LIMIT 10 `,
             (ex, rows) => {
             if (ex) {
                 callback(ex);
@@ -121,6 +120,7 @@ function getMembers(authData,data,callback){
                 }
             }
         });
+        console.log(query.sql)
     } catch(err) {
         callback(err);
     }
