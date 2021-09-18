@@ -217,7 +217,7 @@ function updateDriverStatus(data,status,callback){
 //Queries to get the data of delivery payments
 function deliveryPayment(data,callback){
     try{
-        db.pool.query('SELECT u.id, a.id, a.name, as.id, as.quantity, ad.id, d.user_id , adp.id, adp.amount, adp.created_at, adp.updated_at '+
+        db.pool.query('SELECT u.id AS user_id, a.id AS avail_id, a.name, as.id, as.quantity, ad.id AS availdelivery_id, d.user_id , adp.id AS availdeliverpay_id, adp.amount, adp.created_at, adp.updated_at '+
         'FROM users u'+
         'JOIN availabilities a ON u.id = a.user_id'+
         'JOIN availability_sessions as ON a.id = as.availability_id'+
@@ -268,7 +268,7 @@ function deliveryPaymentFilter(data,callback){
 
 function exploreAvailability(authData,data,callback){
     try{
-        db.pool.query('SELECT a.id, a.user_id, a.name, a.availability_type, a.food_type, a.available_quantity, a.city, a.status, u.user_name, u.profile_picture_path, a.best_before, c.name_en, d.name_en FROM availabilities a ' +
+        db.pool.query('SELECT a.id AS avail_id, a.user_id, a.name, a.availability_type, a.food_type, a.available_quantity, a.city, a.status, u.user_name, u.profile_picture_path, a.best_before, c.name_en, d.name_en FROM availabilities a ' +
             'JOIN users u ON u.id = a.user_id ' +
             'JOIN cities c ON c.id = a.city ' +
             'JOIN districts d ON d.id = c.district_id ' +
@@ -291,7 +291,7 @@ function exploreAvailability(authData,data,callback){
 //Queries to view Availability
 function viewAvailability(data,callback){
     try{
-        db.pool.query('SELECT a.id, a.availability_type, a.description, a.food_type, a.total_quantity, a.status AS avail_status, u.id, u.user_name, u.status AS user_status, c.name_en FROM users u '+
+        db.pool.query('SELECT a.id AS avail_id, a.availability_type, a.description, a.food_type, a.total_quantity, a.status AS avail_status, u.id AS user_id, u.user_name, u.status AS user_status, c.name_en FROM users u '+
         'JOIN cities c on c.id = u.city ' +
         'JOIN availabilities a on a.user_id = u.id ' +
         'WHERE u.status=1 AND a.status=1',
@@ -312,7 +312,7 @@ function viewAvailability(data,callback){
 //Queries to view Availability by ID
 function viewAvailabilityById(data,callback){
     try{
-        db.pool.query('SELECT a.id, a.name, a.availability_type, a.description, a.food_type, a.total_quantity, a.status AS avail_status, u.id, u.user_name, u.status AS user_status, c.name_en FROM users u '+
+        db.pool.query('SELECT a.id AS avail_id, a.name, a.availability_type, a.description, a.food_type, a.total_quantity, a.status AS avail_status, u.id AS user_id, u.user_name, u.status AS user_status, c.name_en FROM users u '+
         'JOIN cities c on c.id = u.city ' +
         'JOIN availabilities a on a.user_id = u.id ' +
         'WHERE a.id=? AND u.status=1 AND a.status=1',
@@ -334,7 +334,7 @@ function viewAvailabilityById(data,callback){
 //Queries to view Availability by Date
 function viewAvailabilityByDate(data,callback){
     try{
-        db.pool.query('SELECT a.id, a.availability_type, a.description, a.food_type, a.total_quantity, a.status AS avail_status, u.id, u.user_name, u.status AS user_status, c.name_en FROM users u '+
+        db.pool.query('SELECT a.id AS avail_id, a.availability_type, a.description, a.food_type, a.total_quantity, a.status AS avail_status, u.id AS user_id, u.user_name, u.status AS user_status, c.name_en FROM users u '+
         'JOIN cities c on c.id = u.city ' +
         'JOIN availabilities a on a.user_id = u.id ' +
         `WHERE (a.created_at BETWEEN "${data.startDate}" AND "${data.endDate}") AND u.status=1 AND a.status=1`,
@@ -355,7 +355,7 @@ function viewAvailabilityByDate(data,callback){
 //Queries to view Request
 function viewRequest(data,callback){
     try{
-        db.pool.query('SELECT r.id, r.request_type , r.description, r.status AS req_statuss, ri.total_quantity, ri.status AS req_items_status, u.id, u.user_name, u.status AS user_status, c.name_en FROM users u '+
+        db.pool.query('SELECT r.id AS request_id, r.request_type , r.description, r.status AS req_statuss, ri.total_quantity, ri.status AS req_items_status, u.id AS user_id, u.user_name, u.status AS user_status, c.name_en FROM users u '+
         'JOIN cities c on c.id = u.city ' +
         'JOIN requests r on r.user_id = u.id ' +
         'JOIN request_items ri on r.id = ri.request_id ' +
@@ -377,7 +377,7 @@ function viewRequest(data,callback){
 //Queries to view Availability by ID
 function viewRequestById(data,callback){
     try{
-        db.pool.query('SELECT r.id, r.request_type , r.description, r.status AS req_status, ri.total_quantity, ri.status AS req_items_status, u.id, u.user_name, u.status AS user_status, c.name_en FROM users u '+
+        db.pool.query('SELECT r.id AS request_id, r.request_type , r.description, r.status AS req_status, ri.total_quantity, ri.status AS req_items_status, u.id AS user_id, u.user_name, u.status AS user_status, c.name_en FROM users u '+
         'JOIN cities c on c.id = u.city ' +
         'JOIN requests r on r.user_id = u.id ' +
         'JOIN request_items ri on r.id = ri.request_id ' +
@@ -400,7 +400,7 @@ function viewRequestById(data,callback){
 //Queries to view Availability by Date
 function viewRequestByDate(data,callback){
     try{
-        db.pool.query('SELECT r.id, r.request_type , r.description, r.status AS req_status, ri.total_quantity, ri.status AS req_items_status, u.id, u.user_name, u.status AS user_status, c.name_en FROM users u '+
+        db.pool.query('SELECT r.id AS request_id, r.request_type , r.description, r.status AS req_status, ri.total_quantity, ri.status AS req_items_status, u.id AS user_id, u.user_name, u.status AS user_status, c.name_en FROM users u '+
         'JOIN cities c on c.id = u.city ' +
         'JOIN requests r on r.user_id = u.id ' +
         'JOIN request_items ri on r.id = ri.request_id ' +
@@ -422,7 +422,7 @@ function viewRequestByDate(data,callback){
 //Queries to view Collection points
 function viewColPoint(data,callback){
     try{
-        db.pool.query('SELECT cp.id, cp.ngo_id, cp.status, o.user_id, o.name, u.id, u.user_name, c.name_en FROM users u '+
+        db.pool.query('SELECT cp.id AS colpoint_id, cp.ngo_id, cp.status, o.user_id, o.name, u.id AS user_id, u.user_name, c.name_en FROM users u '+
         'JOIN organizations o on u.id = o.user_id '+
         'JOIN collection_points cp on cp.ngo_id = u.user_type '+
         'JOIN cities c on c.id = u.city ' +
@@ -445,7 +445,7 @@ function viewColPoint(data,callback){
 //Queries to view Collection point by ID
 function viewColPointById(data,callback){
     try{
-        db.pool.query('SELECT cp.id, cp.ngo_id, cp.status, o.user_id, o.name, u.id, u.user_name, c.name_en FROM users u '+
+        db.pool.query('SELECT cp.id AS colpoint_id, cp.ngo_id, cp.status, o.user_id, o.name, u.id AS user_id, u.user_name, c.name_en FROM users u '+
         'JOIN organizations o on u.id = o.user_id '+
         'JOIN collection_points cp on cp.ngo_id = u.user_type '+
         'JOIN cities c on c.id = u.city ' +
@@ -469,7 +469,7 @@ function viewColPointById(data,callback){
 //Queries to view Collection point by Date
 function viewColPointByDate(data,callback){
     try{
-        db.pool.query('SELECT cp.id, cp.ngo_id, cp.status, o.user_id, o.name, u.id, u.user_name, c.name_en FROM users u '+
+        db.pool.query('SELECT cp.id AS colpoint_id, cp.ngo_id, cp.status, o.user_id, o.name, u.id AS user_id, u.user_name, c.name_en FROM users u '+
         'JOIN organizations o on u.id = o.user_id '+
         'JOIN collection_points cp on cp.ngo_id = u.user_type '+
         'JOIN cities c on c.id = u.city ' +
@@ -492,7 +492,7 @@ function viewColPointByDate(data,callback){
 //Queries to view Selling points
 function viewSellPoint(data,callback){
     try{
-        db.pool.query('SELECT sp.id, sp.shop_id, sp.status, o.user_id, o.name, u.id, u.user_name, c.name_en FROM users u '+
+        db.pool.query('SELECT sp.id AS sellpoint_id, sp.shop_id, sp.status, o.user_id, o.name, u.id AS user_id, u.user_name, c.name_en FROM users u '+
         'JOIN organizations o on u.id = o.user_id '+
         'JOIN selling_points sp on sp.shop_id = u.user_type '+
         'JOIN cities c on c.id = u.city ' +
@@ -515,7 +515,7 @@ function viewSellPoint(data,callback){
 //Queries to view Selling points by ID
 function viewSellPointById(data,callback){
     try{
-        db.pool.query('SELECT sp.id, sp.shop_id, sp.status, o.user_id, o.name, u.id, u.user_name, c.name_en FROM users u '+
+        db.pool.query('SELECT sp.id AS sellpoint_id, sp.shop_id, sp.status, o.user_id, o.name, u.id AS user_id, u.user_name, c.name_en FROM users u '+
         'JOIN organizations o on u.id = o.user_id '+
         'JOIN selling_points sp on sp.shop_id = u.user_type '+
         'JOIN cities c on c.id = u.city ' +
@@ -539,7 +539,7 @@ function viewSellPointById(data,callback){
 //Queries to view Selling points by Date
 function viewSellPointByDate(data,callback){
     try{
-        db.pool.query('SELECT sp.id, sp.shop_id, sp.status, o.user_id, o.name, u.id, u.user_name, c.name_en FROM users u '+
+        db.pool.query('SELECT sp.id AS sellpoint_id, sp.shop_id, sp.status, o.user_id, o.name, u.id AS user_id, u.user_name, c.name_en FROM users u '+
         'JOIN organizations o on u.id = o.user_id '+
         'JOIN selling_points sp on sp.shop_id = u.user_type '+
         'JOIN cities c on c.id = u.city ' +
