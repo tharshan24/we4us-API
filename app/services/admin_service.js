@@ -154,11 +154,11 @@ function viewPublicbyId(data,callback){
 function getDriverById(data,callback){
     try{
         db.pool.query('SELECT u.id, u.user_name, u.email, u.mobile_number, c.name_en, p.first_name, p.last_name, d.license_no, d.license_proof_path, d.extension, d.payment_type, d.status '+
-        'FROM drivers d ' +
-        'JOIN users u ON p.user_id = u.id '+
-        'JOIN public p ON p.user_id = d.user_id '+
+        'FROM users u ' +
+        'JOIN public p ON p.user_id = u.id '+
+        'JOIN drivers d ON p.user_id = d.user_id '+
         'JOIN cities c ON c.id = u.city '+
-        'WHERE d.status=1 AND u.id=?',
+        'WHERE u.id=?',
         [data.user_id], (ex, rows) => {
             if(ex){
                 callback(ex);
@@ -177,11 +177,10 @@ function getDriverById(data,callback){
 function getAllDrivers(data,callback){
     try{
         db.pool.query('SELECT u.id, u.user_name, u.email, u.mobile_number, c.name_en, p.first_name, p.last_name, d.license_no, d.license_proof_path, d.extension, d.payment_type, d.status '+
-        'FROM drivers d ' +
-        'JOIN users u ON p.user_id = u.id '+
-        'JOIN public p ON p.user_id = d.user_id '+
-        'JOIN cities c ON c.id = u.city '+
-        'WHERE d.status=1',
+        'FROM users u ' +
+        'JOIN public p ON p.user_id = u.id '+
+        'JOIN drivers d ON p.user_id = d.user_id '+
+        'JOIN cities c ON c.id = u.city ',
         (ex, rows) => {
             if(ex){
                 callback(ex);
@@ -200,7 +199,7 @@ function getAllDrivers(data,callback){
 // Queries for updating status of Drivers (accept/rejected/pending)
 function updateDriverStatus(data,status,callback){
     try{
-        db.pool.query('UPDATE drivers SET status=? WHERE id=?',
+        db.pool.query('UPDATE drivers SET status=? WHERE user_id=?',
         [status,authData.user.id], (ex, rows) => {
             if(ex){
                 callback(ex);
@@ -500,6 +499,78 @@ function viewColPointByDate(data,callback){
     }
 }
 
+//Queries to view Selling points
+function viewSellPoint(data,callback){
+    try{
+        db.pool.query('SELECT sp.id, sp.shop_id, sp.status, o.user_id, o.name, u.id, u.user_name, c.name_en FROM users u '+
+        'JOIN organizations o on u.id = o.user_id '+
+        'JOIN selling_points sp on sp.shop_id = u.user_type '+
+        'JOIN cities c on c.id = u.city ' +
+        'JOIN user_types ut on ut.id = u.user_type ' +
+        'WHERE u.status=1',
+        (ex, rows) => {
+            if(ex){
+                callback(ex);
+            }
+            else{
+                callback(null,{row: rows});
+            }
+        });
+    }
+    catch(err) {
+    callback(err);
+    }
+}
+
+//Queries to view Selling points by ID
+function viewSellPointById(data,callback){
+    try{
+        db.pool.query('SELECT sp.id, sp.shop_id, sp.status, o.user_id, o.name, u.id, u.user_name, c.name_en FROM users u '+
+        'JOIN organizations o on u.id = o.user_id '+
+        'JOIN selling_points sp on sp.shop_id = u.user_type '+
+        'JOIN cities c on c.id = u.city ' +
+        'JOIN user_types ut on ut.id = u.user_type ' +
+        'WHERE u.status=1 and sp.id=?',
+        [data.sp_id],
+        (ex, rows) => {
+            if(ex){
+                callback(ex);
+            }
+            else{
+                callback(null,{row: rows});
+            }
+        });
+    }
+    catch(err) {
+    callback(err);
+    }
+}
+
+//Queries to view Selling points by Date
+function viewSellPointByDate(data,callback){
+    try{
+        db.pool.query('SELECT sp.id, sp.shop_id, sp.status, o.user_id, o.name, u.id, u.user_name, c.name_en FROM users u '+
+        'JOIN organizations o on u.id = o.user_id '+
+        'JOIN selling_points sp on sp.shop_id = u.user_type '+
+        'JOIN cities c on c.id = u.city ' +
+        'JOIN user_types ut on ut.id = u.user_type ' +
+        'WHERE u.status=1 and AND (sp.created_at BETWEEN "?" AND "?")',
+        [data.startDate,data.endDate],
+        (ex, rows) => {
+            if(ex){
+                callback(ex);
+            }
+            else{
+                callback(null,{row: rows});
+            }
+        });
+    }
+    catch(err) {
+    callback(err);
+    }
+}
+
+
 
 // Queries for selecting the counts of the Users.
 function countUsers(data,u_type,callback){
@@ -564,6 +635,9 @@ module.exports = {
     viewColPointById:viewColPointById,
     viewColPointByDate:viewColPointByDate,
     countUsers:countUsers,
-    countDrivers:countDrivers
+    countDrivers:countDrivers,
+    viewSellPoint:viewSellPoint,
+    viewSellPointById:viewSellPointById,
+    viewSellPointByDate:viewSellPointByDate
     
 }

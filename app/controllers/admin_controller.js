@@ -121,58 +121,32 @@ function viewRestaurants (req, res){
     });
 }
 
-//Updating the status of an Organization (Enable/Disable)
-function updateOrganizationStatus (req, res){
+//Updating the status of an Users (Enable/Disable)
+function updateUserStatus (req, res){
     console.log("request body: ",req.params)
-    adminService.getUserStatus(req.params,function(err1, results1){
-        if(err1){
-            res.json({status_code:1, message: 'Cannot get the current status', error: err.message});
+    let status
+    if(req.params.status == 0){
+        status = 1;
+    }
+    else if(req.params.status == 1){
+        status = 0;
+    }
+    adminService.updateUserStatus(req.params, status, function(err, results){
+        if(err){
+            res.json({status_code:1, message: 'Cannot update user status', error: err.message});
         }
         else{
-          if(results1.row[0].status==1 && results1.row[0].user_type==2){ //Updating status to Disable stage is enabled
-            adminService.updateUserStatus(req.params, 0, function(err2, results2){
-                if(err2){
-                    res.json({status_code:1, message: 'Cannot update status to Disable', error: err2.message});
-                }
-                else{
-                    // console.log(results2)
-                    res.json({
-                        status_code: 0,
-                        message: 'Organization is disabled!!',
-                        result: results2,
-                        authData: req.headers.authData,
-                        token: req.token
-                    });
-                }
-            });
-          }
-          else if(results1.row[0].status==0 && results1.row[0].user_type==2){
-            adminService.updateUserStatus(req.params, 1, function(err3, results3){
-                if(err3){
-                    res.json({status_code:1, message: 'Cannot update status to Enable', error: err3.message});
-                }
-                else{
-                    // console.log(results2)
-                    res.json({
-                        status_code: 0,
-                        message: 'Organization is enabled!!',
-                        result: results3,
-                        authData: req.headers.authData,
-                        token: req.token
-                    });
-                }
-            });
-          }
-          else{
+            console.log(results)
             res.json({
                 status_code: 0,
-                message: 'There is no such status',
+                message: 'User status Updated',
+                result: results,
                 authData: req.headers.authData,
                 token: req.token
-            })
-          }
+            });
         }
     });
+ 
 }
 
 //viewing all Public
@@ -217,58 +191,58 @@ function viewPublicbyId (req, res){
 
 
 //Updating the status of Public (Enable/Disable)
-function updatePublicStatus (req, res){
-    console.log("request body: ",req.params)
-    adminService.getUserStatus(req.params,function(err1, results1){
-        if(err1){
-            res.json({status_code:1, message: 'Cannot get the current status', error: err.message});
-        }
-        else{
-          if(results1.row[0].status==1 && results1.row[0].user_type==1){ //Updating status to Disable stage is enabled
-            adminService.updateUserStatus(req.params, 0, function(err2, results2){
-                if(err2){
-                    res.json({status_code:1, message: 'Cannot update status to Disable', error: err2.message});
-                }
-                else{
-                    // console.log(results2)
-                    res.json({
-                        status_code: 0,
-                        message: 'Organization is disabled!!',
-                        result: results2,
-                        authData: req.headers.authData,
-                        token: req.token
-                    });
-                }
-            });
-          }
-          else if(results1.row[0].status==0 && results1.row[0].user_type==1){
-            adminService.updateUserStatus(req.params, 1, function(err3, results3){
-                if(err3){
-                    res.json({status_code:1, message: 'Cannot update status to Enable', error: err3.message});
-                }
-                else{
-                    // console.log(results2)
-                    res.json({
-                        status_code: 0,
-                        message: 'Organization is enabled!!',
-                        result: results3,
-                        authData: req.headers.authData,
-                        token: req.token
-                    });
-                }
-            });
-          }
-          else{
-            res.json({
-                status_code: 0,
-                message: 'There is no such status',
-                authData: req.headers.authData,
-                token: req.token
-            })
-          }
-        }
-    });
-}
+// function updatePublicStatus (req, res){
+//     console.log("request body: ",req.params)
+//     adminService.getUserStatus(req.params,function(err1, results1){
+//         if(err1){
+//             res.json({status_code:1, message: 'Cannot get the current status', error: err.message});
+//         }
+//         else{
+//           if(results1.row[0].status==1 && results1.row[0].user_type==1){ //Updating status to Disable stage is enabled
+//             adminService.updateUserStatus(req.params, 0, function(err2, results2){
+//                 if(err2){
+//                     res.json({status_code:1, message: 'Cannot update status to Disable', error: err2.message});
+//                 }
+//                 else{
+//                     // console.log(results2)
+//                     res.json({
+//                         status_code: 0,
+//                         message: 'Organization is disabled!!',
+//                         result: results2,
+//                         authData: req.headers.authData,
+//                         token: req.token
+//                     });
+//                 }
+//             });
+//           }
+//           else if(results1.row[0].status==0 && results1.row[0].user_type==1){
+//             adminService.updateUserStatus(req.params, 1, function(err3, results3){
+//                 if(err3){
+//                     res.json({status_code:1, message: 'Cannot update status to Enable', error: err3.message});
+//                 }
+//                 else{
+//                     // console.log(results2)
+//                     res.json({
+//                         status_code: 0,
+//                         message: 'Organization is enabled!!',
+//                         result: results3,
+//                         authData: req.headers.authData,
+//                         token: req.token
+//                     });
+//                 }
+//             });
+//           }
+//           else{
+//             res.json({
+//                 status_code: 0,
+//                 message: 'There is no such status',
+//                 authData: req.headers.authData,
+//                 token: req.token
+//             })
+//           }
+//         }
+//     });
+// }
 
 
 //viewing Driver by ID
@@ -315,53 +289,26 @@ function viewAllDrivers (req, res){
 //Updating the status of an Driver(accept/rejected/pending)
 function updateDriverStatus (req, res){
     console.log("request body: ",req.params)
-    adminService.getDriverById(req.params,function(err1, results1){
-        if(err1){
-            res.json({status_code:1, message: 'Cannot get the current status', error: err.message});
+    let status
+    if(req.params.status == 0){
+        status = 1;
+    }
+    else if(req.params.status == 1){
+        status = 0;
+    }
+    adminService.updateDriverStatus(req.params, status, function(err, results){
+        if(err){
+            res.json({status_code:1, message: 'Cannot update Driver status', error: err.message});
         }
         else{
-          if(results1.row[0].status==0 || results1.row[0].status==1){ //Updating status to reject when status is pending or accepted
-            adminService.updateDriverStatus(req.params,2, function(err2, results2){
-                if(err2){
-                    res.json({status_code:1, message: 'Cannot update status to Reject', error: err2.message});
-                }
-                else{
-                    // console.log(results2)
-                    res.json({
-                        status_code: 0,
-                        message: 'Driver is Rejected!!',
-                        result: results2,
-                        authData: req.headers.authData,
-                        token: req.token
-                    });
-                }
-            });
-          }
-          else if(results1.row[0].status==0 || results1.row[0].status==2){//Updating status to accept when status is pending or rejected
-            adminService.updateDriverStatus(req.params,1, function(err3, results3){
-                if(err3){
-                    res.json({status_code:1, message: 'Cannot update status to Accept', error: err3.message});
-                }
-                else{
-                    // console.log(results2)
-                    res.json({
-                        status_code: 0,
-                        message: 'Driver is accepted!!',
-                        result: results3,
-                        authData: req.headers.authData,
-                        token: req.token
-                    });
-                }
-            });
-          }
-          else{
+            console.log(results)
             res.json({
                 status_code: 0,
-                message: 'There is no such status',
+                message: 'Driver status Updated',
+                result: results,
                 authData: req.headers.authData,
                 token: req.token
-            })
-          }
+            });
         }
     });
 }
@@ -589,6 +536,66 @@ function viewColPointByDate (req, res){
     });
 }
 
+//Getting data of all Selling points 
+function viewSellPoint (req, res){
+    console.log("request body: ",req.params)
+    adminService.viewSellPoint(req.params,function(err, results){
+        if(err){
+            res.json({status_code:1, message: 'Cannot get data of Selling points!!', error: err.message});
+        }
+        else{
+            console.log(results)
+            res.json({
+                status_code: 0,
+                message: 'Data of all Selling points successfully displayed',
+                result: results,
+                authData: req.headers.authData,
+                token: req.token
+            });
+        }
+    });
+}
+
+//Getting data of Selling point by Id 
+function viewSellPointById (req, res){
+    console.log("request body: ",req.params)
+    adminService.viewSellPointById(req.params,function(err, results){
+        if(err){
+            res.json({status_code:1, message: 'Cannot get data of Selling points with ID!!', error: err.message});
+        }
+        else{
+            console.log(results)
+            res.json({
+                status_code: 0,
+                message: 'Data of Selling point with ID successfully displayed',
+                result: results,
+                authData: req.headers.authData,
+                token: req.token
+            });
+        }
+    });
+}
+
+//Getting data of Selling point by Date 
+function viewSellPointByDate (req, res){
+    console.log("request body: ",req.params)
+    adminService.viewSellPointByDate(req.params,function(err, results){
+        if(err){
+            res.json({status_code:1, message: 'Cannot get data of Selling points by date!!', error: err.message});
+        }
+        else{
+            console.log(results)
+            res.json({
+                status_code: 0,
+                message: 'Data of all Selling point with Date successfully displayed',
+                result: results,
+                authData: req.headers.authData,
+                token: req.token
+            });
+        }
+    });
+}
+
 //Getting count of public 
 function countPublic (req, res){
     console.log("request body: ",req.params)
@@ -741,10 +748,10 @@ module.exports = {
     viewCarehomes:viewCarehomes,
     viewShops:viewShops,
     viewRestaurants:viewRestaurants,
-    updateOrganizationStatus:updateOrganizationStatus,
+    updateUserStatus:updateUserStatus,
     viewAllPublic:viewAllPublic,
     viewPublicbyId:viewPublicbyId,
-    updatePublicStatus:updatePublicStatus,
+    //updatePublicStatus:updatePublicStatus,
     viewDriverById:viewDriverById,
     viewAllDrivers:viewAllDrivers,
     updateDriverStatus:updateDriverStatus,
@@ -765,5 +772,9 @@ module.exports = {
     countCarehomes:countCarehomes,
     countShops:countShops,
     countRestaurants:countRestaurants,
-    countDrivers:countDrivers
+    countDrivers:countDrivers,
+    viewSellPoint:viewSellPoint,
+    viewSellPointById:viewSellPointById,
+    viewSellPointByDate:viewSellPointByDate
+
 }
