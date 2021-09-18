@@ -13,6 +13,12 @@ router.get('/deliverReqSession/:req_ses_id', authMiddleware.verifyToken, request
 
 router.get('/getRequestType/', authMiddleware.verifyToken, requestController.getRequestType);
 
-
+router.get('/exploreRequest/',authMiddleware.verifyToken,requestController.exploreRequest);
+router.get('/exploreMyRequest/',authMiddleware.verifyToken,requestController.exploreMyRequest);
+router.get('/exploreRequestById/:availId',authMiddleware.verifyToken,requestController.exploreRequestById);
+// router.get('/getSessions/:avail_id',authMiddleware.verifyToken,requestController.getSessions);
+// router.get('/getSession/:ses_id',authMiddleware.verifyToken,requestController.getSession);
+// router.get('/exploreRequestByMySessions',authMiddleware.verifyToken,requestController.exploreRequestByMySessions);
+// router.get('/exploreRequestByMySession/:ses_id',authMiddleware.verifyToken,requestController.exploreRequestByMySession);
 
 module.exports  = router;
