@@ -200,7 +200,7 @@ function getAllDrivers(data,callback){
 function updateDriverStatus(data,status,callback){
     try{
         db.pool.query('UPDATE drivers SET status=? WHERE user_id=?',
-        [status,authData.user.id], (ex, rows) => {
+        [status,data.user_id], (ex, rows) => {
             if(ex){
                 callback(ex);
             }
