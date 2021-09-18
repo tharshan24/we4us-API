@@ -382,7 +382,7 @@ function updateQuantityWithStatus(data,callback){
 
 function exploreRequest(authData,data,callback){
     try{
-        db.pool.query('SELECT u.user_name, u.profile_picture_path, r.name, r.request_type, r.need_before, r.items_priority FROM requests r ' +
+        db.pool.query('SELECT u.user_name, u.profile_picture_path, r.id as request_id, r.name, r.request_type, r.need_before, r.items_priority FROM requests r ' +
             'JOIN users u ON u.id = r.user_id ' +
             'WHERE r.status = 1 AND u.status = 1 AND r.user_id <> ? AND r.need_before > now() ' +
             'ORDER BY r.id DESC',
