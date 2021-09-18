@@ -105,9 +105,9 @@ function getMembers(authData,data,callback){
     try {
         //console.log(authData)
         //using the connection to query
-        db.pool.query('SELECT u.id, u.user_name, p.first_name, p.last_name' +
+        db.pool.query('SELECT u.id, u.user_name, p.first_name, p.last_name ' +
             'FROM users u '+
-            'JOIN public p ON u.id = p.user_id'+
+            'JOIN public p ON u.id = p.user_id '+
             'WHERE u.status=1 AND (u.user_name LIKE "%?%" OR p.first_name LIKE "%?%" OR p.last_name LIKE "%?%") LIMIT 10 ',
             [data.names, data.names, data.names], 
             (ex, rows) => {

@@ -38,6 +38,13 @@ router.get('/viewColPoint',authMiddleware.verifyToken,adminController.viewColPoi
 router.get('/viewColPointById/:cp_id',authMiddleware.verifyToken,adminController.viewColPointById);
 router.get('/viewColPointByDate/:startDate/:endDate',authMiddleware.verifyToken,adminController.viewColPointByDate);
 
+router.get('/countPublic',authMiddleware.verifyToken,adminController.countPublic);
+router.get('/countNgo',authMiddleware.verifyToken,adminController.countNgo);
+router.get('/countCarehomes',authMiddleware.verifyToken,adminController.countCarehomes);
+router.get('/countShops',authMiddleware.verifyToken,adminController.countShops);
+router.get('/countRestaurants',authMiddleware.verifyToken,adminController.countRestaurants);
+router.get('/countDrivers',authMiddleware.verifyToken,adminController.countDrivers);
+
 
 
 

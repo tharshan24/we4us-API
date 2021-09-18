@@ -492,6 +492,46 @@ function viewColPointByDate(data,callback){
     }
 }
 
+
+// Queries for selecting the counts of the Users.
+function countUsers(data,u_type,callback){
+    try{
+        db.pool.query('SELECT COUNT(id) FROM users WHERE user_type=?',
+        [u_type], 
+        (ex, rows) => {
+            if(ex){
+                callback(ex);
+            }
+            else{
+                callback(null,{row: rows});
+            }
+        });
+    }
+    catch(err) {
+    callback(err);
+    }
+}
+
+
+// Queries for selecting the counts of the Users.
+function countDrivers(data, callback){
+    try{
+        db.pool.query('SELECT COUNT(user_id) FROM public WHERE driver_status=1',
+        (ex, rows) => {
+            if(ex){
+                callback(ex);
+            }
+            else{
+                callback(null,{row: rows});
+            }
+        });
+    }
+    catch(err) {
+    callback(err);
+    }
+}
+
+
 module.exports = {
     viewAllOrganizations:viewAllOrganizations,
     viewOrganizationsbyId:viewOrganizationsbyId,
@@ -514,5 +554,8 @@ module.exports = {
     viewRequestByDate:viewRequestByDate,
     viewColPoint:viewColPoint,
     viewColPointById:viewColPointById,
-    viewColPointByDate:viewColPointByDate
+    viewColPointByDate:viewColPointByDate,
+    countUsers:countUsers,
+    countDrivers:countDrivers
+    
 }
