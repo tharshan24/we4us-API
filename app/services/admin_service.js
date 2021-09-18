@@ -70,8 +70,8 @@ function viewOrganizationsbyType(data,type,callback){
 // Queries for selecting status
 function getUserStatus(data,callback){
     try{
-        db.pool.query('SELECT status, user_type FROM users  WHERE id=?',
-        [authData.user.id], (ex, rows) => {
+        db.pool.query('SELECT u.status, u.user_type, ut.id FROM users u JOIN user_types ut ON ut.id = u.user_type  WHERE id=?',
+        [data.user_id], (ex, rows) => {
             if(ex){
                 callback(ex);
             }
@@ -90,7 +90,7 @@ function getUserStatus(data,callback){
 function updateUserStatus(data,status,callback){
     try{
         db.pool.query('UPDATE users SET status=? WHERE id=?',
-        [status,authData.user.id], (ex, rows) => {
+        [status,data.user_id], (ex, rows) => {
             if(ex){
                 callback(ex);
             }
