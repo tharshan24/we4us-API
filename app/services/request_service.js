@@ -496,7 +496,7 @@ function getSession(authData,data,callback){
                             }
                             else {
                                 callback(null,{
-                                    data: rows1,
+                                    data: rows,
                                     items: rows3
                                 });
                             }
