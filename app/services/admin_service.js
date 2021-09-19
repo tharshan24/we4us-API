@@ -360,7 +360,7 @@ function viewAvailabilityByDate(data,callback){
 //Queries to view Request
 function viewRequest(data,callback){
     try{
-        db.pool.query('SELECT r.id, r.request_type , r.description, r.status AS req_statuss, ri.total_quantity, ri.status AS req_items_status, u.id AS user_id, u.user_name, u.status AS user_status, c.name_en, ut.name as user_type_name, r.created_at FROM users u '+
+        db.pool.query('SELECT r.id, r.request_type , r.description, r.status AS req_statuss, u.id AS user_id, u.user_name, u.status AS user_status, c.name_en, ut.name as user_type_name, r.created_at FROM users u '+
         'JOIN cities c on c.id = u.city ' +
         'JOIN user_types ut on ut.id = u.user_type ' +
         'JOIN requests r on r.user_id = u.id ' +
@@ -383,7 +383,7 @@ function viewRequest(data,callback){
 //Queries to view Availability by ID
 function viewRequestById(data,callback){
     try{
-        db.pool.query('SELECT r.id AS request_id, r.request_type , r.description, r.status AS req_status, ri.total_quantity, ri.status AS req_items_status, u.id AS user_id, u.user_name, u.status AS user_status, c.name_en, ut.name as user_type_name, r.created_at FROM users u '+
+        db.pool.query('SELECT r.id AS request_id, r.request_type , r.description, r.status AS req_status, u.id AS user_id, u.user_name, u.status AS user_status, c.name_en, ut.name as user_type_name, r.created_at FROM users u '+
         'JOIN cities c on c.id = u.city ' +
             'JOIN user_types ut on ut.id = u.user_type ' +
         'JOIN requests r on r.user_id = u.id ' +
@@ -407,7 +407,7 @@ function viewRequestById(data,callback){
 //Queries to view Availability by Date
 function viewRequestByDate(data,callback){
     try{
-        db.pool.query('SELECT r.id AS request_id, r.request_type , r.description, r.status AS req_status, ri.total_quantity, ri.status AS req_items_status, u.id AS user_id, u.user_name, u.status AS user_status, c.name_en, ut.name as user_type_name, r.created_at FROM users u '+
+        db.pool.query('SELECT r.id AS request_id, r.request_type , r.description, r.status AS req_status, u.id AS user_id, u.user_name, u.status AS user_status, c.name_en, ut.name as user_type_name, r.created_at FROM users u '+
         'JOIN cities c on c.id = u.city ' +
             'JOIN user_types ut on ut.id = u.user_type ' +
         'JOIN requests r on r.user_id = u.id ' +
