@@ -14,8 +14,8 @@ router.post("/addMembers", authMiddleware.verifyToken, orgController.addMembers)
 
 //collection points
 router.post("/createCollectionPoint", authMiddleware.verifyToken, orgController.createCollectionPoint);
-router.post("/getCollectionPoints", authMiddleware.verifyToken, orgController.getCollectionPoints);
-router.post("/getMyCollectionPoints", authMiddleware.verifyToken, orgController.getMyCollectionPoints);
-router.post("/getCollectionPointsById/:col_did", authMiddleware.verifyToken, orgController.getCollectionPointsById);
+router.get("/getCollectionPoints", authMiddleware.verifyToken, orgController.getCollectionPoints);
+router.get("/getMyCollectionPoints", authMiddleware.verifyToken, orgController.getMyCollectionPoints);
+router.get("/getCollectionPointsById/:col_did", authMiddleware.verifyToken, orgController.getCollectionPointsById);
 
 module.exports  = router;
