@@ -102,8 +102,8 @@ function acceptReqSession (req, res){
                     break;
                 }
             }
-
-            if(results1.data[0].status==0){ //Updating status to accepted when the current stage is pending
+            // console.log(results1.data[0].status)
+            if(results1.data[0].session_status==0){ //Updating status to accepted when the current stage is pending
 
                 if(flag==1){
                     res.json({
