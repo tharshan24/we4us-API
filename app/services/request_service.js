@@ -129,7 +129,7 @@ function createReqSession(data,callback){
                                                 v.push(vv)
                                             }
                                             // console.log("queries "+ q,[v.map(item => [item.availabilty_id,item.name,item.description,item.image_path,1])]);
-                                            connection.query(q,[v.map(item => [item.request_id,item.name, item.quantity,1])], (ex,rows2) => {
+                                            connection.query(q,[v.map(item => [item.request_id,item.name, item.quantity,0])], (ex,rows2) => {
                                                 if (ex) {
                                                     // console.log("error table2")
                                                     connection.rollback(function () {
