@@ -196,7 +196,7 @@ function getMyCollectionPoints(authData,data,callback){
         db.pool.query('SELECT cp.*, u.user_name, u.profile_picture_path FROM collection_points cp ' +
             'JOIN users u ON u.id = cp.ngo_id ' +
             'WHERE cp.status = 1 AND u.status = 1 AND cp.user_id = ? ' +
-            'ORDER BY a.id DESC',
+            'ORDER BY cp.id DESC',
             [authData.user.id], (ex, rows) => {
                 if(ex){
                     callback(ex);
