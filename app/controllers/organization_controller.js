@@ -187,6 +187,89 @@ function getAllMembers(req,res){
     });
 }
 
+
+//Selling point creation
+function createSellingPoint(req,res){
+    console.log(req.body);
+    orgService.createSellingPoint(req.headers.authData,req.body,function(err,results){
+        if(err){
+            res.json({status_code:1,message:'Cannot Create Selling Point',error:err.message});
+        }
+        else{
+            // console.log(results);
+            res.json({
+                status_code:0,
+                message:'Create Selling Point Successful',
+                result:results,
+                authData: req.headers.authData,
+                token: req.token
+            });
+        }
+    });
+}
+
+//Selling points getting
+function getSellingPoints(req,res){
+    // console.log(req.body);
+    orgService.getSellingPoints(req.headers.authData,req.params,function(err,results){
+        if(err){
+            res.json({status_code:1,message:'Cannot Get Selling Point',error:err.message});
+        }
+        else{
+            // console.log(results);
+            res.json({
+                status_code:0,
+                message:'Get Selling Point Successful',
+                result:results,
+                authData: req.headers.authData,
+                token: req.token
+            });
+        }
+    });
+}
+
+
+//My Collection points getting
+function getMySellingPoints(req,res){
+    // console.log(req.body);
+    orgService.getMySellingPoints(req.headers.authData,req.params,function(err,results){
+        if(err){
+            res.json({status_code:1,message:'Cannot Get my Collection Point',error:err.message});
+        }
+        else{
+            // console.log(results);
+            res.json({
+                status_code:0,
+                message:'Get my Collection Point Successful',
+                result:results,
+                authData: req.headers.authData,
+                token: req.token
+            });
+        }
+    });
+}
+
+
+//getting Selling points by ID
+function getSellingPointsById(req,res){
+    // console.log(req.body);
+    orgService.getSellingPointsById(req.headers.authData,req.params,function(err,results){
+        if(err){
+            res.json({status_code:1,message:'Cannot Get Collection Point by ID',error:err.message});
+        }
+        else{
+            // console.log(results);
+            res.json({
+                status_code:0,
+                message:'Get Collection Point by ID Successful',
+                result:results,
+                authData: req.headers.authData,
+                token: req.token
+            });
+        }
+    });
+}
+
 module.exports = {
     viewProfile:viewProfile,
     updateProfile:updateProfile,
@@ -196,5 +279,9 @@ module.exports = {
     getCollectionPoints:getCollectionPoints,
     getMyCollectionPoints:getMyCollectionPoints,
     getCollectionPointsById:getCollectionPointsById,
-    getAllMembers:getAllMembers
+    getAllMembers:getAllMembers,
+    createSellingPoint:createSellingPoint,
+    getSellingPoints:getSellingPoints,
+    getMySellingPoints:getMySellingPoints,
+    getSellingPointsById:getSellingPointsById
 }
