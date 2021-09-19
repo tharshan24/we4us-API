@@ -191,14 +191,10 @@ function passwordChange(data,callback){
             if (ex) {
                 callback(ex);
             } else {
-                if(rows.length>0){
-                    callback(null, {
-                        status:0,
-                        row:rows
-                    });
-                } else {
-                    callback({status:1, message: "User Failed !"});
-                }
+                callback(null, {
+                    status:0,
+                    row:rows
+                });
             }
         });
 
