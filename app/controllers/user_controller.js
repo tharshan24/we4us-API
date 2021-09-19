@@ -3,6 +3,7 @@ const main = require('../config/main');
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
 const mailer = require('./../utilities/nodemailer');
+const path = require('path');
 
 // registration of public
 function publicRegister(req,res){
@@ -71,6 +72,73 @@ function orgRegister(req,res){
         }
     });
 }
+
+
+//forgotPassword
+function forgotPassword (req, res){
+    console.log(req.body)
+
+            res.sendFile(path.resolve(__dirname + '/../utilities/forgot_password_get.html'));
+}
+
+//changePasswordForm
+function changePasswordForm (req, res){
+    console.log(req.body)
+            res.sendFile(path.resolve(__dirname + '/../utilities/final_password.html'));
+}
+
+
+//passwordChange
+function passwordChange (req, res){
+    console.log(req.body)
+    userService.passwordChange(req.body, function(err,results){
+        if(err){
+            res.json({status_code:1,message:'Cannot Update User',error:err.message});
+        }
+        else{
+            // console.log(results);
+            res.sendFile(path.resolve(__dirname + '/../utilities/password_success.html'));
+        }
+    });
+}
+
+
+//sendPasswordEmail
+function sendPasswordEmail (req, res){
+    console.log(req)
+    userService.checkEmail(req.body, function(err,results){
+        if(err){
+            res.json({status_code:1,message:'Cannot get User',error:err.message});
+        }
+        else{
+            if(results.status == 0) {
+                fs.readFile(__dirname + '/../utilities/passwordEmail.html', 'utf8', function (err,data) {
+                    if (err) {
+                        console.log(err);
+                        res.json({status_code:1,message:'Error in reading email html',error:err.message});
+                    }
+                    let htmlResult = data.replace(/userIddd/g, `?userId=${results.id}`);
+
+                    const options = {
+                        to: req.body.email,
+                        subject: 'Password from We4Us',
+                        html: htmlResult
+                    }
+                    mailer.sendEmail(options, (ex, response) => {
+                        if(ex) {
+                            res.json({status_code:1,message:'Error in Sending Email',error:ex.message});
+                        }
+                        // else {
+                        //     res.json({status_code:0,message:'Registered successfully. Please verify your email by checking email',result:response});
+                        // }
+                    });
+                });
+            }
+            res.sendFile(path.resolve(__dirname + '/../utilities/check_email.html'));
+        }
+    });
+}
+
 
 // user login
 function login(req,res){
@@ -222,5 +290,9 @@ module.exports = {
     updateAccount:updateAccount,
     userVerification:userVerification,
     test:test,
-    getUserDetails:getUserDetails
+    getUserDetails:getUserDetails,
+    forgotPassword:forgotPassword,
+    sendPasswordEmail:sendPasswordEmail,
+    changePasswordForm:changePasswordForm,
+    passwordChange:passwordChange
 }

@@ -8,6 +8,10 @@ router.post("/publicRegister", userController.publicRegister);
 router.post("/orgRegister", userController.orgRegister);
 router.post("/updateAccount", authMiddleware.verifyToken, userController.updateAccount);
 router.get("/userVerification/:userId", userController.userVerification);
+router.get("/forgotPassword/", userController.forgotPassword);
+router.post("/sendPasswordEmail/", userController.sendPasswordEmail);
+router.get("/changePasswordForm/", userController.changePasswordForm);
+router.post("/passwordChange/", userController.passwordChange);
 
 //user login
 router.post("/login", userController.login);
