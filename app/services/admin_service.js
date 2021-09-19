@@ -432,7 +432,7 @@ function viewColPoint(data,callback){
     try{
         db.pool.query('SELECT cp.id AS colpoint_id, cp.ngo_id, cp.status, o.user_id, o.name, u.id AS user_id, u.user_name, c.name_en FROM users u '+
         'JOIN organizations o on u.id = o.user_id '+
-        'JOIN collection_points cp on cp.ngo_id = u.user_type '+
+        'JOIN collection_points cp on cp.ngo_id = u.id '+
         'JOIN cities c on c.id = u.city ' +
         'JOIN user_types ut on ut.id = u.user_type ' +
         'WHERE u.status=1',
@@ -455,7 +455,7 @@ function viewColPointById(data,callback){
     try{
         db.pool.query('SELECT cp.id AS colpoint_id, cp.ngo_id, cp.status, o.user_id, o.name, u.id AS user_id, u.user_name, c.name_en FROM users u '+
         'JOIN organizations o on u.id = o.user_id '+
-        'JOIN collection_points cp on cp.ngo_id = u.user_type '+
+        'JOIN collection_points cp on cp.ngo_id = u.id '+
         'JOIN cities c on c.id = u.city ' +
         'JOIN user_types ut on ut.id = u.user_type ' +
         'WHERE u.status=1 AND cp.id=?',
@@ -479,7 +479,7 @@ function viewColPointByDate(data,callback){
     try{
         db.pool.query('SELECT cp.id AS colpoint_id, cp.ngo_id, cp.status, o.user_id, o.name, u.id AS user_id, u.user_name, c.name_en FROM users u '+
         'JOIN organizations o on u.id = o.user_id '+
-        'JOIN collection_points cp on cp.ngo_id = u.user_type '+
+        'JOIN collection_points cp on cp.ngo_id = u.id '+
         'JOIN cities c on c.id = u.city ' +
         'JOIN user_types ut on ut.id = u.user_type ' +
         `WHERE u.status=1 AND (cp.created_at "${data.startDate}" AND "${data.endDate}")`,
@@ -502,7 +502,7 @@ function viewSellPoint(data,callback){
     try{
         db.pool.query('SELECT sp.id AS sellpoint_id, sp.shop_id, sp.status, o.user_id, o.name, u.id AS user_id, u.user_name, c.name_en FROM users u '+
         'JOIN organizations o on u.id = o.user_id '+
-        'JOIN selling_points sp on sp.shop_id = u.user_type '+
+        'JOIN selling_points sp on sp.shop_id = u.id '+
         'JOIN cities c on c.id = u.city ' +
         'JOIN user_types ut on ut.id = u.user_type ' +
         'WHERE u.status=1',
@@ -525,7 +525,7 @@ function viewSellPointById(data,callback){
     try{
         db.pool.query('SELECT sp.id AS sellpoint_id, sp.shop_id, sp.status, o.user_id, o.name, u.id AS user_id, u.user_name, c.name_en FROM users u '+
         'JOIN organizations o on u.id = o.user_id '+
-        'JOIN selling_points sp on sp.shop_id = u.user_type '+
+        'JOIN selling_points sp on sp.shop_id = u.id '+
         'JOIN cities c on c.id = u.city ' +
         'JOIN user_types ut on ut.id = u.user_type ' +
         'WHERE u.status=1 and sp.id=?',
@@ -549,7 +549,7 @@ function viewSellPointByDate(data,callback){
     try{
         db.pool.query('SELECT sp.id AS sellpoint_id, sp.shop_id, sp.status, o.user_id, o.name, u.id AS user_id, u.user_name, c.name_en FROM users u '+
         'JOIN organizations o on u.id = o.user_id '+
-        'JOIN selling_points sp on sp.shop_id = u.user_type '+
+        'JOIN selling_points sp on sp.shop_id = u.id '+
         'JOIN cities c on c.id = u.city ' +
         'JOIN user_types ut on ut.id = u.user_type ' +
         `WHERE u.status=1 and AND (sp.created_at "${data.startDate}" AND "${data.endDate}")`,
