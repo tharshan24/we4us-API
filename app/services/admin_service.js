@@ -254,7 +254,7 @@ function deliveryPaymentFilter(authData,data,callback){
         'JOIN availability_deliveries ad ON ases.id = ad.availability_session_id '+
         'JOIN drivers d ON d.user_id = ad.driver_id '+
         'JOIN drivers dd ON dd.user_id = uu.id '+
-        'JOIN availability aa ON aa.user_id = uuu.id '+
+        'JOIN availabilities aa ON aa.user_id = uuu.id '+
         'JOIN availability_sessions asess ON asess.user_id = uuuu.id '+
         'JOIN availability_delivery_payments adp ON adp.delivery_id = ad.id '+
         'WHERE adp.status=0 ',
