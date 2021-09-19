@@ -291,8 +291,9 @@ function exploreAvailability(authData,data,callback){
 //Queries to view Availability
 function viewAvailability(data,callback){
     try{
-        db.pool.query('SELECT a.id, a.availability_type, a.description, a.food_type, a.total_quantity, a.status AS avail_status, u.id AS user_id, u.user_name, u.status AS user_status, c.name_en FROM users u '+
+        db.pool.query('SELECT a.id, a.availability_type, a.description, a.food_type, a.total_quantity, a.status AS avail_status, u.id AS user_id, u.user_name, u.status AS user_status, c.name_en, ut.name as user_type_name, a.created_at FROM users u '+
         'JOIN cities c on c.id = u.city ' +
+        'JOIN user_types ut on ut.id = u.user_type ' +
         'JOIN availabilities a on a.user_id = u.id ' +
         'WHERE u.status=1 AND a.status=1',
         (ex, rows) => {
@@ -312,8 +313,9 @@ function viewAvailability(data,callback){
 //Queries to view Availability by ID
 function viewAvailabilityById(data,callback){
     try{
-        db.pool.query('SELECT a.id AS avail_id, a.name, a.availability_type, a.description, a.food_type, a.total_quantity, a.status AS avail_status, u.id AS user_id, u.user_name, u.status AS user_status, c.name_en FROM users u '+
+        db.pool.query('SELECT a.id, a.name, a.availability_type, a.description, a.food_type, a.total_quantity, a.status AS avail_status, u.id AS user_id, u.user_name, u.status AS user_status, c.name_en, ut.name as user_type_name, a.created_at FROM users u '+
         'JOIN cities c on c.id = u.city ' +
+        'JOIN user_types ut on ut.id = u.user_type ' +
         'JOIN availabilities a on a.user_id = u.id ' +
         'WHERE a.id=? AND u.status=1 AND a.status=1',
         [data.avail_id],
