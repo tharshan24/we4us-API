@@ -176,6 +176,61 @@ function login(data,callback){
     }
 }
 
+function checkEmail(data,callback){
+    try {
+        const hashingSecret = main.password_secret; //getting password hashing text
+        const password_text = data.password; //retrieving password from form data
+
+        //hashing password
+        const password = crypto.createHmac('sha256', hashingSecret)
+            .update(password_text)
+            .digest('hex');
+
+        //using the connection to query
+        db.pool.query('UPDATE users SET password=? WHERE id=?', [password,data.userId], (ex, rows) => {
+            if (ex) {
+                callback(ex);
+            } else {
+                if(rows.length>0){
+                    callback(null, {
+                        status:0,
+                        row:rows
+                    });
+                } else {
+                    callback({status:1, message: "User Failed !"});
+                }
+            }
+        });
+
+    } catch(err) {
+        callback(err);
+    }
+}
+
+function passwordChange(data,callback){
+    try {
+
+                //using the connection to query
+        db.pool.query('select id from users where email=?', [data.email], (ex, rows) => {
+            if (ex) {
+                callback(ex);
+            } else {
+                if(rows.length>0){
+                    callback(null, {
+                        status:0,
+                        id: rows[0].id
+                    });
+                } else {
+                    callback({status:1, message: "User Failed !"});
+                }
+            }
+        });
+
+    } catch(err) {
+        callback(err);
+    }
+}
+
 function updateRealUser(authData, data, callback) {
 
     try {
@@ -292,5 +347,7 @@ module.exports = {
     updateRealUser:updateRealUser,
     updateAccount:updateAccount,
     userVerification:userVerification,
-    getUserDetails:getUserDetails
+    getUserDetails:getUserDetails,
+    checkEmail:checkEmail,
+    passwordChange:passwordChange
 }
