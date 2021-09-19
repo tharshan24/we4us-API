@@ -192,7 +192,7 @@ function createReqSession(authData,data,callback){
 
 function getReqSessionStatus(data,callback){
     try{
-        db.pool.query('SELECT status FROM request_sessions WHERE id=?'
+        db.pool.query('SELECT status FROM request_sessions WHERE id=?',
             [data.req_ses_id], (ex, rows) => {
             if(ex){
                 callback(ex);

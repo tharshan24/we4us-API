@@ -70,40 +70,55 @@ function acceptReqSession (req, res){
             res.json({status_code:1, message: 'Cannot get the current status', error: err1.message});
         }
         else{
-            // let q = results1.row[0].quantity;
-          if(results1.data[0].status==0){ //Updating status to accepted when the current stage is pending
 
-              const data = {
-                status:1,
-                req_ses_id:req.params.req_ses_id,
-                total_quantity:results1.row[0].total_quantity,
-                needed_quantity:results1.row[0].needed_quantity,
-                actual_quantity:results1.row[0].actual_quantity,
-            }
-            requestService.updateReqSessionStatus(req.params, 1, function(err2, results2){
-                if(err2){
-                    res.json({status_code:1, message: 'Cannot update Session to Accepted', error: err2.message});
+            results1.items_creator.sort((a, b) => parseInt(a.id) - parseInt(b.id));
+            results1.items.sort((a, b) => parseInt(a.id) - parseInt(b.id));
+
+            let flag=0;
+
+            for(let i = 0; i < results1.items.length; i++) {
+                if(results1.items[i].quantity>results1.items_creator[i].needed_quantity){
+                    flag=1;
+                    break;
                 }
-                else{
-                    // console.log(results2)
+            }
+
+            if(results1.data[0].status==0){ //Updating status to accepted when the current stage is pending
+
+                if(flag==1){
                     res.json({
                         status_code: 0,
-                        message: 'Request Session updating to accepted is Success',
-                        result: results2,
+                        message: 'Quantity cannot exceed needed quantity',
                         authData: req.headers.authData,
                         token: req.token
+                    })
+                }
+                else {
+                    requestService.updateReqSessionStatus(req.params, 1, function(err2, results2){
+                        if(err2){
+                            res.json({status_code:1, message: 'Cannot update Session to Accepted', error: err2.message});
+                        }
+                        else{
+                            // console.log(results2)
+                            res.json({
+                                status_code: 0,
+                                message: 'Request Session updating to accepted is Success',
+                                result: results2,
+                                authData: req.headers.authData,
+                                token: req.token
+                            });
+                        }
                     });
                 }
-            });
-          }
-          else{
-            res.json({
-                status_code: 0,
-                message: 'The current status is not in waiting stage',
-                authData: req.headers.authData,
-                token: req.token
-            })
-          }
+              }
+              else{
+                res.json({
+                    status_code: 0,
+                    message: 'The current status is not in waiting stage',
+                    authData: req.headers.authData,
+                    token: req.token
+                })
+              }
         }
     });
 }
