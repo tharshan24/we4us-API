@@ -105,7 +105,7 @@ function passwordChange (req, res){
 
 //sendPasswordEmail
 function sendPasswordEmail (req, res){
-    console.log(req.body)
+    console.log(req)
     userService.checkEmail(req.body, function(err,results){
         if(err){
             res.json({status_code:1,message:'Cannot get User',error:err.message});
