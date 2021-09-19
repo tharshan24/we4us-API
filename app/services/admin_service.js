@@ -365,7 +365,7 @@ function viewRequest(data,callback){
         'JOIN user_types ut on ut.id = u.user_type ' +
         'JOIN requests r on r.user_id = u.id ' +
         // 'JOIN request_items ri on r.id = ri.request_id ' +
-        'WHERE u.status=1 AND r.status=1 AND ri.status=1',
+        'WHERE u.status=1 AND r.status=1',
         (ex, rows) => {
             if(ex){
                 callback(ex);
@@ -388,7 +388,7 @@ function viewRequestById(data,callback){
             'JOIN user_types ut on ut.id = u.user_type ' +
         'JOIN requests r on r.user_id = u.id ' +
         // 'JOIN request_items ri on r.id = ri.request_id ' +
-        'WHERE r.id=? AND u.status=1 AND r.status=1 AND ri.status=1',
+        'WHERE r.id=? AND u.status=1 AND r.status=1',
         [data.req_id],
         (ex, rows) => {
             if(ex){
@@ -412,7 +412,7 @@ function viewRequestByDate(data,callback){
             'JOIN user_types ut on ut.id = u.user_type ' +
         'JOIN requests r on r.user_id = u.id ' +
         // 'JOIN request_items ri on r.id = ri.request_id ' +
-        `WHERE (r.created_at BETWEEN "${data.startDate}" AND "${data.endDate}") AND  u.status=1 AND r.status=1 AND ri.status=1`,
+        `WHERE (r.created_at BETWEEN "${data.startDate}" AND "${data.endDate}") AND  u.status=1 AND r.status=1`,
         (ex, rows) => {
             if(ex){
                 callback(ex);
