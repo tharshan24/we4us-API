@@ -250,7 +250,7 @@ function deliveryPaymentFilter(data,callback){
         // 'JOIN drivers d ON d.user_id = ad.driver_id'+
         // 'JOIN availability_delivery_payments adp ON adp.delivery_id = ad.id'+
         // 'WHERE adp.status=0',
-        db.pool.query('SELECT SUM(amount) FROM availability_delivery_payments'+
+        db.pool.query('SELECT SUM(amount) FROM availability_delivery_payments '+
         `WHERE created_at BETWEEN "${data.startDate}" AND "${data.endDate}" `,
         (ex, rows) => {
             if(ex){
