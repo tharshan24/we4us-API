@@ -487,7 +487,8 @@ function getSession(authData,data,callback){
                     callback(ex);
                 }
                 else{
-                    db.pool.query('SELECT id, name, quantity FROM request_session_items ' +
+                    db.pool.query('SELECT ri.id, rsi.quantity, ri.name FROM request_session_items rsi ' +
+                        'JOIN request_items ri ON rsi.item_id = ri.id ' +
                         'WHERE request_session_id = ?',
                         [data.ses_id], (ex, rows3) => {
                             if(ex){
@@ -551,7 +552,8 @@ function exploreRequestByMySession(data,callback){
                                 callback(ex);
                             }
                             else {
-                                db.pool.query('SELECT id, name, quantity FROM request_session_items ' +
+                                db.pool.query('SELECT ri.id, rsi.quantity, ri.name FROM request_session_items rsi ' +
+                                    'JOIN request_items ri ON rsi.item_id = ri.id ' +
                                     'WHERE request_session_id = ?',
                                     [rows1[0].session_id], (ex, rows3) => {
                                         if(ex){
