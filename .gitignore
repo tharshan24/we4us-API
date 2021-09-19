@@ -1,6 +1,6 @@
 # public folder
-public/
-app/public/
+#public/
+#app/public/
 
 # Package-lock.json
 package-lock.json
