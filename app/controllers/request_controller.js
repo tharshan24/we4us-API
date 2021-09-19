@@ -21,6 +21,26 @@ function createRequest (req, res){
     });
 }
 
+//cancelRequest
+function cancelRequest (req, res){
+    console.log("request params: ",req.params)
+    requestService.cancelRequest(req.params, function(err, results){
+        if(err){
+            res.json({status_code:1, message: 'Cannot cancel requests', error: err.message});
+        }
+        else{
+            console.log(results)
+            res.json({
+                status_code: 0,
+                message: 'Request cancel Success!',
+                result: results,
+                authData: req.headers.authData,
+                token: req.token
+            });
+        }
+    });
+}
+
 //creating request sessions
 function createReqSession (req, res){
     console.log(req.body)
@@ -400,6 +420,7 @@ function exploreRequestByMySession (req, res){
 
 module.exports = {
     createRequest:createRequest,
+    cancelRequest:cancelRequest,
     createReqSession:createReqSession,
     getRequestType:getRequestType,
     acceptReqSession:acceptReqSession,

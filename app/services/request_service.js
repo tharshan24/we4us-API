@@ -578,6 +578,24 @@ function exploreRequestByMySession(data,callback){
 }
 
 
+function cancelRequest(data,callback){
+    try {
+        db.pool.query('UPDATE requests SET status=0, updated_at=now() WHERE id=?',
+            [data.reqId], (ex, rows) => {
+                if(ex){
+                    callback(ex);
+                }
+                else{
+                    callback(null,{row: rows});
+                }
+            });
+    }
+    catch(err) {
+        callback(err);
+    }
+}
+
+
 module.exports = {
     createRequest:createRequest,
     createReqSession:createReqSession,
@@ -594,5 +612,6 @@ module.exports = {
     getSessions:getSessions,
     getSession:getSession,
     exploreRequestByMySessions:exploreRequestByMySessions,
-    exploreRequestByMySession:exploreRequestByMySession
+    exploreRequestByMySession:exploreRequestByMySession,
+    cancelRequest:cancelRequest
 }
