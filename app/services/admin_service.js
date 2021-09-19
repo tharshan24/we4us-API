@@ -430,7 +430,7 @@ function viewRequestByDate(data,callback){
 //Queries to view Collection points
 function viewColPoint(data,callback){
     try{
-        db.pool.query('SELECT cp.id AS colpoint_id, cp.ngo_id, cp.status, o.user_id, o.name, u.id AS user_id, u.user_name, c.name_en FROM users u '+
+        db.pool.query('SELECT cp.id AS colpoint_id, cp.ngo_id, cp.status, cp.start_time, cp.end_time, o.user_id, o.name, u.id AS user_id, u.user_name, c.name_en FROM users u '+
         'JOIN organizations o on u.id = o.user_id '+
         'JOIN collection_points cp on cp.ngo_id = u.id '+
         'JOIN cities c on c.id = u.city ' +
@@ -453,7 +453,7 @@ function viewColPoint(data,callback){
 //Queries to view Collection point by ID
 function viewColPointById(data,callback){
     try{
-        db.pool.query('SELECT cp.id AS colpoint_id, cp.ngo_id, cp.status, o.user_id, o.name, u.id AS user_id, u.user_name, c.name_en FROM users u '+
+        db.pool.query('SELECT cp.id AS colpoint_id, cp.ngo_id, cp.status, cp.start_time, cp.end_time, o.user_id, o.name, u.id AS user_id, u.user_name, c.name_en FROM users u '+
         'JOIN organizations o on u.id = o.user_id '+
         'JOIN collection_points cp on cp.ngo_id = u.id '+
         'JOIN cities c on c.id = u.city ' +
@@ -477,7 +477,7 @@ function viewColPointById(data,callback){
 //Queries to view Collection point by Date
 function viewColPointByDate(data,callback){
     try{
-        db.pool.query('SELECT cp.id AS colpoint_id, cp.ngo_id, cp.status, o.user_id, o.name, u.id AS user_id, u.user_name, c.name_en FROM users u '+
+        db.pool.query('SELECT cp.id AS colpoint_id, cp.ngo_id, cp.status, cp.start_time, cp.end_time, o.user_id, o.name, u.id AS user_id, u.user_name, c.name_en FROM users u '+
         'JOIN organizations o on u.id = o.user_id '+
         'JOIN collection_points cp on cp.ngo_id = u.id '+
         'JOIN cities c on c.id = u.city ' +
@@ -500,7 +500,7 @@ function viewColPointByDate(data,callback){
 //Queries to view Selling points
 function viewSellPoint(data,callback){
     try{
-        db.pool.query('SELECT sp.id AS sellpoint_id, sp.shop_id, sp.status, o.user_id, o.name, u.id AS user_id, u.user_name, c.name_en FROM users u '+
+        db.pool.query('SELECT sp.id AS sellpoint_id, sp.shop_id, sp.status, sp.start_time, sp.end_time, o.user_id, o.name, u.id AS user_id, u.user_name, c.name_en FROM users u '+
         'JOIN organizations o on u.id = o.user_id '+
         'JOIN selling_points sp on sp.shop_id = u.id '+
         'JOIN cities c on c.id = u.city ' +
@@ -523,7 +523,7 @@ function viewSellPoint(data,callback){
 //Queries to view Selling points by ID
 function viewSellPointById(data,callback){
     try{
-        db.pool.query('SELECT sp.id AS sellpoint_id, sp.shop_id, sp.status, o.user_id, o.name, u.id AS user_id, u.user_name, c.name_en FROM users u '+
+        db.pool.query('SELECT sp.id AS sellpoint_id, sp.shop_id, sp.status, sp.start_time, sp.end_time, o.user_id, o.name, u.id AS user_id, u.user_name, c.name_en FROM users u '+
         'JOIN organizations o on u.id = o.user_id '+
         'JOIN selling_points sp on sp.shop_id = u.id '+
         'JOIN cities c on c.id = u.city ' +
@@ -547,7 +547,7 @@ function viewSellPointById(data,callback){
 //Queries to view Selling points by Date
 function viewSellPointByDate(data,callback){
     try{
-        db.pool.query('SELECT sp.id AS sellpoint_id, sp.shop_id, sp.status, o.user_id, o.name, u.id AS user_id, u.user_name, c.name_en FROM users u '+
+        db.pool.query('SELECT sp.id AS sellpoint_id, sp.shop_id, sp.status, sp.start_time, sp.end_time, o.user_id, o.name, u.id AS user_id, u.user_name, c.name_en FROM users u '+
         'JOIN organizations o on u.id = o.user_id '+
         'JOIN selling_points sp on sp.shop_id = u.id '+
         'JOIN cities c on c.id = u.city ' +
