@@ -120,16 +120,16 @@ function createReqSession(authData,data,callback){
                                     else{
                                         // console.log("results table1",result)
                                         //insert query for request_items table
-                                            let q = "INSERT INTO request_session_items (request_session_id, name, quantity, status) VALUES ?";
+                                            let q = "INSERT INTO request_session_items (request_session_id, item_id, quantity, status) VALUES ?";
                                             let v = [];
                                             for (let i = 0; i < data.items.length; i++){
                                                 // console.log("i:",i)
-                                                let vv = {request_id:rows1.insertId,name:data.items[i].name, quantity:data.items[i].needed_quantity};
+                                                let vv = {request_id:rows1.insertId, id:data.items[i].id, quantity:data.items[i].needed_quantity};
                                                 // console.log("qq:",vv)
                                                 v.push(vv)
                                             }
                                             // console.log("queries "+ q,[v.map(item => [item.availabilty_id,item.name,item.description,item.image_path,1])]);
-                                            connection.query(q,[v.map(item => [item.request_id,item.name, item.quantity,0])], (ex,rows2) => {
+                                            connection.query(q,[v.map(item => [item.request_id, item.id, item.quantity,0])], (ex,rows2) => {
                                                 if (ex) {
                                                     // console.log("error table2")
                                                     connection.rollback(function () {
