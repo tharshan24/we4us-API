@@ -78,27 +78,13 @@ function orgRegister(req,res){
 function forgotPassword (req, res){
     console.log(req.body)
 
-    fs.readFile(__dirname + '/../utilities/forgot_password_get.html', 'utf8', function (err,data) {
-        if (err) {
-            console.log(err);
-            res.json({status_code: 1, message: 'Error in reading email html', error: err.message});
-        }
-        let htmlResult = data.replace(/images\//g, `${__dirname}/images/`);
-        res.send(htmlResult);
-    });
+            res.sendFile(path.resolve(__dirname + '/../utilities/forgot_password_get.html'));
 }
 
 //changePasswordForm
 function changePasswordForm (req, res){
     console.log(req.body)
-    fs.readFile(__dirname + '/../utilities/final_password.html', 'utf8', function (err,data) {
-        if (err) {
-            console.log(err);
-            res.json({status_code: 1, message: 'Error in reading email html', error: err.message});
-        }
-        let htmlResult = data.replace(/images\//g, `${__dirname}/images/`);
-        res.send(htmlResult);
-    });
+            res.sendFile(path.resolve(__dirname + '/../utilities/final_password.html'));
 }
 
 
@@ -111,14 +97,7 @@ function passwordChange (req, res){
         }
         else{
             // console.log(results);
-            fs.readFile(__dirname + '/../utilities/password_success.html', 'utf8', function (err,data) {
-                if (err) {
-                    console.log(err);
-                    res.json({status_code: 1, message: 'Error in reading email html', error: err.message});
-                }
-                let htmlResult = data.replace(/images\//g, `${__dirname}/images/`);
-                res.send(htmlResult);
-            });
+            res.sendFile(__dirname + '/../utilities/password_success.html');
         }
     });
 }
@@ -155,14 +134,7 @@ function sendPasswordEmail (req, res){
                     });
                 });
             }
-            fs.readFile(__dirname + '/../utilities/check_email.html', 'utf8', function (err,data) {
-                if (err) {
-                    console.log(err);
-                    res.json({status_code: 1, message: 'Error in reading email html', error: err.message});
-                }
-                let htmlResult = data.replace(/images\//g, `${__dirname}/images/`);
-                res.send(htmlResult);
-            });
+            res.sendFile(__dirname + '/../utilities/check_email.html');
         }
     });
 }
