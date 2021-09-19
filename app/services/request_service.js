@@ -536,7 +536,7 @@ function exploreRequestByMySession(data,callback){
     try{
         db.pool.query('SELECT r.*, u.user_name, u.profile_picture_path, rt.name as request_type_name, s.id as session_id, s.status as session_status, s.payment_by, s.payment_status FROM requests r ' +
             'JOIN users u ON u.id = r.user_id ' +
-            'JOIN request_sessions s ON s.request_id = a.id ' +
+            'JOIN request_sessions s ON s.request_id = r.id ' +
             'JOIN request_types rt ON rt.id = r.request_type ' +
             'WHERE s.id = ?',
             [data.ses_id], (ex, rows1) => {
