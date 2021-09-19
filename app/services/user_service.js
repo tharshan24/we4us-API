@@ -176,7 +176,7 @@ function login(data,callback){
     }
 }
 
-function checkEmail(data,callback){
+function passwordChange(data,callback){
     try {
         const hashingSecret = main.password_secret; //getting password hashing text
         const password_text = data.password; //retrieving password from form data
@@ -207,7 +207,7 @@ function checkEmail(data,callback){
     }
 }
 
-function passwordChange(data,callback){
+function checkEmail(data,callback){
     try {
 
                 //using the connection to query
