@@ -208,7 +208,7 @@ function rejectReqSession (req, res){
             res.json({status_code:1, message: 'Cannot get the current status', error: err1.message});
         }
         else{
-          if(results1.row[0].status==1){ //Updating status to cancelled when the current stage is pending
+          if(results1.row[0].status==0){ //Updating status to cancelled when the current stage is pending
             requestService.updateReqSessionStatus(req.params,5, function(err2, results2){
                 if(err2){
                     res.json({status_code:1, message: 'Cannot update Session to rejected', error: err2.message});
@@ -227,7 +227,7 @@ function rejectReqSession (req, res){
           }
           else{
             res.json({
-                status_code: 0,
+                status_code: 1,
                 message: 'The current status is not in accepted stage',
                 authData: req.headers.authData,
                 token: req.token
