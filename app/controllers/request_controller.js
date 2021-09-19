@@ -24,7 +24,7 @@ function createRequest (req, res){
 //creating request sessions
 function createReqSession (req, res){
     console.log(req.body)
-    requestService.createReqSession(req.body, function(err, results){
+    requestService.createReqSession(req.headers.authData,req.body, function(err, results){
         if(err){
             res.json({status_code:1, message: 'Cannot create request Sessions', error: err.message});
         }

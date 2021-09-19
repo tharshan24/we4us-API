@@ -89,7 +89,7 @@ function createRequest(data,callback){
 
 
 //Queries for create requests
-function createReqSession(data,callback){
+function createReqSession(authData,data,callback){
     try {
         db.pool.getConnection(function(error, connection){
             if(error){
@@ -109,7 +109,7 @@ function createReqSession(data,callback){
                                 //insert query for requests table
                                 db.pool.query('INSERT INTO request_sessions (request_id, user_id, attender_message, status, location, address_1, address_2, city, latitude, longitude, creator_feedback, attender_feedback, created_at, updated_at)'+
                                 ' values(?,?,?,?,?,?,?,?,?,?,?,?,now(),now())',
-                                [data.request_id, data.headers.authData.user.id, data.attender_message, 0, data.location, data.address_1, data.address_2, data.city, data.latitude, data.longitude, data.creator_feedback, data.requester_feedback],
+                                [data.request_id, authData.user.id, data.attender_message, 0, data.location, data.address_1, data.address_2, data.city, data.latitude, data.longitude, data.creator_feedback, data.requester_feedback],
                                 (ex, rows1) => {
                                     if(ex){
                                         connection.rollback(function () {
