@@ -195,7 +195,7 @@ function getMyCollectionPoints(authData,data,callback){
     try{
         db.pool.query('SELECT cp.*, u.user_name, u.profile_picture_path FROM collection_points cp ' +
             'JOIN users u ON u.id = cp.ngo_id ' +
-            'WHERE cp.status = 1 AND u.status = 1 AND u.user_id = ? ' +
+            'WHERE cp.status = 1 AND u.status = 1 AND u.id = ? ' +
             'ORDER BY cp.id DESC',
             [authData.user.id], (ex, rows) => {
                 if(ex){
@@ -306,7 +306,7 @@ function getMySellingPoints(authData,data,callback){
     try{
         db.pool.query('SELECT sp.*, u.user_name, u.profile_picture_path FROM selling_points sp ' +
             'JOIN users u ON u.id = sp.shop_id ' +
-            'WHERE sp.status = 1 AND u.status = 1 AND u.user_id = ? ' +
+            'WHERE sp.status = 1 AND u.status = 1 AND u.id = ? ' +
             'ORDER BY sp.id DESC',
             [authData.user.id], (ex, rows) => {
                 if(ex){
