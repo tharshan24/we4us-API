@@ -122,9 +122,9 @@ function createReqSession(authData,data,callback){
                                         //insert query for request_items table
                                             let q = "INSERT INTO request_session_items (request_id, name, quantity, status) VALUES ?";
                                             let v = [];
-                                            for (let i = 0; i < data.body.items.length; i++){
+                                            for (let i = 0; i < data.items.length; i++){
                                                 // console.log("i:",i)
-                                                let vv = {request_id:rows1.insertId,name:data.body.items[i].name, quantity:data.body.items[i].quantity};
+                                                let vv = {request_id:rows1.insertId,name:data.items[i].name, quantity:data.items[i].needed_quantity};
                                                 // console.log("qq:",vv)
                                                 v.push(vv)
                                             }
