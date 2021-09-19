@@ -37,8 +37,8 @@ function publicRegister(data,callback){
                                 });
                             } else {
                                 // insert query for public table
-                                connection.query('insert into public (user_id,gender,created_at,updated_at)' +
-                                    ' values(?,?,now(),now())', [rows1.insertId, data.gender], (ex, rows2) => {
+                                connection.query('insert into public (user_id,first_name,last_name,gender,created_at,updated_at)' +
+                                    ' values(?,?,?,?,now(),now())', [rows1.insertId,data.first_name, data.last_name, data.gender], (ex, rows2) => {
                                     if (ex) {
                                         connection.rollback(function () {
                                             connection.release();
