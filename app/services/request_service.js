@@ -89,7 +89,7 @@ function createRequest(data,callback){
 
 
 //Queries for create requests
-function createReqSession(data,callback){
+function createReqSession(authData,data,callback){
     try {
         db.pool.getConnection(function(error, connection){
             if(error){
@@ -109,7 +109,7 @@ function createReqSession(data,callback){
                                 //insert query for requests table
                                 db.pool.query('INSERT INTO request_sessions (request_id, user_id, attender_message, status, location, address_1, address_2, city, latitude, longitude, creator_feedback, attender_feedback, created_at, updated_at)'+
                                 ' values(?,?,?,?,?,?,?,?,?,?,?,?,now(),now())',
-                                [data.request_id, data.headers.authData.user.id, data.attender_message, 0, data.location, data.address_1, data.address_2, data.city, data.latitude, data.longitude, data.creator_feedback, data.requester_feedback],
+                                [data.request_id, authData.user.id, data.attender_message, 0, data.location, data.address_1, data.address_2, data.city, data.latitude, data.longitude, data.creator_feedback, data.requester_feedback],
                                 (ex, rows1) => {
                                     if(ex){
                                         connection.rollback(function () {
@@ -120,16 +120,16 @@ function createReqSession(data,callback){
                                     else{
                                         // console.log("results table1",result)
                                         //insert query for request_items table
-                                            let q = "INSERT INTO request_session_items (request_id, name, quantity, status) VALUES ?";
+                                            let q = "INSERT INTO request_session_items (request_session_id, item_id, quantity, status) VALUES ?";
                                             let v = [];
-                                            for (let i = 0; i < data.body.items.length; i++){
+                                            for (let i = 0; i < data.items.length; i++){
                                                 // console.log("i:",i)
-                                                let vv = {request_id:rows1.insertId,name:data.body.items[i].name, quantity:data.body.items[i].quantity};
+                                                let vv = {request_id:rows1.insertId, id:data.items[i].id, quantity:data.items[i].needed_quantity};
                                                 // console.log("qq:",vv)
                                                 v.push(vv)
                                             }
                                             // console.log("queries "+ q,[v.map(item => [item.availabilty_id,item.name,item.description,item.image_path,1])]);
-                                            connection.query(q,[v.map(item => [item.request_id,item.name, item.quantity,1])], (ex,rows2) => {
+                                            connection.query(q,[v.map(item => [item.request_id, item.id, item.quantity,0])], (ex,rows2) => {
                                                 if (ex) {
                                                     // console.log("error table2")
                                                     connection.rollback(function () {
@@ -192,7 +192,7 @@ function createReqSession(data,callback){
 
 function getReqSessionStatus(data,callback){
     try{
-        db.pool.query('SELECT status FROM request_sessions WHERE id=?'
+        db.pool.query('SELECT status FROM request_sessions WHERE id=?',
             [data.req_ses_id], (ex, rows) => {
             if(ex){
                 callback(ex);
@@ -487,7 +487,20 @@ function getSession(authData,data,callback){
                     callback(ex);
                 }
                 else{
-                    callback(null,{row: rows});
+                    db.pool.query('SELECT ri.id, rsi.quantity, ri.name FROM request_session_items rsi ' +
+                        'JOIN request_items ri ON rsi.item_id = ri.id ' +
+                        'WHERE request_session_id = ?',
+                        [data.ses_id], (ex, rows3) => {
+                            if(ex){
+                                callback(ex);
+                            }
+                            else {
+                                callback(null,{
+                                    data: rows1,
+                                    items: rows3
+                                });
+                            }
+                        });
                 }
             });
     }
@@ -522,10 +535,10 @@ function exploreRequestByMySessions(data,callback){
 
 function exploreRequestByMySession(data,callback){
     try{
-        db.pool.query('SELECT r.*, u.user_name, u.profile_picture_path, rt.name as availability_type_name, s.quantity, s.requester_delivery_option, s.final_delivery_option, s.id as session_id, s.status as session_status, s.payment_by, s.payment_status FROM requests r ' +
+        db.pool.query('SELECT r.*, u.user_name, u.profile_picture_path, rt.name as request_type_name, s.id as session_id, s.status as session_status, s.payment_by, s.payment_status FROM requests r ' +
             'JOIN users u ON u.id = r.user_id ' +
-            'JOIN request_sessions s ON s.request_id = a.id ' +
-            'JOIN request_types at ON rt.id = r.request_type ' +
+            'JOIN request_sessions s ON s.request_id = r.id ' +
+            'JOIN request_types rt ON rt.id = r.request_type ' +
             'WHERE s.id = ?',
             [data.ses_id], (ex, rows1) => {
                 if(ex){
@@ -539,7 +552,8 @@ function exploreRequestByMySession(data,callback){
                                 callback(ex);
                             }
                             else {
-                                db.pool.query('SELECT id, name, quantity FROM request_session_items ' +
+                                db.pool.query('SELECT ri.id, rsi.quantity, ri.name FROM request_session_items rsi ' +
+                                    'JOIN request_items ri ON rsi.item_id = ri.id ' +
                                     'WHERE request_session_id = ?',
                                     [rows1[0].session_id], (ex, rows3) => {
                                         if(ex){

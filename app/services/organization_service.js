@@ -149,9 +149,9 @@ function addMembers(authData, data,callback){
 //Queries for adding Members
 function createCollectionPoint(authData,data,callback){
     try {
-        db.pool.query('INSERT INTO collection_points (ngo_id, description, assigned_to, start_time, end_time, status, location, address_1, city, latitude, longitude, created_at, updated_at)'+
+        db.pool.query('INSERT INTO collection_points (ngo_id, name, description, assigned_to, start_time, end_time, status, location, address_1, city, latitude, longitude, created_at, updated_at)'+
         ' values(?,?,?,?,?,?,?,?,?,?,?,now(),now())',
-        [data.headers.authData.user.id, data.description, data.assigned_to, data.start_time, data.end_time, data.status, data.location, data.address_1, data.city, data.latitude, data.longitude],
+        [authData.user.id, data.name, data.description, data.assigned_to, data.start_time, data.end_time, 1, data.location, data.address_1, data.city, data.latitude, data.longitude],
         (ex, rows) => {
             if(ex){
                 callback(ex);
