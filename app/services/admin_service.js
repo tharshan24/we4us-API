@@ -242,7 +242,7 @@ function deliveryPayment(data,callback){
 }
 
 //Queries to filter the data of delivery payments with dates
-function deliveryPaymentFilter(data,callback){
+function deliveryPaymentFilter(authData,data,callback){
     try{
         db.pool.query('SELECT u.id AS user_id, u.user_name, a.id AS avail_id, a.user_id, as.user_id as availReq_id, adp.created_at, adp.status '+
         'FROM users u '+
