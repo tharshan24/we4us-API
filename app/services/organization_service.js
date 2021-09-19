@@ -211,7 +211,7 @@ function getMyCollectionPoints(authData,data,callback){
     }
 }
 
-function getCollectionPointsById(data,callback){
+function getCollectionPointsById(authdata,data,callback){
     try{
         db.pool.query('SELECT cp.*, u.user_name, u.profile_picture_path FROM collection_points cp ' +
             'JOIN users u ON u.id = cp.ngo_id ' +
@@ -322,7 +322,7 @@ function getMySellingPoints(authData,data,callback){
     }
 }
 
-function getSellingPointsById(data,callback){
+function getSellingPointsById(authData,data,callback){
     try{
         db.pool.query('SELECT sp.*, u.user_name, u.profile_picture_path FROM selling_points sp ' +
             'JOIN users u ON u.id = sp.shop_id ' +
