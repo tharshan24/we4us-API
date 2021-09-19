@@ -97,7 +97,7 @@ function passwordChange (req, res){
         }
         else{
             // console.log(results);
-            res.sendFile(__dirname + '/../utilities/password_success.html');
+            res.sendFile(path.resolve(__dirname + '/../utilities/password_success.html'));
         }
     });
 }
@@ -134,7 +134,7 @@ function sendPasswordEmail (req, res){
                     });
                 });
             }
-            res.sendFile(__dirname + '/../utilities/check_email.html');
+            res.sendFile(path.resolve(__dirname + '/../utilities/check_email.html'));
         }
     });
 }
