@@ -487,7 +487,19 @@ function getSession(authData,data,callback){
                     callback(ex);
                 }
                 else{
-                    callback(null,{row: rows});
+                    db.pool.query('SELECT id, name, quantity FROM request_session_items ' +
+                        'WHERE request_session_id = ?',
+                        [data.ses_id], (ex, rows3) => {
+                            if(ex){
+                                callback(ex);
+                            }
+                            else {
+                                callback(null,{
+                                    data: rows1,
+                                    items: rows3
+                                });
+                            }
+                        });
                 }
             });
     }
@@ -522,10 +534,10 @@ function exploreRequestByMySessions(data,callback){
 
 function exploreRequestByMySession(data,callback){
     try{
-        db.pool.query('SELECT r.*, u.user_name, u.profile_picture_path, rt.name as availability_type_name, s.quantity, s.requester_delivery_option, s.final_delivery_option, s.id as session_id, s.status as session_status, s.payment_by, s.payment_status FROM requests r ' +
+        db.pool.query('SELECT r.*, u.user_name, u.profile_picture_path, rt.name as request_type_name, s.quantity, s.requester_delivery_option, s.final_delivery_option, s.id as session_id, s.status as session_status, s.payment_by, s.payment_status FROM requests r ' +
             'JOIN users u ON u.id = r.user_id ' +
             'JOIN request_sessions s ON s.request_id = a.id ' +
-            'JOIN request_types at ON rt.id = r.request_type ' +
+            'JOIN request_types rt ON rt.id = r.request_type ' +
             'WHERE s.id = ?',
             [data.ses_id], (ex, rows1) => {
                 if(ex){

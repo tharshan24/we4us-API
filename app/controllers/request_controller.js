@@ -65,14 +65,15 @@ function getRequestType (req, res){
 //Updating the status to accepted.
 function acceptReqSession (req, res){
     console.log("request body: ",req.params)
-    requestService.getQuantityWithStatus(req.headers.authData,req.params,function(err1, results1){
+    requestService.exploreRequestByMySession(req.headers.authData,req.params,function(err1, results1){
         if(err1){
             res.json({status_code:1, message: 'Cannot get the current status', error: err1.message});
         }
         else{
             // let q = results1.row[0].quantity;
-          if(results1.row[0].status==0){ //Updating status to accepted when the current stage is pending
-            const data = {
+          if(results1.data[0].status==0){ //Updating status to accepted when the current stage is pending
+
+              const data = {
                 status:1,
                 req_ses_id:req.params.req_ses_id,
                 total_quantity:results1.row[0].total_quantity,
