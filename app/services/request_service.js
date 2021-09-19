@@ -120,7 +120,7 @@ function createReqSession(authData,data,callback){
                                     else{
                                         // console.log("results table1",result)
                                         //insert query for request_items table
-                                            let q = "INSERT INTO request_session_items (request_id, name, quantity, status) VALUES ?";
+                                            let q = "INSERT INTO request_session_items (request_session_id, name, quantity, status) VALUES ?";
                                             let v = [];
                                             for (let i = 0; i < data.items.length; i++){
                                                 // console.log("i:",i)
