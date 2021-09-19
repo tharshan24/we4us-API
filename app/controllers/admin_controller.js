@@ -336,7 +336,7 @@ function deliveryPayment (req, res){
 //Getting Filtered data of delivery payment 
 function deliveryPaymentFilter (req, res){
     console.log("request body: ",req.params)
-    adminService.deliveryPaymentFilter(req.params,function(err, results){
+    adminService.deliveryPaymentFilter(req.headers.authData,req.params,function(err, results){
         if(err){
             res.json({status_code:1, message: 'Cannot Filter data of Availability Delivery payments!!', error: err.message});
         }
