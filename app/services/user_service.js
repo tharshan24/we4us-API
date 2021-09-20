@@ -335,6 +335,37 @@ function getUserDetails(authData, data, callback){
     }
 }
 
+function updateProfPic(authData,data,callback){
+    try{
+        //call cloudinary 
+        upload.multerCloud(data.files, (ex, result) =>{
+            //console.log(results);
+            if(!result || result == undefined || result.urls[0] == null){
+                callback(ex);
+            }
+            else{
+                db.pool.query('UPDATE users SET profile_picture_path=?, updated_at=now() WHERE id=?',
+                [data.files, authData.user.id],
+                (ex, rows) => {
+                    if(ex){
+                        cloudinary.destroyer(result.ids,  (err, result) => {
+                            console.log(err, result);
+                            callback(ex);
+                        });
+                    }
+                    else{
+                        callback(null,{row: rows});
+                    }
+                }
+                );
+            }
+        });
+    }
+    catch(err) {
+        callback(err);
+    }
+}
+
 module.exports = {
     publicRegister:publicRegister,
     orgRegister:orgRegister,
@@ -345,5 +376,6 @@ module.exports = {
     userVerification:userVerification,
     getUserDetails:getUserDetails,
     checkEmail:checkEmail,
-    passwordChange:passwordChange
+    passwordChange:passwordChange,
+    updateProfPic:updateProfPic
 }

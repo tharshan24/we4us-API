@@ -2,6 +2,8 @@ const express = require('express');
 const userController = require('../controllers/user_controller');
 const authMiddleware = require('../middlewares/auth');
 const router = express.Router();
+const upload = require('../utilities/multer');
+
 
 //user registration
 router.post("/publicRegister", userController.publicRegister);
@@ -24,5 +26,8 @@ router.get('/getRealUser/:userId', authMiddleware.verifyToken, userController.ge
 router.get('/test',authMiddleware.verifyToken,userController.test);
 
 router.get('/getUserDetails/:userId', authMiddleware.verifyToken, userController.getUserDetails);
+
+//profile picture update 
+router.post('/updateProfPic', upload.upload.array('files', 12), authMiddleware.verifyToken, userController.updateProfPic);
 
 module.exports  = router;

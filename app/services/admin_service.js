@@ -455,7 +455,7 @@ function viewColPoint(data,callback){
 //Queries to view Collection point by ID
 function viewColPointById(data,callback){
     try{
-        db.pool.query('SELECT cp.id AS colpoint_id, cp.ngo_id, cp.status, cp.start_time, cp.end_time, o.user_id, o.name, u.id AS user_id, u.user_name, u.email, u.mobile_number, c.name_en FROM users u '+
+        db.pool.query('SELECT cp.id AS colpoint_id, cp.ngo_id, cp.description, cp.status, cp.start_time, cp.end_time, o.user_id, o.name, u.id AS user_id, u.user_name, u.email, u.mobile_number, c.name_en FROM users u '+
         'JOIN organizations o on u.id = o.user_id '+
         'JOIN collection_points cp on cp.ngo_id = u.id '+
         'JOIN cities c on c.id = u.city ' +
