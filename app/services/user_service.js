@@ -4,6 +4,9 @@ const crypto = require('crypto');
 const moment = require('moment');
 const User = require('../models/Users')
 const mongoose = require('mongoose');
+const upload = require('../utilities/multer');
+const cloudinary = require('../utilities/cloudinary');
+
 
 function publicRegister(data,callback){
     try {
@@ -342,6 +345,40 @@ function getUserDetails(authData, data, callback){
     }
 }
 
+function updateProfPic(authData,data,callback){
+    try{
+        //call cloudinary
+        console.log(data.files)
+        upload.multerCloud(data.files, (ex, result) =>{
+            //console.log(result);
+            if(!result || result == undefined || result.urls[0] == null){
+                console.log("random")
+                callback(ex);
+            }
+            else{
+                db.pool.query('UPDATE users SET profile_picture_path=?, updated_at=now() WHERE id=?',
+                [data.files, authData.user.id],
+                (ex, rows) => {
+                    if(ex){
+                        //console.log("sdwdwd")
+                        cloudinary.destroyer(result.ids,  (err, result) => {
+                            console.log(err, result);
+                            callback(ex);
+                        });
+                    }
+                    else{
+                        callback(null,{row: rows});
+                    }
+                }
+                );
+            }
+        });
+    }
+    catch(err) {
+        callback(err);
+    }
+}
+
 module.exports = {
     publicRegister:publicRegister,
     orgRegister:orgRegister,
@@ -352,5 +389,6 @@ module.exports = {
     userVerification:userVerification,
     getUserDetails:getUserDetails,
     checkEmail:checkEmail,
-    passwordChange:passwordChange
+    passwordChange:passwordChange,
+    updateProfPic:updateProfPic
 }

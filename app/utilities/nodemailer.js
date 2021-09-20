@@ -25,8 +25,10 @@ function sendEmail (options, callback) {
     transporter.sendMail(mailOptions, function(error, info){
         if (error) {
             console.log(error);
+            callback(error)
         } else {
             console.log('Email sent: ' + info.response);
+            callback(null,info)
         }
     });
 }

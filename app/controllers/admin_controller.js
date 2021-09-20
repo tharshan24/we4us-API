@@ -291,10 +291,10 @@ function updateDriverStatus (req, res){
     console.log("request body: ",req.params)
     let status
     if(req.params.status == 0){
-        status = 1;
+        status = 0;
     }
     else if(req.params.status == 1){
-        status = 0;
+        status = 1;
     }
     adminService.updateDriverStatus(req.params, status, function(err, results){
         if(err){

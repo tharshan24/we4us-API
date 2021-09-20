@@ -281,6 +281,27 @@ function getUserDetails (req, res){
 }
 
 
+//update profile Picture
+function updateProfPic (req, res){
+   //console.log(req.body)
+    userService.updateProfPic(req.headers.authData, req, function(err,results){
+        if(err){
+            res.json({status_code:1,message:'Cannot Update Profile picture',error:err.message});
+        }
+        else{
+            // console.log(results);
+            res.json({
+                status_code:0,
+                message:'Update Profile picture success',
+                result:results,
+                authData: req.headers.authData,
+                token: req.token
+            });
+        }
+    });
+}
+
+
 module.exports = {
     login:login,
     publicRegister:publicRegister,
@@ -294,5 +315,7 @@ module.exports = {
     forgotPassword:forgotPassword,
     sendPasswordEmail:sendPasswordEmail,
     changePasswordForm:changePasswordForm,
-    passwordChange:passwordChange
+    passwordChange:passwordChange,
+    updateProfPic:updateProfPic
 }
+

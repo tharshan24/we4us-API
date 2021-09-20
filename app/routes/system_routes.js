@@ -14,4 +14,11 @@ router.get("/getVehicleTypes", systemController.getVehicleTypes);
 router.get("/getAvailabilityType",authMiddleware.verifyToken,systemController.getAvailabilityType);
 router.get("/getRequestType",authMiddleware.verifyToken,systemController.getRequestType);
 
+//Notifications
+router.get("/getAllNotifications",authMiddleware.verifyToken,systemController.getAllNotifications);
+router.get("/getActiveNotifications",authMiddleware.verifyToken,systemController.getActiveNotifications);
+router.get("/getCount",authMiddleware.verifyToken,systemController.getCount);
+
+
+
 module.exports = router;
