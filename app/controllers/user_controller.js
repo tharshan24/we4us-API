@@ -283,8 +283,8 @@ function getUserDetails (req, res){
 
 //update profile Picture
 function updateProfPic (req, res){
-    //console.log(req.body)
-    userService.updateProfPic(req.headers.authData, req.body, function(err,results){
+   //console.log(req.body)
+    userService.updateProfPic(req.headers.authData, req, function(err,results){
         if(err){
             res.json({status_code:1,message:'Cannot Update Profile picture',error:err.message});
         }
