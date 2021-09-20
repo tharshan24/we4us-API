@@ -4,6 +4,9 @@ const crypto = require('crypto');
 const moment = require('moment');
 const User = require('../models/Users')
 const mongoose = require('mongoose');
+const upload = require('../utilities/multer');
+const cloudinary = require('../utilities/cloudinary');
+
 
 function publicRegister(data,callback){
     try {
@@ -337,10 +340,12 @@ function getUserDetails(authData, data, callback){
 
 function updateProfPic(authData,data,callback){
     try{
-        //call cloudinary 
+        //call cloudinary
+        console.log(data.files) 
         upload.multerCloud(data.files, (ex, result) =>{
-            //console.log(results);
+            //console.log(result);
             if(!result || result == undefined || result.urls[0] == null){
+                console.log("random")
                 callback(ex);
             }
             else{
@@ -348,6 +353,7 @@ function updateProfPic(authData,data,callback){
                 [data.files, authData.user.id],
                 (ex, rows) => {
                     if(ex){
+                        //console.log("sdwdwd")
                         cloudinary.destroyer(result.ids,  (err, result) => {
                             console.log(err, result);
                             callback(ex);
