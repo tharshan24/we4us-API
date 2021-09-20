@@ -379,6 +379,121 @@ function updateProfPic(authData,data,callback){
     }
 }
 
+
+function getAvailCount(authData,callback){
+    try{
+        db.pool.query('SELECT count(id) from availabilities where user_id = ?',
+            [authData], (ex, rows1) => {
+                if(ex){
+                    callback(ex);
+                }
+                else{
+                    callback(null,{
+                        data: rows1
+                    });
+                }
+            });
+    }
+    catch(err) {
+        callback(err);
+    }
+}
+
+function getReqCount(authData,callback){
+    try{
+        db.pool.query('SELECT count(id) from requests where user_id = ?',
+            [authData], (ex, rows1) => {
+                if(ex){
+                    callback(ex);
+                }
+                else{
+
+                    callback(null,{
+                        data: rows1
+                    });
+                }
+            });
+    }
+    catch(err) {
+        callback(err);
+    }
+}
+
+function getColCount(authData,callback){
+    try{
+        db.pool.query('SELECT count(id) from collection_points where user_id = ?',
+            [authData], (ex, rows1) => {
+                if(ex){
+                    callback(ex);
+                }
+                else{
+
+                    callback(null,{
+                        data: rows1
+                    });
+                }
+            });
+    }
+    catch(err) {
+        callback(err);
+    }
+}
+
+function getSelCount(authData,callback){
+    try{
+        db.pool.query('SELECT count(id) from selling_points where user_id = ?',
+            [authData], (ex, rows1) => {
+                if(ex){
+                    callback(ex);
+                }
+                else{
+
+                    callback(null,{
+                        data: rows1
+                    });
+                }
+            });
+    }
+    catch(err) {
+        callback(err);
+    }
+}
+
+function changeUserPass(authData,data,callback){
+    try{
+        const hashingSecret = main.password_secret; //getting password hashing text
+        const new_password_text = data.new_password; //retrieving password from form data
+        const old_password_text = data.old_password; //retrieving password from form data
+
+        //hashing password
+        const new_password = crypto.createHmac('sha256', hashingSecret)
+            .update(new_password_text)
+            .digest('hex');
+
+        const old_password = crypto.createHmac('sha256', hashingSecret)
+            .update(old_password_text)
+            .digest('hex');
+
+
+        db.pool.query('update users set password = ? where password = ? and id = ?',
+            [new_password,old_password,authData.user.id], (ex, rows1) => {
+                if(ex){
+                    callback(ex);
+                }
+                else{
+
+                    callback(null,{
+                        data: rows1
+                    });
+                }
+            });
+    }
+    catch(err) {
+        callback(err);
+    }
+}
+
+
 module.exports = {
     publicRegister:publicRegister,
     orgRegister:orgRegister,
@@ -390,5 +505,10 @@ module.exports = {
     getUserDetails:getUserDetails,
     checkEmail:checkEmail,
     passwordChange:passwordChange,
-    updateProfPic:updateProfPic
+    updateProfPic:updateProfPic,
+    getAvailCount:getAvailCount,
+    getReqCount:getReqCount,
+    getColCount:getColCount,
+    getSelCount:getSelCount,
+    changeUserPass:changeUserPass
 }

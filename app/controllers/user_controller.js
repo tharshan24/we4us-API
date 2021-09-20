@@ -301,6 +301,73 @@ function updateProfPic (req, res){
     });
 }
 
+//update changeUserPass Picture
+function changeUserPass (req, res){
+   //console.log(req.body)
+    userService.changeUserPass(req.headers.authData, req.body, function(err,results){
+        if(err){
+            res.json({status_code:1,message:'Cannot Update Profile picture',error:err.message});
+        }
+        else{
+            // console.log(results);
+            res.json({
+                status_code:0,
+                message:'Update Profile picture success',
+                result:results,
+                authData: req.headers.authData,
+                token: req.token
+            });
+        }
+    });
+}
+
+
+//Available ongoing delivery
+function getCounts (req, res){
+    console.log("request params: ",req.params)
+    userService.getAvailCount(req.headers.authData, function(err, results1){
+        if(err){
+            res.json({status_code:1, message: 'Cannot get avails', error: err.message});
+        }
+        else{
+            userService.getReqCount(req.headers.authData, function(err, results2){
+                if(err){
+                    res.json({status_code:1, message: 'Cannot get avails', error: err.message});
+                }
+                else{
+                    userService.getColCount(req.headers.authData, function(err, results3){
+                        if(err){
+                            res.json({status_code:1, message: 'Cannot get avails', error: err.message});
+                        }
+                        else{
+                            userService.getSelCount(req.headers.authData, function(err, results4){
+                                if(err){
+                                    res.json({status_code:1, message: 'Cannot get avails', error: err.message});
+                                }
+                                else{
+                                    console.log(results)
+                                    res.json({
+                                        status_code: 0,
+                                        message: 'Successful',
+                                        result: {
+                                            avail:results1,
+                                            req:results2,
+                                            col:results3,
+                                            sel:results4
+                                        },
+                                        authData: req.headers.authData,
+                                        token: req.token
+                                    });
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+        }
+    });
+}
+
 
 module.exports = {
     login:login,
@@ -316,6 +383,8 @@ module.exports = {
     sendPasswordEmail:sendPasswordEmail,
     changePasswordForm:changePasswordForm,
     passwordChange:passwordChange,
-    updateProfPic:updateProfPic
+    updateProfPic:updateProfPic,
+    getCounts:getCounts,
+    changeUserPass:changeUserPass
 }
 
