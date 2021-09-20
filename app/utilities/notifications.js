@@ -123,3 +123,9 @@ function getCount(authData, data, callback) {
         callback(err);
     }
 }
+
+module.exports ={
+    getAllNotifications:getAllNotifications,
+    getActiveNotifications:getActiveNotifications,
+    getCount:getCount
+}
