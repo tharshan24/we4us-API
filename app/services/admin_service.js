@@ -385,7 +385,7 @@ function viewRequest(data,callback){
 //Queries to view Availability by ID
 function viewRequestById(data,callback){
     try{
-        db.pool.query('SELECT r.id AS request_id, r.request_type , r.description, r.status AS req_status, u.id AS user_id, u.user_name, u.email, u.mobile_number, u.status AS user_status, c.name_en, ut.name as user_type_name, r.created_at FROM users u '+
+        db.pool.query('SELECT r.id AS request_id, r.request_type , r.description, r.need_before, r.status AS req_status, u.id AS user_id, u.user_name, u.email, u.mobile_number, u.status AS user_status, c.name_en, ut.name as user_type_name, r.created_at FROM users u '+
         'JOIN cities c on c.id = u.city ' +
             'JOIN user_types ut on ut.id = u.user_type ' +
         'JOIN requests r on r.user_id = u.id ' +
@@ -455,7 +455,7 @@ function viewColPoint(data,callback){
 //Queries to view Collection point by ID
 function viewColPointById(data,callback){
     try{
-        db.pool.query('SELECT cp.id AS colpoint_id, cp.ngo_id, cp.status, cp.start_time, cp.end_time, o.user_id, o.name, u.id AS user_id, u.user_name, c.name_en FROM users u '+
+        db.pool.query('SELECT cp.id AS colpoint_id, cp.ngo_id, cp.status, cp.start_time, cp.end_time, o.user_id, o.name, u.id AS user_id, u.user_name, u.email, u.mobile_number, c.name_en FROM users u '+
         'JOIN organizations o on u.id = o.user_id '+
         'JOIN collection_points cp on cp.ngo_id = u.id '+
         'JOIN cities c on c.id = u.city ' +
@@ -525,7 +525,7 @@ function viewSellPoint(data,callback){
 //Queries to view Selling points by ID
 function viewSellPointById(data,callback){
     try{
-        db.pool.query('SELECT sp.id AS sellpoint_id, sp.shop_id, sp.status, sp.start_time, sp.end_time, o.user_id, o.name, u.id AS user_id, u.user_name, c.name_en FROM users u '+
+        db.pool.query('SELECT sp.id AS sellpoint_id, sp.shop_id, sp.status, sp.start_time, sp.end_time, o.user_id, o.name, u.id AS user_id, u.user_name, u.email, u.mobile_number, c.name_en FROM users u '+
         'JOIN organizations o on u.id = o.user_id '+
         'JOIN selling_points sp on sp.shop_id = u.id '+
         'JOIN cities c on c.id = u.city ' +
