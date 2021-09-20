@@ -155,11 +155,12 @@ function viewPublicbyId(data,callback){
 // Queries for selecting status for driver
 function getDriverById(data,callback){
     try{
-        db.pool.query('SELECT u.id, u.user_name, u.email, u.mobile_number, c.name_en, p.first_name, p.last_name, d.license_no, d.license_proof_path, d.extension, d.payment_type, d.status '+
+        db.pool.query('SELECT u.id, u.user_name, u.email, u.mobile_number, u.profile_picture_path, c.name_en, p.first_name, p.last_name, d.license_no, d.license_proof_path, d.extension, d.payment_type, d.status, v.vehicle_book_proof, v.vehicle_no '+
         'FROM users u ' +
         'JOIN public p ON p.user_id = u.id '+
         'JOIN drivers d ON p.user_id = d.user_id '+
         'JOIN cities c ON c.id = u.city '+
+        'JOIN vehicles v ON v.user_id = u.id '+
         'WHERE u.id=?',
         [data.user_id], (ex, rows) => {
             if(ex){
@@ -178,7 +179,7 @@ function getDriverById(data,callback){
 // Queries for selecting status for driver
 function getAllDrivers(data,callback){
     try{
-        db.pool.query('SELECT u.id, u.user_name, u.email, u.mobile_number, c.name_en, p.first_name, p.last_name, d.license_no, d.license_proof_path, d.extension, d.payment_type, d.status '+
+        db.pool.query('SELECT u.id, u.user_name, u.email, u.mobile_number, u.profile_picture_path, c.name_en, p.first_name, p.last_name, d.license_no, d.license_proof_path, d.extension, d.payment_type, d.status '+
         'FROM users u ' +
         'JOIN public p ON p.user_id = u.id '+
         'JOIN drivers d ON p.user_id = d.user_id '+
