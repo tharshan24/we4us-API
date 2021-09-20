@@ -508,6 +508,26 @@ function exploreAvailabilityByMySession (req, res){
     });
 }
 
+//Available ongoing delivery
+function getAVailabilityDeliveries (req, res){
+    console.log("request params: ",req.params)
+    availabilityService.getAVailabilityDeliveries(req.params, function(err, results){
+        if(err){
+            res.json({status_code:1, message: 'Cannot get deliveries', error: err.message});
+        }
+        else{
+            console.log(results)
+            res.json({
+                status_code: 0,
+                message: 'Successful',
+                result: results,
+                authData: req.headers.authData,
+                token: req.token
+            });
+        }
+    });
+}
+
 module.exports = {
     createAvailability:createAvailability,
     cancelAvailability:cancelAvailability,
@@ -525,5 +545,6 @@ module.exports = {
     availOngoingDelivery:availOngoingDelivery,
     exploreAvailabilityById:exploreAvailabilityById,
     exploreAvailabilityByMySessions:exploreAvailabilityByMySessions,
-    exploreAvailabilityByMySession:exploreAvailabilityByMySession
+    exploreAvailabilityByMySession:exploreAvailabilityByMySession,
+    getAVailabilityDeliveries:getAVailabilityDeliveries
 }

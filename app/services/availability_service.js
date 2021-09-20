@@ -521,6 +521,65 @@ function exploreAvailabilityByMySession(data,callback){
     }
 }
 
+function getAVailabilityDeliveries(data,callback){
+    try{
+        db.pool.query('SELECT ad.driver_id, u.user_name as driver_user_name, p.first_name as driver_first_name, p.last_name as driver_last_name, ' +
+            'uu.id as requester_id, uu.user_name as requester_user_name, pp.first_name as requester_first_name, pp.last_name as requester_last_name, ' +
+            'uuu.id as creator_id, uuu.user_name as creator_user_name, ppp.first_name as creator_first_name, ppp.last_name as creator_last_name, ' +
+            's.id as availability_session_id, s.requester_message, s.quantity as request_quantity, s.status as availability_session_status, ' +
+            's.requester_delivery_option, s.final_delivery_option, vt.name as delivery_vehicle_option, s.payment_status, s.payment_by, ' +
+            'c.name_en as requested_city, s.longitude as requested_longitude, s.latitude as requested_latitude, s.created_at as request_created_at, ' +
+            'a.id as availability_id, a.description as availability_description, a.food_type, a.total_quantity, a.available_quantity, a.actual_quantity, ' +
+            'a.cooked_time, a.best_before, a.storage_description, cc.name_en as created_city, a.creator_delivery_option, ' +
+            'a.longitude as created_longitude, a.latitude as created_latitude, a.created_at as availability_created_at FROM availability_deliveries ad ' +
+            'JOIN users u ON u.id = ad.driver_id ' +
+            'JOIN public p ON u.id = p.user_id ' +
+            'JOIN availability_sessions s ON s.id = ad.availability_session_id ' +
+            'JOIN availabilities a ON s.availability_id = a.id ' +
+            'JOIN availability_types at ON at.id = a.availability_type ' +
+            'JOIN users uu ON uu.id = s.user_id ' +
+            'JOIN public pp ON uu.id = pp.user_id ' +
+            'JOIN users uuu ON uuu.id = a.user_id ' +
+            'JOIN public ppp ON uu.id = ppp.user_id ' +
+            'JOIN vehicle_types vt ON vt.id = s.delivery_vehicle_option ' +
+            'JOIN cities c ON uu.city = c.id ' +
+            'JOIN cities cc ON uuu.city = cc.id ' +
+            'WHERE ad.availability_session_id=? AND ad.status = 0',
+            [data.avail_ses_id], (ex, rows1) => {
+                if(ex){
+                    callback(ex);
+                }
+                else{
+                    if(rows1.length>0) {
+                        console.log(rows1)
+                        db.pool.query('SELECT name, image_path FROM availability_images ' +
+                            'WHERE availability_id = ?',
+                            [rows1[0].id], (ex, rows2) => {
+                                if(ex){
+                                    callback(ex);
+                                }
+                                else {
+                                    callback(null,{
+                                        data: rows1,
+                                        images: rows2
+                                    });
+                                }
+                            });
+                    }
+                    else {
+                        callback({
+                            message: "No Data",
+                            status:1
+                        });
+                    }
+                }
+            });
+    }
+    catch(err) {
+        callback(err);
+    }
+}
+
 module.exports = {
     createAvailability:createAvailability,
     cancelAvailability:cancelAvailability,
@@ -536,7 +595,8 @@ module.exports = {
     availOngoingDelivery:availOngoingDelivery,
     exploreAvailabilityById:exploreAvailabilityById,
     exploreAvailabilityByMySessions:exploreAvailabilityByMySessions,
-    exploreAvailabilityByMySession:exploreAvailabilityByMySession
+    exploreAvailabilityByMySession:exploreAvailabilityByMySession,
+    getAVailabilityDeliveries:getAVailabilityDeliveries
 }
 
 
