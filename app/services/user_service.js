@@ -162,7 +162,7 @@ function login(data,callback){
             .digest('hex');
 
                 //using the connection to query
-        db.pool.query('select id, user_name, email, user_type, profile_picture_path, is_verified from users where user_name=? and password=?', [data.user_name, password], (ex, rows) => {
+        db.pool.query('select id, user_name, email, user_type, profile_picture_path, is_verified from users where user_name=? and password=? and status=1', [data.user_name, password], (ex, rows) => {
             if (ex) {
                 callback(ex);
             } else {
