@@ -42,7 +42,7 @@ function createRequest(data,callback){
                                             let v = [];
                                             for (let i = 0; i < data.body.items.length; i++){
                                                 // console.log("i:",i)
-                                                let vv = {request_id:rows1.insertId, name:data.body.items[i].name, total_quantity:data.body.items[i].quantity, actual_quantity:data.body.items[i].quantity, needed_quantity:data.body.items[i].quantity};
+                                                let vv = {request_id:rows1.insertId, name:data.body.items[i].name, total_quantity:data.body.items[i].quantity, actual_quantity:0, needed_quantity:data.body.items[i].quantity};
                                                 // console.log("qq:",vv)
                                                 v.push(vv)
                                             }
