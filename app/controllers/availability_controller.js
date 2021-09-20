@@ -141,7 +141,7 @@ function acceptAvailSession (req, res){
             }
             else{
                 res.json({
-                    status_code: 0,
+                    status_code: 1,
                     message: 'There are accepted requests ongoing or rejected or cancelled',
                     authData: req.headers.authData,
                     token: req.token
