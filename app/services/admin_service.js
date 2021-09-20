@@ -155,11 +155,12 @@ function viewPublicbyId(data,callback){
 // Queries for selecting status for driver
 function getDriverById(data,callback){
     try{
-        db.pool.query('SELECT u.id, u.user_name, u.email, u.mobile_number, c.name_en, p.first_name, p.last_name, d.license_no, d.license_proof_path, d.extension, d.payment_type, d.status '+
+        db.pool.query('SELECT u.id, u.user_name, u.email, u.mobile_number, u.profile_picture_path, c.name_en, p.first_name, p.last_name, d.license_no, d.license_proof_path, d.extension, d.payment_type, d.status, v.vehicle_book_proof, v.vehicle_no '+
         'FROM users u ' +
         'JOIN public p ON p.user_id = u.id '+
         'JOIN drivers d ON p.user_id = d.user_id '+
         'JOIN cities c ON c.id = u.city '+
+        'JOIN vehicles v ON v.user_id = u.id '+
         'WHERE u.id=?',
         [data.user_id], (ex, rows) => {
             if(ex){
@@ -178,7 +179,7 @@ function getDriverById(data,callback){
 // Queries for selecting status for driver
 function getAllDrivers(data,callback){
     try{
-        db.pool.query('SELECT u.id, u.user_name, u.email, u.mobile_number, c.name_en, p.first_name, p.last_name, d.license_no, d.license_proof_path, d.extension, d.payment_type, d.status '+
+        db.pool.query('SELECT u.id, u.user_name, u.email, u.mobile_number, u.profile_picture_path, c.name_en, p.first_name, p.last_name, d.license_no, d.license_proof_path, d.extension, d.payment_type, d.status '+
         'FROM users u ' +
         'JOIN public p ON p.user_id = u.id '+
         'JOIN drivers d ON p.user_id = d.user_id '+
@@ -316,7 +317,7 @@ function viewAvailability(data,callback){
 //Queries to view Availability by ID
 function viewAvailabilityById(data,callback){
     try{
-        db.pool.query('SELECT a.id, a.cooked_time, a.best_before, a.name, a.availability_type, a.description, a.food_type, a.total_quantity, a.status AS avail_status, u.id AS user_id, u.user_name, u.status AS user_status, c.name_en, ut.name as user_type_name, a.created_at FROM users u '+
+        db.pool.query('SELECT a.id, a.cooked_time, a.best_before, a.name, a.availability_type, a.description, a.food_type, a.total_quantity, a.status AS avail_status, u.id AS user_id, u.user_name, u.email, u.mobile_number, u.status AS user_status, c.name_en, ut.name as user_type_name, a.created_at FROM users u '+
         'JOIN cities c on c.id = u.city ' +
         'JOIN user_types ut on ut.id = u.user_type ' +
         'JOIN availabilities a on a.user_id = u.id ' +
@@ -384,7 +385,7 @@ function viewRequest(data,callback){
 //Queries to view Availability by ID
 function viewRequestById(data,callback){
     try{
-        db.pool.query('SELECT r.id AS request_id, r.request_type , r.description, r.status AS req_status, u.id AS user_id, u.user_name, u.status AS user_status, c.name_en, ut.name as user_type_name, r.created_at FROM users u '+
+        db.pool.query('SELECT r.id AS request_id, r.request_type , r.description, r.status AS req_status, u.id AS user_id, u.user_name, u.email, u.mobile_number, u.status AS user_status, c.name_en, ut.name as user_type_name, r.created_at FROM users u '+
         'JOIN cities c on c.id = u.city ' +
             'JOIN user_types ut on ut.id = u.user_type ' +
         'JOIN requests r on r.user_id = u.id ' +
