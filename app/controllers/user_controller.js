@@ -7,7 +7,7 @@ const path = require('path');
 
 // registration of public
 function publicRegister(req,res){
-    // console.log(req.body);
+    console.log(req.body);
     userService.publicRegister(req.body,function(err,results){
         if(err){
             res.json({status_code:1,message:'Error in register user',error:err.message});
