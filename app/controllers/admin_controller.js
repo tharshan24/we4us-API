@@ -44,7 +44,7 @@ function viewOrganizationsbyId (req, res){
 //viewing NGOs
 function viewNgo (req, res){
     console.log("request body: ",req.params)
-    adminService.viewOrganizationsbyType(req.params,1,function(err, results){
+    adminService.viewOrganizationsbyType(req.params,2,function(err, results){
         if(err){
             res.json({status_code:1, message: 'Cannot get data of  NGOs!!', error: err.message});
         }
@@ -64,7 +64,7 @@ function viewNgo (req, res){
 //viewing Carehomes
 function viewCarehomes (req, res){
     console.log("request body: ",req.params)
-    adminService.viewOrganizationsbyType(req.params,2,function(err, results){
+    adminService.viewOrganizationsbyType(req.params,3,function(err, results){
         if(err){
             res.json({status_code:1, message: 'Cannot get data of Carehomes!!', error: err.message});
         }
@@ -84,7 +84,7 @@ function viewCarehomes (req, res){
 //viewing Shops
 function viewShops (req, res){
     console.log("request body: ",req.params)
-    adminService.viewOrganizationsbyType(req.params,3,function(err, results){
+    adminService.viewOrganizationsbyType(req.params,4,function(err, results){
         if(err){
             res.json({status_code:1, message: 'Cannot get data of Shops!!', error: err.message});
         }
@@ -104,7 +104,7 @@ function viewShops (req, res){
 //viewing Restaurants
 function viewRestaurants (req, res){
     console.log("request body: ",req.params)
-    adminService.viewOrganizationsbyType(req.params,4,function(err, results){
+    adminService.viewOrganizationsbyType(req.params,5,function(err, results){
         if(err){
             res.json({status_code:1, message: 'Cannot get data of Restaurants!!', error: err.message});
         }

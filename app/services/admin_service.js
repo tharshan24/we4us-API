@@ -244,20 +244,16 @@ function deliveryPayment(data,callback){
 //Queries to filter the data of delivery payments with dates
 function deliveryPaymentFilter(authData,data,callback){
     try{
-        db.pool.query('SELECT u.id AS user_id, u.user_name, a.id AS avail_id, a.user_id, ases.user_id as availReq_id, adp.amount, adp.created_at, adp.status '+
+        db.pool.query('SELECT u.id AS avail_creator_user_id, u.user_name as avail_creator_user_name, uu.id AS avail_req_user_id, uu.user_name as avail_req_user_name, uuu.id AS driver_user_id, uuu.user_name as driver_user_name, a.id AS avail_id, adp.amount, adp.created_at, adp.status '+
         'FROM users u '+
         'JOIN availabilities a ON u.id = a.user_id '+
-        'JOIN users uu ON uu.id = ? '+
-        'JOIN users uuu ON uuu.id = ? '+
-        'JOIN users uuuu ON uuuu.id = ? '+
         'JOIN availability_sessions ases ON a.id = ases.availability_id '+
         'JOIN availability_deliveries ad ON ases.id = ad.availability_session_id '+
         'JOIN drivers d ON d.user_id = ad.driver_id '+
-        'JOIN drivers dd ON dd.user_id = uu.id '+
-        'JOIN availabilities aa ON aa.user_id = uuu.id '+
-        'JOIN availability_sessions asess ON asess.user_id = uuuu.id '+
         'JOIN availability_delivery_payments adp ON adp.delivery_id = ad.id '+
-        'WHERE adp.status=0 ',
+        'JOIN users uu ON uu.id = ases.user_id '+
+        'JOIN users uuu ON uuu.id = d.user_id ',
+        // 'WHERE adp.status=0 ',
         [authData.user.id,authData.user.id,authData.user.id], 
         (ex, rows) => {
             if(ex){
