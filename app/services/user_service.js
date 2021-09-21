@@ -357,7 +357,7 @@ function updateProfPic(authData,data,callback){
             }
             else{
                 db.pool.query('UPDATE users SET profile_picture_path=?, updated_at=now() WHERE id=?',
-                [data.files, authData.user.id],
+                [result.urls[0], authData.user.id],
                 (ex, rows) => {
                     if(ex){
                         //console.log("sdwdwd")

@@ -125,7 +125,13 @@ function acceptAvailSession (req, res){
                 //Updating the final results from the logic and data.
                 availabilityService.updateAvailSessionTrans(data, function(err3, results3){
                     if(err3){
-                        res.json({status_code:1, message: 'Cannot update accepted availability Session', error: err3.message});
+                        if(err3.error.includes("45000")) {
+                            res.json({status_code:1, message: 'Check quantity before accepting', error: err3.message});
+                        }
+                        else {
+                            res.json({status_code:1, message: 'Cannot update accepted availability Session', error: err3.message});
+                        }
+
                     }
                     else{
                         console.log(results3)
