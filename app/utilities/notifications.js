@@ -127,5 +127,6 @@ function getCount(authData, data, callback) {
 module.exports ={
     getAllNotifications:getAllNotifications,
     getActiveNotifications:getActiveNotifications,
-    getCount:getCount
+    getCount:getCount,
+    createNotification:createNotification
 }

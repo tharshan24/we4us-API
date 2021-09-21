@@ -435,9 +435,9 @@ function viewColPoint(data,callback){
         db.pool.query('SELECT cp.id AS colpoint_id, cp.ngo_id, cp.status, cp.start_time, cp.end_time, o.user_id, o.name, u.id AS user_id, u.user_name, c.name_en FROM users u '+
         'JOIN organizations o on u.id = o.user_id '+
         'JOIN collection_points cp on cp.ngo_id = u.id '+
-        'JOIN cities c on c.id = u.city ' +
+        'JOIN cities c on c.id = cp.city ' +
         'JOIN user_types ut on ut.id = u.user_type ' +
-        'WHERE u.status=1',
+        '',
         (ex, rows) => {
             if(ex){
                 callback(ex);
@@ -458,9 +458,9 @@ function viewColPointById(data,callback){
         db.pool.query('SELECT cp.id AS colpoint_id, cp.ngo_id, cp.description, cp.status, cp.start_time, cp.end_time, o.user_id, o.name, u.id AS user_id, u.user_name, u.email, u.mobile_number, c.name_en FROM users u '+
         'JOIN organizations o on u.id = o.user_id '+
         'JOIN collection_points cp on cp.ngo_id = u.id '+
-        'JOIN cities c on c.id = u.city ' +
+        'JOIN cities c on c.id = cp.city ' +
         'JOIN user_types ut on ut.id = u.user_type ' +
-        'WHERE u.status=1 AND cp.id=?',
+        'WHERE cp.id=?',
         [data.cp_id],
         (ex, rows) => {
             if(ex){
@@ -482,9 +482,9 @@ function viewColPointByDate(data,callback){
         db.pool.query('SELECT cp.id AS colpoint_id, cp.ngo_id, cp.status, cp.start_time, cp.end_time, o.user_id, o.name, u.id AS user_id, u.user_name, c.name_en FROM users u '+
         'JOIN organizations o on u.id = o.user_id '+
         'JOIN collection_points cp on cp.ngo_id = u.id '+
-        'JOIN cities c on c.id = u.city ' +
+        'JOIN cities c on c.id = cp.city ' +
         'JOIN user_types ut on ut.id = u.user_type ' +
-        `WHERE u.status=1 AND (cp.created_at "${data.startDate}" AND "${data.endDate}")`,
+        `WHERE cp.created_at between "${data.startDate}" AND "${data.endDate}"`,
         (ex, rows) => {
             if(ex){
                 callback(ex);
@@ -505,9 +505,9 @@ function viewSellPoint(data,callback){
         db.pool.query('SELECT sp.id AS sellpoint_id, sp.shop_id, sp.status, sp.start_time, sp.end_time, o.user_id, o.name, u.id AS user_id, u.user_name, c.name_en FROM users u '+
         'JOIN organizations o on u.id = o.user_id '+
         'JOIN selling_points sp on sp.shop_id = u.id '+
-        'JOIN cities c on c.id = u.city ' +
+        'JOIN cities c on c.id = sp.city ' +
         'JOIN user_types ut on ut.id = u.user_type ' +
-        'WHERE u.status=1',
+        '',
         (ex, rows) => {
             if(ex){
                 callback(ex);
@@ -528,9 +528,9 @@ function viewSellPointById(data,callback){
         db.pool.query('SELECT sp.id AS sellpoint_id, sp.shop_id, sp.status, sp.start_time, sp.end_time, o.user_id, o.name, u.id AS user_id, u.user_name, u.email, u.mobile_number, c.name_en FROM users u '+
         'JOIN organizations o on u.id = o.user_id '+
         'JOIN selling_points sp on sp.shop_id = u.id '+
-        'JOIN cities c on c.id = u.city ' +
+        'JOIN cities c on c.id = sp.city ' +
         'JOIN user_types ut on ut.id = u.user_type ' +
-        'WHERE u.status=1 and sp.id=?',
+        'WHERE sp.id=?',
         [data.sp_id],
         (ex, rows) => {
             if(ex){
@@ -552,9 +552,9 @@ function viewSellPointByDate(data,callback){
         db.pool.query('SELECT sp.id AS sellpoint_id, sp.shop_id, sp.status, sp.start_time, sp.end_time, o.user_id, o.name, u.id AS user_id, u.user_name, c.name_en FROM users u '+
         'JOIN organizations o on u.id = o.user_id '+
         'JOIN selling_points sp on sp.shop_id = u.id '+
-        'JOIN cities c on c.id = u.city ' +
+        'JOIN cities c on c.id = sp.city ' +
         'JOIN user_types ut on ut.id = u.user_type ' +
-        `WHERE u.status=1 and AND (sp.created_at "${data.startDate}" AND "${data.endDate}")`,
+        `WHERE sp.created_at between "${data.startDate}" AND "${data.endDate}"`,
         (ex, rows) => {
             if(ex){
                 callback(ex);
@@ -612,7 +612,7 @@ function countDrivers(data, callback){
 // Queries for selecting the counts of the Availabilities.
 function countAvailability(data, callback){
     try{
-        db.pool.query('SELECT COUNT(id) FROM availabilities WHERE status=1',
+        db.pool.query('SELECT COUNT(id) FROM availabilities',
         (ex, rows) => {
             if(ex){
                 callback(ex);
@@ -630,7 +630,7 @@ function countAvailability(data, callback){
 // Queries for selecting the counts of the Requests.
 function countRequest(data, callback){
     try{
-        db.pool.query('SELECT COUNT(id) FROM requests WHERE status=1',
+        db.pool.query('SELECT COUNT(id) FROM requests',
         (ex, rows) => {
             if(ex){
                 callback(ex);
