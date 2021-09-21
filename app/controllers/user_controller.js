@@ -324,7 +324,7 @@ function changeUserPass (req, res){
 
 //Available ongoing delivery
 function getCounts (req, res){
-    console.log("request params: ",req.params)
+    console.log("request params: ",req.headers.authData)
     userService.getAvailCount(req.headers.authData, function(err, results1){
         if(err){
             res.json({status_code:1, message: 'Cannot get avails', error: err.message});
@@ -332,20 +332,20 @@ function getCounts (req, res){
         else{
             userService.getReqCount(req.headers.authData, function(err, results2){
                 if(err){
-                    res.json({status_code:1, message: 'Cannot get avails', error: err.message});
+                    res.json({status_code:1, message: 'Cannot get req', error: err.message});
                 }
                 else{
                     userService.getColCount(req.headers.authData, function(err, results3){
                         if(err){
-                            res.json({status_code:1, message: 'Cannot get avails', error: err.message});
+                            res.json({status_code:1, message: 'Cannot get col', error: err.message});
                         }
                         else{
                             userService.getSelCount(req.headers.authData, function(err, results4){
                                 if(err){
-                                    res.json({status_code:1, message: 'Cannot get avails', error: err.message});
+                                    res.json({status_code:1, message: 'Cannot get sell', error: err.message});
                                 }
                                 else{
-                                    console.log(results)
+                                    // console.log(results)
                                     res.json({
                                         status_code: 0,
                                         message: 'Successful',
