@@ -33,8 +33,8 @@ function publicRegister(data,callback){
                     } else {
                         console.log('aaaaaaaaaaaaaaaaa')
                         // insert query for users table
-                        connection.query('insert into users (user_name,email,password,mobile_number,user_type,city,status,created_at,updated_at)' +
-                            ' values(?,?,?,?,?,?,?,now(),now())', [data.user_name, data.email, password, data.mobile_number, 1, data.city, 0], (ex, rows1) => {
+                        connection.query('insert into users (user_name,email,password,mobile_number,user_type,city,status,created_at,updated_at, profile_picture_path)' +
+                            ' values(?,?,?,?,?,?,?,now(),now(),?)', [data.user_name, data.email, password, data.mobile_number, 1, data.city, 0, "https://iupac.org/wp-content/uploads/2018/05/default-avatar.png"], (ex, rows1) => {
                             if (ex) {
                                 console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz')
                                 connection.rollback(function () {
@@ -105,8 +105,8 @@ function orgRegister(data,callback){
                         });
                     } else {
                         // insert query for users table
-                        connection.query('insert into users (user_name,email,password,mobile_number,user_type,city,status,created_at,updated_at)' +
-                            ' values(?,?,?,?,?,?,?,now(),now())', [data.user_name, data.email, password, data.mobile_number, data.organization_type, data.city, 0], (ex, rows1) => {
+                        connection.query('insert into users (user_name,email,password,mobile_number,user_type,city,status,created_at,updated_at,profile_picture_path)' +
+                            ' values(?,?,?,?,?,?,?,now(),now(),?)', [data.user_name, data.email, password, data.mobile_number, data.organization_type, data.city, 0, "https://iupac.org/wp-content/uploads/2018/05/default-avatar.png"], (ex, rows1) => {
                             if (ex) {
                                 connection.rollback(function () {
                                     connection.release();
