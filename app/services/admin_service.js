@@ -609,6 +609,77 @@ function countDrivers(data, callback){
     }
 }
 
+// Queries for selecting the counts of the Availabilities.
+function countAvailability(data, callback){
+    try{
+        db.pool.query('SELECT COUNT(id) FROM availabilities WHERE status=1',
+        (ex, rows) => {
+            if(ex){
+                callback(ex);
+            }
+            else{
+                callback(null,{row: rows});
+            }
+        });
+    }
+    catch(err) {
+    callback(err);
+    }
+}
+
+// Queries for selecting the counts of the Requests.
+function countRequest(data, callback){
+    try{
+        db.pool.query('SELECT COUNT(id) FROM requests WHERE status=1',
+        (ex, rows) => {
+            if(ex){
+                callback(ex);
+            }
+            else{
+                callback(null,{row: rows});
+            }
+        });
+    }
+    catch(err) {
+    callback(err);
+    }
+}
+
+// Queries for selecting the counts of the Collection points.
+function countColPoint(data, callback){
+    try{
+        db.pool.query('SELECT COUNT(id) FROM collection_points',
+        (ex, rows) => {
+            if(ex){
+                callback(ex);
+            }
+            else{
+                callback(null,{row: rows});
+            }
+        });
+    }
+    catch(err) {
+    callback(err);
+    }
+}
+
+// Queries for selecting the counts of the Selling points.
+function countSellPoint(data, callback){
+    try{
+        db.pool.query('SELECT COUNT(id) FROM selling_points',
+        (ex, rows) => {
+            if(ex){
+                callback(ex);
+            }
+            else{
+                callback(null,{row: rows});
+            }
+        });
+    }
+    catch(err) {
+    callback(err);
+    }
+}
 
 module.exports = {
     viewAllOrganizations:viewAllOrganizations,
@@ -637,6 +708,10 @@ module.exports = {
     countDrivers:countDrivers,
     viewSellPoint:viewSellPoint,
     viewSellPointById:viewSellPointById,
-    viewSellPointByDate:viewSellPointByDate
+    viewSellPointByDate:viewSellPointByDate,
+    countAvailability:countAvailability,
+    countRequest:countRequest,
+    countColPoint:countColPoint,
+    countSellPoint:countSellPoint
     
 }

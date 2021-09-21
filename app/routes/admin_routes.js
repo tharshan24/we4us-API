@@ -29,19 +29,23 @@ router.get('/deliveryPaymentFilter',authMiddleware.verifyToken,adminController.d
 router.get('/viewAvailability',authMiddleware.verifyToken,adminController.viewAvailability);
 router.get('/viewAvailabilityById/:avail_id',authMiddleware.verifyToken,adminController.viewAvailabilityById);
 router.get('/viewAvailabilityByDate/:startDate/:endDate',authMiddleware.verifyToken,adminController.viewAvailabilityByDate);
+router.get('/countAvailability',authMiddleware.verifyToken,adminController.countAvailability);
+
 
 router.get('/viewRequest',authMiddleware.verifyToken,adminController.viewRequest);
 router.get('/viewRequestById/:req_id',authMiddleware.verifyToken,adminController.viewRequestById);
 router.get('/viewRequestByDate/:startDate/:endDate',authMiddleware.verifyToken,adminController.viewRequestByDate);
+router.get('/countRequest',authMiddleware.verifyToken,adminController.countRequest);
 
 router.get('/viewColPoint',authMiddleware.verifyToken,adminController.viewColPoint);
 router.get('/viewColPointById/:cp_id',authMiddleware.verifyToken,adminController.viewColPointById);
 router.get('/viewColPointByDate/:startDate/:endDate',authMiddleware.verifyToken,adminController.viewColPointByDate);
+router.get('/countColPoint',authMiddleware.verifyToken,adminController.countColPoint);
 
 router.get('/viewSellPoint',authMiddleware.verifyToken,adminController.viewSellPoint);
 router.get('/viewSellPointById/:sp_id',authMiddleware.verifyToken,adminController.viewSellPointById);
 router.get('/viewSellPointByDate/:startDate/:endDate',authMiddleware.verifyToken,adminController.viewSellPointByDate);
-
+router.get('/countSellPoint',authMiddleware.verifyToken,adminController.countSellPoint);
 
 router.get('/countPublic',authMiddleware.verifyToken,adminController.countPublic);
 router.get('/countNgo',authMiddleware.verifyToken,adminController.countNgo);

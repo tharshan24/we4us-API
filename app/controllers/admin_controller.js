@@ -414,6 +414,25 @@ function viewAvailabilityByDate (req, res){
     });
 }
 
+//Getting counts of availability
+function countAvailability (req, res){
+    console.log("request body: ",req.params)
+    adminService.countAvailability(req.params,function(err, results){
+        if(err){
+            res.json({status_code:1, message: 'Cannot get count of Availability!!', error: err.message});
+        }
+        else{
+            console.log(results)
+            res.json({
+                status_code: 0,
+                message: 'Count of Availability successfully displayed',
+                result: results,
+                authData: req.headers.authData,
+                token: req.token
+            });
+        }
+    });
+}
 
 //Getting data of all requests 
 function viewRequest (req, res){
@@ -467,6 +486,26 @@ function viewRequestByDate (req, res){
             res.json({
                 status_code: 0,
                 message: 'Data of Request successfully displayed',
+                result: results,
+                authData: req.headers.authData,
+                token: req.token
+            });
+        }
+    });
+}
+
+//Getting counts of Requests
+function countRequest (req, res){
+    console.log("request body: ",req.params)
+    adminService.countRequest(req.params,function(err, results){
+        if(err){
+            res.json({status_code:1, message: 'Cannot get count of Requests!!', error: err.message});
+        }
+        else{
+            console.log(results)
+            res.json({
+                status_code: 0,
+                message: 'Count of Requests successfully displayed',
                 result: results,
                 authData: req.headers.authData,
                 token: req.token
@@ -536,6 +575,26 @@ function viewColPointByDate (req, res){
     });
 }
 
+//Getting counts of Collection Points
+function countColPoint (req, res){
+    console.log("request body: ",req.params)
+    adminService.countColPoint(req.params,function(err, results){
+        if(err){
+            res.json({status_code:1, message: 'Cannot get count of Collection points!!', error: err.message});
+        }
+        else{
+            console.log(results)
+            res.json({
+                status_code: 0,
+                message: 'Count of Collection poiints successfully displayed',
+                result: results,
+                authData: req.headers.authData,
+                token: req.token
+            });
+        }
+    });
+}
+
 //Getting data of all Selling points 
 function viewSellPoint (req, res){
     console.log("request body: ",req.params)
@@ -588,6 +647,26 @@ function viewSellPointByDate (req, res){
             res.json({
                 status_code: 0,
                 message: 'Data of all Selling point with Date successfully displayed',
+                result: results,
+                authData: req.headers.authData,
+                token: req.token
+            });
+        }
+    });
+}
+
+//Getting counts of Selling Points
+function countSellPoint (req, res){
+    console.log("request body: ",req.params)
+    adminService.countSellPoint(req.params,function(err, results){
+        if(err){
+            res.json({status_code:1, message: 'Cannot get count of Selling points!!', error: err.message});
+        }
+        else{
+            console.log(results)
+            res.json({
+                status_code: 0,
+                message: 'Count of Selling poiints successfully displayed',
                 result: results,
                 authData: req.headers.authData,
                 token: req.token
@@ -761,12 +840,16 @@ module.exports = {
     viewAvailability:viewAvailability,
     viewAvailabilityById:viewAvailabilityById,
     viewAvailabilityByDate:viewAvailabilityByDate,
+    countAvailability:countAvailability,
     viewRequest:viewRequest,
     viewRequestById:viewRequestById,
     viewRequestByDate:viewRequestByDate,
+    countRequest:countRequest,
     viewColPoint:viewColPoint,
     viewColPointById:viewColPointById,
     viewColPointByDate:viewColPointByDate,
+    countSellPoint:countSellPoint,
+    countColPoint:countColPoint,
     countPublic:countPublic,
     countNgo:countNgo,
     countCarehomes:countCarehomes,
