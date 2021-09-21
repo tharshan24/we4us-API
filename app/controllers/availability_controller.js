@@ -536,22 +536,82 @@ function getAVailabilityDeliveries (req, res){
 }
 
 //Available ongoing delivery
+function updateDriverRequest (req, res){
+    console.log("request params: ",req.params)
+    availabilityService.updateDriverRequest(req.params, function(err, results){
+        if(err){
+            res.json({status_code:1, message: 'Cannot update', error: err.message});
+        }
+        else{
+            console.log(results)
+            res.json({
+                status_code: 0,
+                message: 'Successful',
+                result: results,
+                authData: req.headers.authData,
+                token: req.token
+            });
+        }
+    });
+}
+
+//Available ongoing delivery
 function driverCheckForRide (req, res){
     console.log("request params: ",req.params)
-    availabilityService.driverCheckForRide(req.headers.authData,req.params, function(err, results){
+    availabilityService.driverCheckForRide2(req.headers.authData,req.params, function(err, results){
         if(err){
-            res.json({status_code:1, message: 'Cannot get deliveries', error: err.message});
+            if(err.status==1) {
+                availabilityService.driverCheckForRide(req.headers.authData,req.params, function(err, results){
+                    if(err){
+                        res.json({status_code:1, message: 'Cannot get deliveries', error: err.message});
+                    }
+                    else{
+                        const data = {
+                            from_id: 0,
+                            to_id: req.headers.authData.user.id,
+                            type: 2,
+                            textss: "Delivery Notice",
+                            message: "You have to do the delivery",
+                            paramm: results.driver_req_id
+                        }
+                        notification.createNotification(data, (ex, response) => {
+                            if(ex) {
+                                console.log(ex);
+                                res.json({
+                                    status_code: 1,
+                                    message: 'failed',
+                                    err: ex,
+                                    authData: req.headers.authData,
+                                    token: req.token
+                                });
+                            }
+                            else {
+                                res.json({
+                                    status_code: 0,
+                                    message: 'Successful',
+                                    result: results,
+                                    notification:data,
+                                    response: response,
+                                    authData: req.headers.authData,
+                                    token: req.token
+                                });
+                            }
+                        })
+                    }
+                });
+            }
+            else {
+                res.json({status_code:1, message: 'Cannot get deliveries', error: err.message});
+            }
         }
         else{
             const data = {
                 from_id: 0,
                 to_id: req.headers.authData.user.id,
-                message: {
                     type: 1,
-                    text: "Delivery Request",
+                    textss: "Delivery Request",
                     message: "You have a new delivery request",
-                    param: results.driver_req_id
-                }
+                    paramm: results.driver_req_id
             }
             notification.createNotification(data, (ex, response) => {
                 if(ex) {
@@ -599,5 +659,6 @@ module.exports = {
     exploreAvailabilityByMySessions:exploreAvailabilityByMySessions,
     exploreAvailabilityByMySession:exploreAvailabilityByMySession,
     getAVailabilityDeliveries:getAVailabilityDeliveries,
-    driverCheckForRide:driverCheckForRide
+    driverCheckForRide:driverCheckForRide,
+    updateDriverRequest:updateDriverRequest
 }
