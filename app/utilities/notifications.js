@@ -37,24 +37,34 @@ function getAllNotifications(authData, data, callback) {
                     callback(ex);
                 }
                 else {
-                    let ids = "";
-                    ids+=rows[0].id;
-                    for(let i = 1; i < rows.length; i++) {
-                        ids=ids+","+rows[i].id;
+                    if(rows.length>0) {
+                        let ids = "";
+                        ids += rows[0].id;
+                        for (let i = 1; i < rows.length; i++) {
+                            ids = ids + "," + rows[i].id;
+                        }
+                        db.pool.query(`UPDATE notifications
+                                       SET status = 0
+                                       WHERE id IN (${ids})`, (exx, rows2) => {
+                            if (exx) {
+                                console.log(exx);
+                                callback(exx);
+                            } else {
+                                if (rows.length > 0) {
+                                }
+                                callback(null, {
+                                    rows: rows,
+                                    update: rows2
+                                });
+                            }
+                        })
                     }
-                    db.pool.query(`UPDATE notifications SET status = 0 WHERE id IN (${ids})`, (exx, rows2) => {
-                        if(exx){
-                            console.log(exx);
-                            callback(exx);
-                        }
-                        else {
-                            if(rows.length>0){}
-                            callback(null, {
-                                rows:rows,
-                                update:rows2
-                            });
-                        }
-                    })
+                    else{
+                        callback({
+                            status:1,
+                            message:"null"
+                        })
+                    }
                 }
             })
     }
@@ -77,23 +87,31 @@ function getActiveNotifications(authData, data, callback) {
                     callback(ex);
                 }
                 else {
-                    let ids = "";
-                    ids+=rows[0].id;
-                    for(let i = 1; i < rows.length; i++) {
-                        ids=ids+","+rows[i].id;
+                    if(rows.length>0) {
+                        let ids = "";
+                        ids+=rows[0].id;
+                        for(let i = 1; i < rows.length; i++) {
+                            ids=ids+","+rows[i].id;
+                        }
+                        db.pool.query(`UPDATE notifications SET status = 0 WHERE id IN (${ids})`, (exx, rows2) => {
+                            if(exx){
+                                console.log(exx);
+                                callback(exx);
+                            }
+                            else {
+                                callback(null, {
+                                    rows:rows,
+                                    update:rows2
+                                });
+                            }
+                        })
                     }
-                    db.pool.query(`UPDATE notifications SET status = 0 WHERE id IN (${ids})`, (exx, rows2) => {
-                        if(exx){
-                            console.log(exx);
-                            callback(exx);
-                        }
-                        else {
-                            callback(null, {
-                                rows:rows,
-                                update:rows2
-                            });
-                        }
-                    })
+                    else{
+                        callback({
+                            status:1,
+                            message:"null"
+                        })
+                    }
                 }
             })
     }
@@ -105,7 +123,7 @@ function getActiveNotifications(authData, data, callback) {
 
 function getCount(authData, data, callback) {
     try {
-        db.pool.query(`SELECT COUNT(id) FROM notifications WHERE status=1 AND to_id=${authData.user.id}`,
+        db.pool.query(`SELECT COUNT(id) as c FROM notifications WHERE status=1 AND to_id=${authData.user.id}`,
             (ex, rows) => {
                 if(ex) {
                     console.log(ex);
@@ -114,7 +132,10 @@ function getCount(authData, data, callback) {
                     });
                 }
                 else {
-
+                    callback(null,{
+                        status:0,
+                        rows:rows
+                    })
                 }
             })
     }

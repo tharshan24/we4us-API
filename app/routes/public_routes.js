@@ -11,5 +11,6 @@ router.post("/updateProfile", authMiddleware.verifyToken, publicController.updat
 router.post('/driverRegister', upload.upload.array('files', 12), authMiddleware.verifyToken, publicController.registerDriver);
 router.post('/vehicleRegister', upload.upload.array('files', 12), authMiddleware.verifyToken, publicController.vehicleRegister);
 
+router.post("/updatePaymentMode/:stat", authMiddleware.verifyToken, publicController.updatePaymentMode);
 
 module.exports  = router;

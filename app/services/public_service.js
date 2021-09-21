@@ -207,10 +207,28 @@ function vehicleRegister(data,callback){
 }
 
 
+function updatePaymentMode(authdata,data,callback){
+    try {
+                //using the connection to query
+                db.pool.query('UPDATE drivers set payment_type = ?, updated_at=now() where user_id=?',
+                    [data.stat, authData.user.id], (ex, rows) => {
+                    if (ex) {
+                        callback(ex);
+                    } else {
+                        callback(null, rows);
+                    }
+                });
+    } catch(err) {
+        callback(err);
+    }
+}
+
+
 
 module.exports = {
     viewProfile:viewProfile,
     updateProfile:updateProfile,
     registerDriver:registerDriver,
-    vehicleRegister:vehicleRegister
+    vehicleRegister:vehicleRegister,
+    updatePaymentMode:updatePaymentMode
 }

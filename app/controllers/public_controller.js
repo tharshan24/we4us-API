@@ -81,9 +81,30 @@ function vehicleRegister (req, res){
     });
 }
 
+//registerDriver
+function updatePaymentMode (req, res){
+    // console.log(req.body)
+    publicService.updatePaymentMode(req.headers.auth,req.params, function(err,results){
+        if(err){
+            res.json({status_code:1,message:'Cannot Register Vehicle',error:err.message});
+        }
+        else{
+            // console.log(results);
+            res.json({
+                status_code:0,
+                message:'Register success',
+                result:results,
+                authData: req.headers.authData,
+                token: req.token
+            });
+        }
+    });
+}
+
 module.exports = {
     viewProfile:viewProfile,
     updateProfile:updateProfile,
     registerDriver:registerDriver,
-    vehicleRegister:vehicleRegister
+    vehicleRegister:vehicleRegister,
+    updatePaymentMode:updatePaymentMode
 }
