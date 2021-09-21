@@ -15,6 +15,8 @@ router.post("/sendPasswordEmail/", userController.sendPasswordEmail);
 router.get("/changePasswordForm/", userController.changePasswordForm);
 router.post("/passwordChange/", userController.passwordChange);
 
+router.post("/changeUserPass/", authMiddleware.verifyToken, userController.changeUserPass);
+
 //user login
 router.post("/login", userController.login);
 
@@ -29,5 +31,8 @@ router.get('/getUserDetails/:userId', authMiddleware.verifyToken, userController
 
 //profile picture update 
 router.post('/updateProfPic', upload.upload.array('files', 12), authMiddleware.verifyToken, userController.updateProfPic);
+
+//get counts for dashboard
+router.get('/getCounts',authMiddleware.verifyToken,userController.getCounts);
 
 module.exports  = router;

@@ -25,32 +25,39 @@ function publicRegister(data,callback){
                 //use transaction as 2 tables are involved
                 connection.beginTransaction(function(err) {
                     if (err) {
+                        console.log('ffffffffffffffffffff')
                         connection.rollback(function () {
                             connection.release();
                             callback(err);
                         });
                     } else {
+                        console.log('aaaaaaaaaaaaaaaaa')
                         // insert query for users table
                         connection.query('insert into users (user_name,email,password,mobile_number,user_type,city,status,created_at,updated_at)' +
                             ' values(?,?,?,?,?,?,?,now(),now())', [data.user_name, data.email, password, data.mobile_number, 1, data.city, 0], (ex, rows1) => {
                             if (ex) {
+                                console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz')
                                 connection.rollback(function () {
                                     connection.release();
                                     callback(ex);
                                 });
                             } else {
+                                console.log('bbbbbbb')
                                 // insert query for public table
                                 connection.query('insert into public (user_id,first_name,last_name,gender,created_at,updated_at)' +
                                     ' values(?,?,?,?,now(),now())', [rows1.insertId,data.first_name, data.last_name, data.gender], (ex, rows2) => {
                                     if (ex) {
+                                        console.log('ccccccccccccc')
                                         connection.rollback(function () {
                                             connection.release();
                                             callback(ex);
                                         });
                                     } else {
+                                        console.log('eeeeeeeeeeeee')
                                         //committing the transaction
                                         connection.commit(function (err) {
                                             if (err) {
+                                                console.log('dddddddddddddddd')
                                                 connection.rollback(function () {
                                                     connection.release();
                                                     callback(err);
@@ -155,7 +162,7 @@ function login(data,callback){
             .digest('hex');
 
                 //using the connection to query
-        db.pool.query('select id, user_name, email, user_type, profile_picture_path, is_verified from users where user_name=? and password=?', [data.user_name, password], (ex, rows) => {
+        db.pool.query('select id, user_name, email, user_type, profile_picture_path, is_verified from users where user_name=? and password=? and status=1', [data.user_name, password], (ex, rows) => {
             if (ex) {
                 callback(ex);
             } else {
@@ -341,7 +348,7 @@ function getUserDetails(authData, data, callback){
 function updateProfPic(authData,data,callback){
     try{
         //call cloudinary
-        console.log(data.files) 
+        console.log(data.files)
         upload.multerCloud(data.files, (ex, result) =>{
             //console.log(result);
             if(!result || result == undefined || result.urls[0] == null){
@@ -372,6 +379,121 @@ function updateProfPic(authData,data,callback){
     }
 }
 
+
+function getAvailCount(authData,callback){
+    try{
+        db.pool.query('SELECT count(id) from availabilities where user_id = ?',
+            [authData], (ex, rows1) => {
+                if(ex){
+                    callback(ex);
+                }
+                else{
+                    callback(null,{
+                        data: rows1
+                    });
+                }
+            });
+    }
+    catch(err) {
+        callback(err);
+    }
+}
+
+function getReqCount(authData,callback){
+    try{
+        db.pool.query('SELECT count(id) from requests where user_id = ?',
+            [authData], (ex, rows1) => {
+                if(ex){
+                    callback(ex);
+                }
+                else{
+
+                    callback(null,{
+                        data: rows1
+                    });
+                }
+            });
+    }
+    catch(err) {
+        callback(err);
+    }
+}
+
+function getColCount(authData,callback){
+    try{
+        db.pool.query('SELECT count(id) from collection_points where user_id = ?',
+            [authData], (ex, rows1) => {
+                if(ex){
+                    callback(ex);
+                }
+                else{
+
+                    callback(null,{
+                        data: rows1
+                    });
+                }
+            });
+    }
+    catch(err) {
+        callback(err);
+    }
+}
+
+function getSelCount(authData,callback){
+    try{
+        db.pool.query('SELECT count(id) from selling_points where user_id = ?',
+            [authData], (ex, rows1) => {
+                if(ex){
+                    callback(ex);
+                }
+                else{
+
+                    callback(null,{
+                        data: rows1
+                    });
+                }
+            });
+    }
+    catch(err) {
+        callback(err);
+    }
+}
+
+function changeUserPass(authData,data,callback){
+    try{
+        const hashingSecret = main.password_secret; //getting password hashing text
+        const new_password_text = data.new_password; //retrieving password from form data
+        const old_password_text = data.old_password; //retrieving password from form data
+
+        //hashing password
+        const new_password = crypto.createHmac('sha256', hashingSecret)
+            .update(new_password_text)
+            .digest('hex');
+
+        const old_password = crypto.createHmac('sha256', hashingSecret)
+            .update(old_password_text)
+            .digest('hex');
+
+
+        db.pool.query('update users set password = ? where password = ? and id = ?',
+            [new_password,old_password,authData.user.id], (ex, rows1) => {
+                if(ex){
+                    callback(ex);
+                }
+                else{
+
+                    callback(null,{
+                        data: rows1
+                    });
+                }
+            });
+    }
+    catch(err) {
+        callback(err);
+    }
+}
+
+
 module.exports = {
     publicRegister:publicRegister,
     orgRegister:orgRegister,
@@ -383,5 +505,10 @@ module.exports = {
     getUserDetails:getUserDetails,
     checkEmail:checkEmail,
     passwordChange:passwordChange,
-    updateProfPic:updateProfPic
+    updateProfPic:updateProfPic,
+    getAvailCount:getAvailCount,
+    getReqCount:getReqCount,
+    getColCount:getColCount,
+    getSelCount:getSelCount,
+    changeUserPass:changeUserPass
 }
