@@ -382,7 +382,7 @@ function updateProfPic(authData,data,callback){
 
 function getAvailCount(authData,callback){
     try{
-        db.pool.query('SELECT count(id) from availabilities where user_id = ?',
+        db.pool.query('SELECT count(id) as cc from availabilities where user_id = ?',
             [authData.user.id], (ex, rows1) => {
                 if(ex){
                     callback(ex);
@@ -401,7 +401,7 @@ function getAvailCount(authData,callback){
 
 function getReqCount(authData,callback){
     try{
-        db.pool.query('SELECT count(id) from requests where user_id = ?',
+        db.pool.query('SELECT count(id) as cc from requests where user_id = ?',
             [authData.user.id], (ex, rows1) => {
                 if(ex){
                     callback(ex);
@@ -421,7 +421,7 @@ function getReqCount(authData,callback){
 
 function getColCount(authData,callback){
     try{
-        db.pool.query('SELECT count(id) from collection_points where ngo_id = ?',
+        db.pool.query('SELECT count(id) as cc  from collection_points where ngo_id = ?',
             [authData.user.id], (ex, rows1) => {
                 if(ex){
                     callback(ex);
@@ -441,7 +441,7 @@ function getColCount(authData,callback){
 
 function getSelCount(authData,callback){
     try{
-        db.pool.query('SELECT count(id) from selling_points where shop_id = ?',
+        db.pool.query('SELECT count(id) as cc from selling_points where shop_id = ?',
             [authData.user.id], (ex, rows1) => {
                 if(ex){
                     callback(ex);
