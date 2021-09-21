@@ -26,7 +26,7 @@ function createNotification(data, callback) {
 
 function getAllNotifications(authData, data, callback) {
     try {
-        db.pool.query('SELECT n.*, u.user_name as from_name FROM notifications n ' +
+        db.pool.query('SELECT n.*, u.user_name as from_name, u.profile_picture_path FROM notifications n ' +
             'JOIN users u ON u.id = n.from_id ' +
             'WHERE n.to_id = ? ' +
             'ORDER BY n.id DESC ' +
@@ -76,7 +76,7 @@ function getAllNotifications(authData, data, callback) {
 
 function getActiveNotifications(authData, data, callback) {
     try {
-        db.pool.query('SELECT n.*, u.user_name as from_name FROM notifications n ' +
+        db.pool.query('SELECT n.*, u.user_name as from_name, u.profile_picture_path FROM notifications n ' +
             'JOIN users u ON u.id = n.from_id ' +
             'WHERE n.to_id = ? AND n.status = 1 ' +
             'ORDER BY n.id DESC ' +
