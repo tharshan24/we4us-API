@@ -836,7 +836,7 @@ function updateDriverRequest(data,callback){
                 }
                 else{
                     if(rows1.length>0){
-                        db.pool.query('select avail_session_id from driver_requests where and id = ?',
+                        db.pool.query('select avail_session_id from driver_requests where id = ?',
                             [data.stat, data.driver_req_id], (ex, rows2) => {
                                 if(ex){
                                     callback(ex);
