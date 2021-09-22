@@ -556,6 +556,49 @@ function updateDriverRequest (req, res){
 }
 
 //Available ongoing delivery
+function driverCheckForRide3 (req, res){
+    console.log("request params: ",req.params)
+    availabilityService.driverCheckForRide3(req.headers.authData,req.params, function(err, results){
+        if(err){
+            res.json({status_code:1, message: 'Cannot get deliveries', error: err.message});
+        }
+        else{
+            const data = {
+                from_id: 0,
+                to_id: req.headers.authData.user.id,
+                type: 2,
+                textss: "Delivery Notice",
+                message: "You have to do the delivery",
+                paramm: results.driver_req_id
+            }
+            notification.createNotification(data, (ex, response) => {
+                if(ex) {
+                    console.log(ex);
+                    res.json({
+                        status_code: 1,
+                        message: 'failed',
+                        err: ex,
+                        authData: req.headers.authData,
+                        token: req.token
+                    });
+                }
+                else {
+                    res.json({
+                        status_code: 0,
+                        message: 'Successful',
+                        result: results,
+                        notification:data,
+                        response: response,
+                        authData: req.headers.authData,
+                        token: req.token
+                    });
+                }
+            })
+        }
+    });
+}
+
+//Available ongoing delivery
 function driverCheckForRide (req, res){
     console.log("request params: ",req.params)
     availabilityService.driverCheckForRide2(req.headers.authData,req.params, function(err, results){
@@ -660,5 +703,6 @@ module.exports = {
     exploreAvailabilityByMySession:exploreAvailabilityByMySession,
     getAVailabilityDeliveries:getAVailabilityDeliveries,
     driverCheckForRide:driverCheckForRide,
-    updateDriverRequest:updateDriverRequest
+    updateDriverRequest:updateDriverRequest,
+    driverCheckForRide3:driverCheckForRide3
 }
