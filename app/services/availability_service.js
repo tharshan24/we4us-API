@@ -731,7 +731,7 @@ function updateDriverRequest(data,callback){
                     callback(ex);
                 }
                 else{
-                    db.pool.query('select avail_session_id from driver_requests where satus=? and id = ?',
+                    db.pool.query('select avail_session_id from driver_requests where status=? and id = ?',
                         [data.stat, data.driver_req_id], (ex, rows2) => {
                             if(ex){
                                 callback(ex);
