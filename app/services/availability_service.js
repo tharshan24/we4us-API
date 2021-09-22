@@ -731,18 +731,27 @@ function updateDriverRequest(data,callback){
                     callback(ex);
                 }
                 else{
-                    db.pool.query('select avail_session_id from driver_requests where status=? and id = ?',
-                        [data.stat, data.driver_req_id], (ex, rows2) => {
-                            if(ex){
-                                callback(ex);
-                            }
-                            else{
-                                callback(null,{
-                                    data: rows1,
-                                    paramm:rows2[0].avail_session_id
-                                });
-                            }
+                    if(rows1.length>0){
+                        db.pool.query('select avail_session_id from driver_requests where status=? and id = ?',
+                            [data.stat, data.driver_req_id], (ex, rows2) => {
+                                if(ex){
+                                    callback(ex);
+                                }
+                                else{
+                                    callback(null,{
+                                        data: rows1,
+                                        paramm:rows2[0].avail_session_id
+                                    });
+                                }
+                            });
+                    }
+                    else {
+                        callback({
+                            status: 1,
+                            message: "null data"
                         });
+                    }
+
                 }
             });
     }
