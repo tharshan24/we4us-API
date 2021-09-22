@@ -3,7 +3,7 @@ const main = require('../config/main');
 
 function createNotification(data, callback) {
     try {
-        db.pool.query('INSERT INTO notifications (from_id, to_id, message, status, type, text, param, created_at, updated_at) ' +
+        db.pool.query('INSERT INTO notifications (from_id, to_id, message, status, type, text, paramm, created_at, updated_at) ' +
             'VALUES (?,?,?,?,?,?,?,now(),now())', [data.from_id, data.to_id, data.message, 1, data.type, data.textss, data.paramm],
             (ex, rows) => {
                 if(ex) {

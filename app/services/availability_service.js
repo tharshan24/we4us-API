@@ -726,7 +726,7 @@ function driverCheckForRide2(authData,data,callback){
 function updateDriverRequest(data,callback){
     try{
         db.pool.query('UPDATE driver_requests set status = ?, updated_at=now() where id = ?',
-            [data.status, data.driver_request_id], (ex, rows1) => {
+            [data.stat, data.driver_req_id], (ex, rows1) => {
                 if(ex){
                     callback(ex);
                 }

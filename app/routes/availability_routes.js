@@ -28,6 +28,6 @@ router.get('/availOngoingDelivery',authMiddleware.verifyToken,availabilityContro
 router.get('/getAVailabilityDeliveries/:avail_ses_id',authMiddleware.verifyToken,availabilityController.getAVailabilityDeliveries);
 router.get('/driverCheckForRide',authMiddleware.verifyToken,availabilityController.driverCheckForRide);
 // router.get('/driverCheckForRide',authMiddleware.verifyToken,availabilityController.driverCheckForRide);
-router.get('/updateDriverRequest/:driver_req_id',authMiddleware.verifyToken,availabilityController.updateDriverRequest);
+router.get('/updateDriverRequest/:driver_req_id/:stat',authMiddleware.verifyToken,availabilityController.updateDriverRequest);
 
 module.exports  = router;
