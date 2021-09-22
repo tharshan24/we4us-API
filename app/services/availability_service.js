@@ -728,7 +728,7 @@ function driverCheckForRide3(authData,data,callback){
         db.pool.query('SELECT ad.id, '+
             's.id as availability_session_id FROM availability_deliveries ad ' +
             'JOIN availability_sessions s ON s.id = ad.availability_session_id ' +
-            'WHERE ad.status = 5 AND ad.driver_id NOT IN (select driver_id from driver_requests LIMIT 1) ' +
+            'WHERE ad.status = 5 AND ad.driver_id NOT IN (select driver_id from driver_requests) ' +
             'LIMIT 1', (ex, rows1) => {
                 if(ex){
                     callback(ex);
