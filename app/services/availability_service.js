@@ -527,21 +527,21 @@ function getAVailabilityDeliveries(data,callback){
             'uu.id as requester_id, uu.user_name as requester_user_name, uu.profile_picture_path as requester_profile_path, pp.first_name as requester_first_name, pp.last_name as requester_last_name, ' +
             'uuu.id as creator_id, uuu.user_name as creator_user_name, uuu.profile_picture_path as creator_profile_path, ppp.first_name as creator_first_name, ppp.last_name as creator_last_name, ' +
             's.id as availability_session_id, s.requester_message, s.quantity as request_quantity, s.status as availability_session_status, ' +
-            's.requester_delivery_option, s.final_delivery_option, vt.name as delivery_vehicle_option, s.payment_status, s.payment_by, ' +
+            's.requester_delivery_option, s.final_delivery_option, s.payment_status, s.payment_by, ' +
             'c.name_en as requested_city, s.longitude as requested_longitude, s.latitude as requested_latitude, s.created_at as request_created_at, ' +
             'a.id as availability_id, a.name as availability_name, a.description as availability_description, a.food_type, a.total_quantity, a.available_quantity, a.actual_quantity, ' +
             'a.cooked_time, a.best_before, a.storage_description, cc.name_en as created_city, a.creator_delivery_option, ' +
             'a.longitude as created_longitude, a.latitude as created_latitude, a.created_at as availability_created_at FROM availability_deliveries ad ' +
             'LEFT JOIN users u ON u.id = ad.driver_id ' +
             'LEFT JOIN public p ON u.id = p.user_id ' +
-            'JOIN availability_sessions s ON s.id = ad.availability_session_id ' +
-            'JOIN availabilities a ON s.availability_id = a.id ' +
+            'left JOIN availability_sessions s ON s.id = ad.availability_session_id ' +
+            'left JOIN availabilities a ON s.availability_id = a.id ' +
             'JOIN availability_types at ON at.id = a.availability_type ' +
             'JOIN users uu ON uu.id = s.user_id ' +
             'JOIN public pp ON uu.id = pp.user_id ' +
             'JOIN users uuu ON uuu.id = a.user_id ' +
             'JOIN public ppp ON uu.id = ppp.user_id ' +
-            'JOIN vehicle_types vt ON vt.id = s.delivery_vehicle_option ' +
+            // 'JOIN vehicle_types vt ON vt.id = s.delivery_vehicle_option ' +
             'JOIN cities c ON uu.city = c.id ' +
             'JOIN cities cc ON uuu.city = cc.id ' +
             'WHERE ad.availability_session_id=? AND ad.status = 0',
@@ -837,11 +837,12 @@ function updateDriverRequest(data,callback){
                 else{
                     if(rows1.length>0){
                         db.pool.query('select avail_session_id from driver_requests where id = ?',
-                            [data.stat, data.driver_req_id], (ex, rows2) => {
+                            [data.driver_req_id], (ex, rows2) => {
                                 if(ex){
                                     callback(ex);
                                 }
                                 else{
+                                    console.log("dfytdsuykftegsfikuytgruyfsuf",avail_session_id)
                                     callback(null,{
                                         data: rows1,
                                         paramm:rows2[0].avail_session_id
