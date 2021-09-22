@@ -736,7 +736,7 @@ function driverCheckForRide3(authData,data,callback){
                 else{
                     if(rows1.length>0) {
                         console.log(rows1)
-                        db.pool.query('insert into driver_requests (driver_id, avail_session_id, status, created_at, upadated_at) ' +
+                        db.pool.query('insert into driver_requests (driver_id, avail_session_id, status, created_at, updated_at) ' +
                             'VALUES (?,?,?,now(),now())',
                             [authData.user.id,rows1[0].availability_session_id,0], (ex, rows3) => {
                                 if(ex){

@@ -26,7 +26,7 @@ router.get('/availOngoingDelivery',authMiddleware.verifyToken,availabilityContro
 
 // delivery
 router.get('/getAVailabilityDeliveries/:avail_ses_id',authMiddleware.verifyToken,availabilityController.getAVailabilityDeliveries);
-router.get('/driverCheckForRide',authMiddleware.verifyToken,availabilityController.driverCheckForRide);
+router.get('/driverCheckForRide',authMiddleware.verifyToken,availabilityController.driverCheckForRide3);
 // router.get('/driverCheckForRide',authMiddleware.verifyToken,availabilityController.driverCheckForRide);
 router.get('/updateDriverRequest/:driver_req_id/:stat',authMiddleware.verifyToken,availabilityController.updateDriverRequest);
 
