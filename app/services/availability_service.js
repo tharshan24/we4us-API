@@ -731,9 +731,18 @@ function updateDriverRequest(data,callback){
                     callback(ex);
                 }
                 else{
-                    callback(null,{
-                        data: rows1
-                    });
+                    db.pool.query('select avail_session_id from driver_requests where satus=? and id = ?',
+                        [data.stat, data.driver_req_id], (ex, rows2) => {
+                            if(ex){
+                                callback(ex);
+                            }
+                            else{
+                                callback(null,{
+                                    data: rows1,
+                                    paramm:rows2[0].avail_session_id
+                                });
+                            }
+                        });
                 }
             });
     }
